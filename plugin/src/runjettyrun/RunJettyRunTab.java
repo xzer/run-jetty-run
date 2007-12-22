@@ -49,14 +49,6 @@ import org.eclipse.ui.dialogs.ElementListSelectionDialog;
  */
 public class RunJettyRunTab extends JavaLaunchTab {
 
-	static final String ATTR_CONTEXT = RunJettyRunPlugin.PLUGIN_ID
-			+ ".CONTEXT_ATTR";
-
-	static final String ATTR_WEBAPPDIR = RunJettyRunPlugin.PLUGIN_ID
-			+ ".WEBAPPDIR_ATTR";
-
-	static final String ATTR_PORT = RunJettyRunPlugin.PLUGIN_ID + ".PORT_ATTR";
-
 	private static abstract class ButtonListener implements SelectionListener {
 
 		public void widgetDefaultSelected(SelectionEvent e) {
@@ -218,12 +210,13 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		try {
 			fProjText
 					.setText(configuration.getAttribute(ATTR_PROJECT_NAME, ""));
-			fContextText.setText(configuration.getAttribute(ATTR_CONTEXT, ""));
-			fWebAppDirText.setText(configuration.getAttribute(ATTR_WEBAPPDIR,
-					""));
-			fPortText.setText(configuration.getAttribute(ATTR_PORT, ""));
+			fContextText.setText(configuration.getAttribute(
+					Plugin.ATTR_CONTEXT, ""));
+			fWebAppDirText.setText(configuration.getAttribute(
+					Plugin.ATTR_WEBAPPDIR, ""));
+			fPortText.setText(configuration.getAttribute(Plugin.ATTR_PORT, ""));
 		} catch (CoreException e) {
-			RunJettyRunPlugin.log(e);
+			Plugin.logError(e);
 		}
 	}
 
@@ -291,12 +284,14 @@ public class RunJettyRunTab extends JavaLaunchTab {
 
 	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
 		configuration.setAttribute(ATTR_PROJECT_NAME, fProjText.getText());
-		configuration.setAttribute(ATTR_CONTEXT, fContextText.getText());
-		configuration.setAttribute(ATTR_WEBAPPDIR, fWebAppDirText.getText());
-		configuration.setAttribute(ATTR_PORT, fPortText.getText());
+		configuration.setAttribute(Plugin.ATTR_CONTEXT, fContextText.getText());
+		configuration.setAttribute(Plugin.ATTR_WEBAPPDIR, fWebAppDirText
+				.getText());
+		configuration.setAttribute(Plugin.ATTR_PORT, fPortText.getText());
 	}
 
 	public void setDefaults(ILaunchConfigurationWorkingCopy configuration) {
+
 		IJavaElement javaElement = getContext();
 		if (javaElement != null) {
 			initializeJavaProject(javaElement, configuration);
@@ -306,7 +301,15 @@ public class RunJettyRunTab extends JavaLaunchTab {
 
 		configuration.setAttribute(
 				IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME,
-				JettyServerRunner.class.getName());
+				Plugin.BOOTSTRAP_CLASS_NAME);
+
+		// set the class path provider so that Jetty and the bootstrap jar are
+		// added to the run time class path. Value has to be the same as the one
+		// defined for the extension point
+		configuration.setAttribute(
+				IJavaLaunchConfigurationConstants.ATTR_CLASSPATH_PROVIDER,
+				"RunJettyRunWebAppClassPathProvider");
+
 		// get the name for this launch configuration
 		String launchConfigName = "";
 		try {
@@ -324,10 +327,10 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		launchConfigName = getLaunchConfigurationDialog().generateName(
 				launchConfigName);
 		configuration.rename(launchConfigName); // and rename the config
-		
-		configuration.setAttribute(ATTR_CONTEXT, "/");
-		configuration.setAttribute(ATTR_WEBAPPDIR, "src/main/webapp");
-		configuration.setAttribute(ATTR_PORT, "8080");
+
+		configuration.setAttribute(Plugin.ATTR_CONTEXT, "/");
+		configuration.setAttribute(Plugin.ATTR_WEBAPPDIR, "src/main/webapp");
+		configuration.setAttribute(Plugin.ATTR_PORT, "8080");
 	}
 
 	private IJavaProject chooseJavaProject() {
@@ -343,7 +346,7 @@ public class RunJettyRunTab extends JavaLaunchTab {
 							ResourcesPlugin.getWorkspace().getRoot())
 							.getJavaProjects());
 		} catch (JavaModelException jme) {
-			RunJettyRunPlugin.log(jme);
+			Plugin.logError(jme);
 		}
 
 		IJavaProject javaProject = null;

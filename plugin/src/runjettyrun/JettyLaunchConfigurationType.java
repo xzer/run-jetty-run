@@ -2,6 +2,9 @@ package runjettyrun;
 
 import java.io.File;
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.CoreException;
@@ -11,6 +14,7 @@ import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jdt.launching.AbstractJavaLaunchConfigurationDelegate;
 import org.eclipse.jdt.launching.ExecutionArguments;
+import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jdt.launching.IVMRunner;
 import org.eclipse.jdt.launching.JavaLaunchDelegate;
 import org.eclipse.jdt.launching.VMRunnerConfiguration;
@@ -43,7 +47,7 @@ public class JettyLaunchConfigurationType extends
 		try {
 			monitor.subTask("verifying installation");
 
-			String mainTypeName = JettyServerRunner.class.getName();
+			String mainTypeName = Plugin.BOOTSTRAP_CLASS_NAME;
 			IVMRunner runner = getVMRunner(configuration, mode);
 
 			File workingDir = verifyWorkingDirectory(configuration);
@@ -72,7 +76,18 @@ public class JettyLaunchConfigurationType extends
 					mainTypeName, classpath);
 			runConfig.setProgramArguments(execArgs.getProgramArgumentsArray());
 			runConfig.setEnvironment(envp);
-			runConfig.setVMArguments(execArgs.getVMArgumentsArray());
+
+			List<String> runtimeVmArgs = new ArrayList<String>();
+			runtimeVmArgs.add("-Drjrcontext="
+					+ configuration.getAttribute(Plugin.ATTR_CONTEXT, ""));
+			runtimeVmArgs.add("-Drjrwebapp="
+					+ configuration.getAttribute(Plugin.ATTR_WEBAPPDIR, ""));
+			runtimeVmArgs.add("-Drjrport="
+					+ configuration.getAttribute(Plugin.ATTR_PORT, ""));
+			runtimeVmArgs.addAll(Arrays.asList(execArgs.getVMArgumentsArray()));
+
+			runConfig.setVMArguments(runtimeVmArgs
+					.toArray(new String[runtimeVmArgs.size()]));
 			runConfig.setWorkingDirectory(workingDirName);
 			runConfig.setVMSpecificAttributesMap(vmAttributesMap);
 
