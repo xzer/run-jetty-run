@@ -1,0 +1,22 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Run Jetty Run Plug-in
+Bundle-SymbolicName: runjettyrun;singleton:=true
+Bundle-Version: 1.0.0
+Bundle-Activator: runjettyrun.RunJettyRunPlugin
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.apache.log4j,
+ org.eclipse.debug.core,
+ org.eclipse.debug.ui,
+ org.eclipse.jdt.debug,
+ org.eclipse.jdt.debug.ui,
+ org.eclipse.jdt.launching,
+ org.eclipse.jdt.core,
+ org.eclipse.jdt.ui,
+ org.eclipse.ui.ide
+Eclipse-LazyStart: true
+Bundle-ClassPath: lib/jetty-6.1.6.jar,
+ lib/jetty-management-6.1.6.jar,
+ lib/jetty-util-6.1.6.jar,
+ .
