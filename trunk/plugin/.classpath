@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry kind="lib" path="lib/jetty-6.1.6.jar" sourcepath="lib/jetty-6.1.6-sources.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-management-6.1.6.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-util-6.1.6.jar" sourcepath="lib/jetty-util-6.1.6-sources.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

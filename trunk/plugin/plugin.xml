@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.eclipse.debug.core.launchConfigurationTypes">
+      <launchConfigurationType
+            delegate="runjettyrun.JettyLaunchConfigurationType"
+            id="RunJettyRunWebApp"
+            modes="run, debug"
+            name="Jetty Webapp"
+            sourceLocatorId="org.eclipse.jdt.launching.sourceLocator.JavaSourceLookupDirector"
+            sourcePathComputerId="org.eclipse.jdt.launching.sourceLookup.javaSourcePathComputer">
+      </launchConfigurationType>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTabGroups">
+      <launchConfigurationTabGroup
+            class="runjettyrun.JettyLaunchConfigurationTabGroup"
+            id="RunJettyRunWebAppTabGroup"
+            type="RunJettyRunWebApp">
+      </launchConfigurationTabGroup>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTypeImages">
+      <launchConfigurationTypeImage
+            configTypeID="RunJettyRunWebApp"
+            icon="icons/jetty.gif"
+            id="RunJettyRunWebAppTypeImage">
+      </launchConfigurationTypeImage>
+   </extension>
+
+</plugin>
