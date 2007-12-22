@@ -28,5 +28,12 @@
             id="RunJettyRunWebAppTypeImage">
       </launchConfigurationTypeImage>
    </extension>
+   <extension
+         point="org.eclipse.jdt.launching.classpathProviders">
+      <classpathProvider
+            class="runjettyrun.JettyLaunchConfigurationClassPathProvider"
+            id="RunJettyRunWebAppClassPathProvider">
+      </classpathProvider>
+   </extension>
 
 </plugin>
