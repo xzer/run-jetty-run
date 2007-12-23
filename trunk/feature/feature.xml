@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="runjettyrun_feature"
+      label="Run Jetty Run Feature"
+      version="1.0.0">
+
+   <description url="http://code.google.com/p/run-jetty-run/">
+      This feature packages the run-jetty-run plugin.
+This Eclipse plugin is a simplification of JettyLauncher (http://jettylauncher.sourceforge.net/),
+which at this time is not maintained anymore. This initiative
+aims to be simple but effective, with a recent version of Jetty
+shipped with the plugin, so that you can run your projects without
+further configuration.
+   </description>
+
+   <license url="http://www.apache.org/licenses/LICENSE-2.0">
+      Copyright 2007 Eelco Hillenius
+Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+or implied.
+See the License for the specific language governing permissions
+and limitations under the License.
+   </license>
+
+   <requires>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.debug.core"/>
+      <import plugin="org.eclipse.debug.ui"/>
+      <import plugin="org.eclipse.jdt.debug"/>
+      <import plugin="org.eclipse.jdt.debug.ui"/>
+      <import plugin="org.eclipse.jdt.launching"/>
+      <import plugin="org.eclipse.jdt.core"/>
+      <import plugin="org.eclipse.jdt.ui"/>
+      <import plugin="org.eclipse.ui.ide"/>
+   </requires>
+
+   <plugin
+         id="runjettyrun"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>
