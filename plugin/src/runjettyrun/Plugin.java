@@ -2,11 +2,14 @@ package runjettyrun;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.URL;
 
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.resource.ImageRegistry;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -19,6 +22,8 @@ public class Plugin extends AbstractUIPlugin {
 
 	/** The plug-in ID. */
 	public static final String PLUGIN_ID = "run_jetty_run";
+
+	private static final String JETTY_ICON = PLUGIN_ID + ".jettyIcon";
 
 	/** configuration attribute for the full class name of the bootstrap class. */
 	public static final String BOOTSTRAP_CLASS_NAME = "runjettyrun.Bootstrap";
@@ -57,8 +62,21 @@ public class Plugin extends AbstractUIPlugin {
 		return plugin;
 	}
 
-	public static ImageDescriptor getImageDescriptor(String path) {
-		return imageDescriptorFromPlugin(PLUGIN_ID, path);
+	@Override
+	protected void initializeImageRegistry(ImageRegistry reg) {
+
+		URL imageURL = getBundle().getEntry("/icons/jetty.gif");
+		if (imageURL != null) {
+			ImageDescriptor descriptor = ImageDescriptor
+					.createFromURL(imageURL);
+			reg.put(JETTY_ICON, descriptor);
+		} else {
+			logError("resource " + "/icons/jetty.gif" + " was not found");
+		}
+	}
+
+	public static Image getJettyIcon() {
+		return plugin.getImageRegistry().get(JETTY_ICON);
 	}
 
 	static public void logError(Exception e) {
