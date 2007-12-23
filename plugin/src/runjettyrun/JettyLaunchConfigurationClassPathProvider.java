@@ -36,13 +36,9 @@ public class JettyLaunchConfigurationClassPathProvider extends
 		boolean useDefault = configuration.getAttribute(
 				IJavaLaunchConfigurationConstants.ATTR_DEFAULT_CLASSPATH, true);
 		if (useDefault) {
-			try {
-				classpath = filterWebInfLibs(classpath, configuration);
-				classpath = addJettyAndBootstrap(classpath, configuration);
+			classpath = filterWebInfLibs(classpath, configuration);
+			// classpath = addJettyAndBootstrap(classpath, configuration);
 
-			} catch (CoreException e) {
-				Plugin.logError(e);
-			}
 		} else {
 			// recover persisted classpath
 			return recoverRuntimePath(configuration,
@@ -52,8 +48,7 @@ public class JettyLaunchConfigurationClassPathProvider extends
 	}
 
 	private IRuntimeClasspathEntry[] addJettyAndBootstrap(
-			IRuntimeClasspathEntry[] existing, ILaunchConfiguration config)
-			throws CoreException {
+			IRuntimeClasspathEntry[] existing, ILaunchConfiguration config) {
 
 		List<IRuntimeClasspathEntry> entries = new ArrayList<IRuntimeClasspathEntry>();
 		entries.addAll(Arrays.asList(existing));
