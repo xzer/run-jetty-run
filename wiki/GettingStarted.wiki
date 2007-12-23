@@ -1,0 +1,15 @@
+#summary Installing and using the plugin
+
+= Installing =
+
+Well, that's easy. Simply use Eclipse's update manager (Help -> Updates -> Find and install... -> Search for new features to install) to add a remote site and point it to http://run-jetty-run.googlecode.com/svn/trunk/. Click finish, select the plugin (just one choice atm) and finish again. Done.
+
+= Using =
+
+The plugin provides a launch configuration. It will only work with Java projects ([http://www.scala-lang.org/ Scala] and other VM languages should work as well if they have a Java nature) with a web application in them. Meaning that you have a directory in your project with WEB-INF/web.xml. You can run such projects with Jetty using the launch configuration this plugin provides.
+
+There aren't many options, just the web application directory, the context and the port. I intentionally keep it basic so that it will be easy to use and maintain; if you need anything more fancy, use one of the other Eclipse app server plugins, or do what I often do: create a start up class in your project. For an example of the latter, check out the various projects of that are part of the [http://wicket.apache.org/ Wicket family].
+
+Finally, here is a screenshot of the plugin in action. Have fun with it!
+
+http://run-jetty-run.googlecode.com/svn/trunk/updatesite/jetty-run-configuration.gif
