@@ -37,7 +37,7 @@ public class JettyLaunchConfigurationClassPathProvider extends
 				IJavaLaunchConfigurationConstants.ATTR_DEFAULT_CLASSPATH, true);
 		if (useDefault) {
 			classpath = filterWebInfLibs(classpath, configuration);
-			// classpath = addJettyAndBootstrap(classpath, configuration);
+			classpath = addJettyAndBootstrap(classpath, configuration);
 
 		} else {
 			// recover persisted classpath
@@ -55,19 +55,19 @@ public class JettyLaunchConfigurationClassPathProvider extends
 		Bundle bundle = Plugin.getDefault().getBundle();
 		URL installUrl = bundle.getEntry("/");
 		try {
-			URL bootstrapJarUrl = FileLocator.resolve(new URL(installUrl,
+			URL bootstrapJarUrl = FileLocator.toFileURL(new URL(installUrl,
 					"lib/run-jetty-run-bootstrap.jar"));
 			entries.add(JavaRuntime.newArchiveRuntimeClasspathEntry(new Path(
 					bootstrapJarUrl.getFile())));
-			URL jettyJarUrl = FileLocator.resolve(new URL(installUrl,
+			URL jettyJarUrl = FileLocator.toFileURL(new URL(installUrl,
 					"lib/jetty-" + Plugin.JETTY_VERSION + ".jar"));
 			entries.add(JavaRuntime.newArchiveRuntimeClasspathEntry(new Path(
 					jettyJarUrl.getFile())));
-			URL jettyUtilJarUrl = FileLocator.resolve(new URL(installUrl,
+			URL jettyUtilJarUrl = FileLocator.toFileURL(new URL(installUrl,
 					"lib/jetty-util-" + Plugin.JETTY_VERSION + ".jar"));
 			entries.add(JavaRuntime.newArchiveRuntimeClasspathEntry(new Path(
 					jettyUtilJarUrl.getFile())));
-			URL jettyMngmtJarUrl = FileLocator.resolve(new URL(installUrl,
+			URL jettyMngmtJarUrl = FileLocator.toFileURL(new URL(installUrl,
 					"lib/jetty-management-" + Plugin.JETTY_VERSION + ".jar"));
 			entries.add(JavaRuntime.newArchiveRuntimeClasspathEntry(new Path(
 					jettyMngmtJarUrl.getFile())));
@@ -93,6 +93,11 @@ public class JettyLaunchConfigurationClassPathProvider extends
 					"");
 		} catch (CoreException e) {
 			Plugin.logError(e);
+		}
+
+		if (projectName == null || projectName.trim().equals("")
+				|| webAppDirName == null || webAppDirName.trim().equals("")) {
+			return defaults;
 		}
 
 		IJavaProject project = javaModel.getJavaProject(projectName);
