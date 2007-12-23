@@ -2,7 +2,7 @@
 
 = Installing =
 
-Well, that's easy. Simply use Eclipse's update manager (Help -> Updates -> Find and install... -> Search for new features to install) to add a remote site and point it to http://run-jetty-run.googlecode.com/svn/trunk/. Click finish, select the plugin (just one choice atm) and finish again. Done.
+Well, that's easy. Simply use Eclipse's update manager (Help -> Updates -> Find and install... -> Search for new features to install) to add a remote site and point it to http://run-jetty-run.googlecode.com/svn/trunk/updatesite. Click finish, select the plugin (just one choice atm) and finish again. Done.
 
 = Using =
 
