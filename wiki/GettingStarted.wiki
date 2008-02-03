@@ -1,4 +1,5 @@
 #summary Installing and using the plugin
+#labels Featured
 
 = Installing =
 
