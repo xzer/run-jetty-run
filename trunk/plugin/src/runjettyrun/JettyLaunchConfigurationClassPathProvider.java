@@ -71,7 +71,18 @@ public class JettyLaunchConfigurationClassPathProvider extends
 					"lib/jetty-management-" + Plugin.JETTY_VERSION + ".jar"));
 			entries.add(JavaRuntime.newArchiveRuntimeClasspathEntry(new Path(
 					jettyMngmtJarUrl.getFile())));
-
+			URL jspApiJarUrl = FileLocator.toFileURL(new URL(installUrl,
+					"lib/jsp-api-2.1.jar"));
+			entries.add(JavaRuntime.newArchiveRuntimeClasspathEntry(new Path(
+					jspApiJarUrl.getFile())));
+			URL jspJarUrl = FileLocator.toFileURL(new URL(installUrl,
+					"lib/jsp-2.1.jar"));
+			entries.add(JavaRuntime.newArchiveRuntimeClasspathEntry(new Path(
+					jspJarUrl.getFile())));
+			URL eclipseCompilerJarUrl = FileLocator.toFileURL(new URL(
+					installUrl, "lib/core-3.1.1.jar"));
+			entries.add(JavaRuntime.newArchiveRuntimeClasspathEntry(new Path(
+					eclipseCompilerJarUrl.getFile())));
 		} catch (IOException e) {
 			Plugin.logError(e);
 		}

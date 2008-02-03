@@ -11,6 +11,10 @@
 		<pathelement location="lib/jetty-6.1.6.jar" />
 		<pathelement location="lib/jetty-management-6.1.6.jar" />
 		<pathelement location="lib/jetty-util-6.1.6.jar" />
+		<pathelement location="lib/core-3.1.1.jar" />
+		<pathelement location="lib/jsp-2.1.jar" />
+		<pathelement location="lib/jsp-api-2.1.jar" />
+		<pathelement location="lib/servlet-api-2.5-6.1.6.jar" />
 		<path refid="Plug-in Dependencies.libraryclasspath" />
 	</path>
 	<target name="init">
