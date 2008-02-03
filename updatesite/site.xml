@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/runjettyrun_feature_1.0.0.jar" id="runjettyrun_feature" version="1.0.0"/>
-   <feature url="features/runjettyrun_feature_1.0.1.jar" id="runjettyrun_feature" version="1.0.1"/>
+   <description url="http://run-jetty-run.googlecode.com">
+      run-jetty-run update site
+   </description>
+   <feature url="features/runjettyrun_feature_1.0.0.jar" id="runjettyrun_feature" version="1.0.0">
+   		<category name="Jetty Integration"/>
+   </feature>
+   <feature url="features/runjettyrun_feature_1.0.1.jar" id="runjettyrun_feature" version="1.0.1">
+   		<category name="Jetty Integration"/>
+   </feature>
+   <category-def name="Jetty Integration" label="Jetty Integration"/>
 </site>
