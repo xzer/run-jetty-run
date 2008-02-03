@@ -10,9 +10,11 @@ Jetty distribution (Jetty 6.1.6).
 
 Changelog
 --------------------
+
 1.0.1
 * Added support for JSPs (issue http://code.google.com/p/run-jetty-run/issues/detail?id=1)
 * Added servlet dependency (issue http://code.google.com/p/run-jetty-run/issues/detail?id=3)
+* Fixed dependency issue that prevented the plugin from working in Eclipse 2.2 (issue http://code.google.com/p/run-jetty-run/issues/detail?id=5)
 
 1.0.0
 * First version
