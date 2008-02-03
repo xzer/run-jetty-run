@@ -2,19 +2,38 @@
 <feature
       id="runjettyrun_feature"
       label="Run Jetty Run Feature"
-      version="1.0.0">
+      version="1.0.1">
 
    <description url="http://code.google.com/p/run-jetty-run/">
-      Run web applications in Eclipse using this plugin&apos;s embedded Jetty distribution (Jetty 6.1.5).
+      Run web applications in Eclipse using this plugin&apos;s embedded
+Jetty distribution (Jetty 6.1.6).
+
+Changelog
+--------------------
+1.0.1
+* Added support for JSPs (issue http://code.google.com/p/run-jetty-run/issues/detail?id=1)
+* Added servlet dependency (issue http://code.google.com/p/run-jetty-run/issues/detail?id=3)
+
+1.0.0
+* First version
    </description>
 
    <license url="http://www.apache.org/licenses/LICENSE-2.0">
       Copyright 2007 Eelco Hillenius
-
-Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License. You may obtain a copy of the License at
-http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+http://www.apache.org/licenses/LICENSE-2.0 Unless required by
+applicable law or agreed to in writing, software distributed
+under the License is distributed on an &quot;AS IS&quot; BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+or implied. See the License for the specific language governing
+permissions and limitations under the License.
    </license>
+
+   <url>
+      <update label="run-jetty-run update site" url="http://run-jetty-run.googlecode.com/svn/trunk/updatesite/"/>
+   </url>
 
    <requires>
       <import plugin="org.eclipse.ui"/>
@@ -33,7 +52,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
          id="runjettyrun"
          download-size="0"
          install-size="0"
-         version="0.0.0"
+         version="1.0.1"
          unpack="false"/>
 
 </feature>
