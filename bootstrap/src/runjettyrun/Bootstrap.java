@@ -1,7 +1,6 @@
 /*
- * $Id: Start.java,v 1.3 2006/06/12 04:53:34 hillenius Exp $
- * $Revision: 1.3 $
- * $Date: 2006/06/12 04:53:34 $
+ * $Id$
+ * $HeadURL$
  * 
  * ==============================================================================
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -24,60 +23,107 @@ import javax.management.MBeanServer;
 
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.nio.SelectChannelConnector;
+import org.mortbay.jetty.security.SslSocketConnector;
 import org.mortbay.jetty.webapp.WebAppContext;
 import org.mortbay.management.MBeanContainer;
 
 /**
  * Started up by the plugin's runner. Starts Jetty.
  * 
- * @author hillenius
+ * @author hillenius, jsynge
  */
 public class Bootstrap {
 
-	/**
-	 * Main function, starts the jetty server.
-	 * 
-	 * @param args
-	 */
-	public static void main(String[] args) throws Exception {
+  /**
+   * Main function, starts the jetty server.
+   * 
+   * @param args
+   */
+  public static void main(String[] args) throws Exception {
 
-		String context = System.getProperty("rjrcontext");
-		if (context == null) {
-			throw new IllegalStateException(
-					"you need to provide argument -Drjrcontext");
-		}
-		String webAppDir = System.getProperty("rjrwebapp");
-		if (webAppDir == null) {
-			throw new IllegalStateException(
-					"you need to provide argument -Drjrwebapp");
-		}
-		Integer port = Integer.getInteger("rjrport");
-		if (port == null) {
-			throw new IllegalStateException(
-					"you need to provide argument -Drjrport");
-		}
+    String context = System.getProperty("rjrcontext");
+    String webAppDir = System.getProperty("rjrwebapp");
+    Integer port = Integer.getInteger("rjrport");
+    Integer sslport = Integer.getInteger("rjrsslport");
+    String webAppClassPath = System.getProperty("rjrclasspath");
+    String keystore = System.getProperty("rjrkeystore");
+    String password = System.getProperty("rjrpassword");
+    String keyPassword = System.getProperty("rjrkeypassword");
 
-		Server server = new Server();
-		SelectChannelConnector connector = new SelectChannelConnector();
-		connector.setPort(port);
-		server.addConnector(connector);
+    if (context == null) {
+      throw new IllegalStateException(
+          "you need to provide argument -Drjrcontext");
+    }
+    if (webAppDir == null) {
+      throw new IllegalStateException(
+          "you need to provide argument -Drjrwebapp");
+    }
+    if (port == null && sslport == null) {
+      throw new IllegalStateException(
+          "you need to provide argument -Drjrport and/or -Drjrsslport");
+    }
 
-		WebAppContext web = new WebAppContext();
-		web.setContextPath(context);
-		web.setWar(webAppDir);
-		server.addHandler(web);
+    Server server = new Server();
 
-		MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
-		MBeanContainer mBeanContainer = new MBeanContainer(mBeanServer);
-		server.getContainer().addEventListener(mBeanContainer);
-		mBeanContainer.start();
+    if (port != null) {
+      SelectChannelConnector connector = new SelectChannelConnector();
+      connector.setPort(port);
 
-		try {
-			server.start();
-			server.join();
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.exit(100);
-		}
-	}
+      if (sslport != null) {
+        connector.setConfidentialPort(sslport);
+      }
+
+      server.addConnector(connector);
+    }
+
+    if (sslport != null) {
+      if (keystore == null) {
+        throw new IllegalStateException(
+            "you need to provide argument -Drjrkeystore with -Drjrsslport");
+      }
+      if (password == null) {
+        throw new IllegalStateException(
+            "you need to provide argument -Drjrpassword with -Drjrsslport");
+      }
+      if (keyPassword == null) {
+        throw new IllegalStateException(
+            "you need to provide argument -Drjrkeypassword with -Drjrsslport");
+      }
+
+      SslSocketConnector sslConnector = new SslSocketConnector();
+      sslConnector.setKeystore(keystore);
+      sslConnector.setPassword(password);
+      sslConnector.setKeyPassword(keyPassword);
+
+      sslConnector.setMaxIdleTime(30000);
+      sslConnector.setPort(sslport);
+
+      server.addConnector(sslConnector);
+    }
+
+    WebAppContext web = new WebAppContext();
+    web.setContextPath(context);
+    web.setWar(webAppDir);
+
+    if (webAppClassPath != null) {
+      ProjectClassLoader loader = new ProjectClassLoader(web, webAppClassPath);
+      web.setClassLoader(loader);
+    }
+
+    server.addHandler(web);
+
+    MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
+    MBeanContainer mBeanContainer = new MBeanContainer(mBeanServer);
+    server.getContainer().addEventListener(mBeanContainer);
+    mBeanContainer.start();
+
+    try {
+      server.start();
+      server.join();
+    } catch (Exception e) {
+      e.printStackTrace();
+      System.exit(100);
+    }
+    return;
+  }
 }
