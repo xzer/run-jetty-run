@@ -13,4 +13,4 @@ There aren't many options, just the web application directory, the context and t
 
 Finally, here is a screenshot of the plugin in action. Have fun with it!
 
-http://run-jetty-run.googlecode.com/svn/trunk/updatesite/jetty-run-configuration.gif
+http://run-jetty-run.googlecode.com/svn/trunk/updatesite/jetty-run-configuration.png
