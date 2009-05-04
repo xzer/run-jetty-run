@@ -1,4 +1,4 @@
-#summary Installing and using the plugin
+#summary Installing and using the plug-in
 #labels Featured
 
 = Installing =
@@ -7,10 +7,30 @@ Well, that's easy. Simply use Eclipse's update manager (Help -> Updates -> Find 
 
 = Using =
 
-The plugin provides a launch configuration. It will only work with Java projects ([http://www.scala-lang.org/ Scala] and other VM languages should work as well if they have a Java nature) with a web application in them. Meaning that you have a directory in your project with WEB-INF/web.xml. You can run such projects with Jetty using the launch configuration this plugin provides.
+The plugin provides a launch configuration. It will only work with Java projects ([http://www.scala-lang.org/ Scala] and other Java VM languages should work as well if they have a Java nature) with a web application in them (i.e. the project has a folder that is the root of the web application, and in that folder is a WEB-INF folder containing a web.xml file).  You can run such projects with Jetty using the launch configuration this plugin provides.
 
-There aren't many options, just the web application directory, the context and the port. I intentionally keep it basic so that it will be easy to use and maintain; if you need anything more fancy, use one of the other Eclipse app server plugins, or do what I often do: create a start up class in your project. For an example of the latter, check out the various projects of that are part of the [http://wicket.apache.org/ Wicket family].
-
-Finally, here is a screenshot of the plugin in action. Have fun with it!
+Here is a screen shot of the Jetty tab in the launch dialog:
 
 http://run-jetty-run.googlecode.com/svn/trunk/updatesite/jetty-run-configuration.png
+
+These options are required:
+
+  * Project (must be a Java Project)
+  * Web application directory (inside the Project)
+  * Context (can just be "/")
+  * A web server port (either HTTP, HTTPS or both)
+
+If an HTTPS port is specified, these options area also required:
+
+  * Keystore file (typically `.keystore` in the user's home directory)
+  * The keystore password (used to check the integrity of the keystore)
+  * The key password (required to unlock the key)
+
+If you need more control than Run Jetty Run provides, you have choices:
+
+  * Use another plug-in that provides you with more control
+  * Write your own main method that starts Jetty (see the Bootstrap class in
+Run Jetty Run, or the various projects of that are part of the [http://wicket.apache.org/ Wicket family].
+  * Extend Run Jetty Run, and feed your changes back so that others can benefit
+
+Have fun with it!
