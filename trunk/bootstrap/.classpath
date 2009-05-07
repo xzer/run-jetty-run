@@ -23,5 +23,8 @@
 	<classpathentry kind="lib" path="/run-jetty-run/lib/jetty-6.1.6.jar" sourcepath="/run-jetty-run/lib/jetty-6.1.6-sources.jar"/>
 	<classpathentry kind="lib" path="/run-jetty-run/lib/jetty-util-6.1.6.jar" sourcepath="/run-jetty-run/run-jetty-runsrc.zip"/>
 	<classpathentry kind="lib" path="/run-jetty-run/lib/jetty-management-6.1.6.jar" sourcepath="/run-jetty-run/run-jetty-runsrc.zip"/>
+	<classpathentry kind="lib" path="/run-jetty-run/lib/servlet-api-2.5-6.1.6.jar" sourcepath="/run-jetty-run/run-jetty-runsrc.zip"/>
+	<classpathentry kind="lib" path="/run-jetty-run/lib/jsp-2.1.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run/lib/jsp-api-2.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
