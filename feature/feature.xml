@@ -19,11 +19,12 @@
 <feature
       id="runjettyrun_feature"
       label="Run Jetty Run Feature"
-      version="1.1.0"
+      version="1.1.1"
       provider-name="http://code.google.com/p/run-jetty-run/">
 
    <description url="http://code.google.com/p/run-jetty-run/">
-      Run web applications in Eclipse using this plugin's embedded Jetty distribution (Jetty 6.1.6).
+      Run web applications in Eclipse using the Jetty distribution (Jetty 6.1.6)
+      embedded in this plug-in.
    </description>
 
    <copyright>
