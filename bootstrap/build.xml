@@ -1,82 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
-  - $Id$
-  - $HeadURL$
-  - 
-  - ==============================================================================
-  - Licensed under the Apache License, Version 2.0 (the "License"); you may not
-  - use this file except in compliance with the License. You may obtain a copy of
-  - the License at
-  - 
-  - http://www.apache.org/licenses/LICENSE-2.0
-  - 
-  - Unless required by applicable law or agreed to in writing, software
-  - distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
-  - WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
-  - License for the specific language governing permissions and limitations under
-  - the License.
-  -->
 <project basedir="." default="build" name="run-jetty-run-bootstrap">
-	<property environment="env" />
 	<property name="run-jetty-run-project" value="../run-jetty-run" />
-	<property name="libdir" value="${run-jetty-run-project}/lib" />
-	<property name="bootstrap.jar" value="${libdir}/run-jetty-run-bootstrap.jar"/>
+	<property environment="env" />
 	<property name="debuglevel" value="source,lines,vars" />
 	<property name="target" value="1.5" />
 	<property name="source" value="1.5" />
 	<path id="Plug-in Dependencies.libraryclasspath" />
 	<path id="run-jetty-run-bootstrap.classpath">
 		<pathelement location="bin" />
-		<pathelement location="${libdir}/jetty-6.1.6.jar" />
-		<pathelement location="${libdir}/jetty-management-6.1.6.jar" />
-		<pathelement location="${libdir}/jetty-util-6.1.6.jar" />
-		<pathelement location="${libdir}/core-3.1.1.jar" />
-		<pathelement location="${libdir}/jsp-2.1.jar" />
-		<pathelement location="${libdir}/jsp-api-2.1.jar" />
-		<pathelement location="${libdir}/servlet-api-2.5-6.1.6.jar" />
+		<pathelement location="lib/jetty-6.1.6.jar" />
+		<pathelement location="lib/jetty-management-6.1.6.jar" />
+		<pathelement location="lib/jetty-util-6.1.6.jar" />
+		<pathelement location="lib/core-3.1.1.jar" />
+		<pathelement location="lib/jsp-2.1.jar" />
+		<pathelement location="lib/jsp-api-2.1.jar" />
+		<pathelement location="lib/servlet-api-2.5-6.1.6.jar" />
 		<path refid="Plug-in Dependencies.libraryclasspath" />
 	</path>
-
-	<target name="announce" unless="already-announced">
-		<echo message="${ant.project.name}: ${ant.file}" />
-		<property name="already-announced" value="true"/>
-	</target>
-
-	<target depends="announce" name="init">
+	<target name="init">
 		<mkdir dir="bin" />
 		<copy includeemptydirs="false" todir="bin">
-			<!-- Removed ', **/*.java' from excludes attribute -->
-			<fileset dir="src" excludes="**/*.launch" />
+			<fileset dir="src" excludes="**/*.launch, **/*.java" />
 		</copy>
 	</target>
-
-	<target depends="announce" name="clean">
+	<target name="clean">
 		<delete dir="bin" />
 	</target>
-
-	<target depends="announce, init" name="compile">
+	<target depends="init" name="build">
+		<echo message="${ant.project.name}: ${ant.file}" />
 		<javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
 			<src path="src" />
 			<classpath refid="run-jetty-run-bootstrap.classpath" />
 		</javac>
-	</target>
-
-	<target depends="announce" name="package"
-		description="Create the bootstrap jar and put it in the run-jetty-run project">
-
-		<delete file="MANIFEST.MF" quiet="true" verbose="false"/>
-		<delete file="${bootstrap.jar}" quiet="true" verbose="false"/>
-
-		<manifest file="MANIFEST.MF">
-	    <attribute name="Built-By" value="${user.name}"/>
-			<attribute name="Main-Class" value="runjettyrun.Bootstrap"/>
-    </manifest>
-
-		<jar destfile="${bootstrap.jar}" basedir="bin" manifest="MANIFEST.MF"/>
-
-		<delete file="MANIFEST.MF" quiet="true" verbose="false"/>
-	</target>
-
-	<target depends="announce,init,compile,package" name="build">
+		<!-- create a jar and put it in the run-jetty-run project -->
+		<jar destfile="${run-jetty-run-project}/lib/run-jetty-run-bootstrap.jar" basedir="bin" />
 	</target>
 </project>
