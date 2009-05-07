@@ -17,6 +17,7 @@
  */
 package runjettyrun;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.mortbay.jetty.webapp.WebAppClassLoader;
@@ -36,7 +37,34 @@ public class ProjectClassLoader extends WebAppClassLoader {
   public ProjectClassLoader(WebAppContext context, String projectClassPath)
       throws IOException {
     super(context);
-    super.addClassPath(projectClassPath);
+
+    /*
+     * As reported in these bugs:
+     * 
+     *          http://code.google.com/p/run-jetty-run/issues/detail?id=25
+     *          http://code.google.com/p/run-jetty-run/issues/detail?id=26
+     * 
+     * the path separator defined by Java (java.io.File.pathSeparator)
+     * (and used by the run-jetty-run plug-in) may not match the one used by
+     * Jetty (which is expects it to be either a comma or a semi-colon).
+     * Rather than move away from the standard path separator, I'm choosing
+     * to split the projectClassPath, and hand each entry to the super class,
+     * one at a time.
+     */
+    int start = 0;
+    int length = projectClassPath.length();
+    while (start < length) {
+      int index = projectClassPath.indexOf(File.pathSeparatorChar, start);
+      if (index == -1)
+        index = length;
+      if (index > start) {
+        String entry = projectClassPath.substring(start, index);
+        System.err.println("ProjectClassLoader: entry="+entry);
+        super.addClassPath(entry);
+      }
+      start = index + 1;
+    }
+
     initialized = true;
   }
 
