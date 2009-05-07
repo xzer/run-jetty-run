@@ -53,20 +53,9 @@ To build Run Jetty Run, follow these steps:
 		If you're creating a new version,
 			Click Add Feature...
 			Then follow the steps to add the new version of the feature.
-			Save site.xml.
-			Right-click site.xml, select "PDE Tools > Build Site"
 
 		Else if you're updating an existing version,
 			Select that version in the list of features under category Jetty Integration,
 			Click Synchronize...
 			Select "Synchronize selected features only"
 			Click Finish
-
-10) Test in another Eclipse configuration, updating from the update site just
-    modified, restarting that Eclipse, then launching a web application.
-
-11) Clean all projects (Project > Clean ...), and delete remaining intermediate files
-	  such as run-jetty-run/@dot and the plug-in and feature jars (in run-jetty-run/
-	  and run-jetty-run-feature, respectively).
-
-12) Commit changes back to SVN.
