@@ -20,10 +20,10 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
-	<classpathentry kind="lib" path="/run-jetty-run/lib/jetty-6.1.6.jar" sourcepath="/run-jetty-run/lib/jetty-6.1.6-sources.jar"/>
-	<classpathentry kind="lib" path="/run-jetty-run/lib/jetty-util-6.1.6.jar" sourcepath="/run-jetty-run/run-jetty-runsrc.zip"/>
-	<classpathentry kind="lib" path="/run-jetty-run/lib/jetty-management-6.1.6.jar" sourcepath="/run-jetty-run/run-jetty-runsrc.zip"/>
-	<classpathentry kind="lib" path="/run-jetty-run/lib/servlet-api-2.5-6.1.6.jar" sourcepath="/run-jetty-run/run-jetty-runsrc.zip"/>
+	<classpathentry kind="lib" path="/run-jetty-run/lib/jetty-6.1.6.jar" sourcepath="/run-jetty-run/lib/jetty-6.1.6-src.zip"/>
+	<classpathentry kind="lib" path="/run-jetty-run/lib/jetty-util-6.1.6.jar" sourcepath="/run-jetty-run/lib/jetty-6.1.6-src.zip"/>
+	<classpathentry kind="lib" path="/run-jetty-run/lib/jetty-management-6.1.6.jar" sourcepath="/run-jetty-run/lib/jetty-6.1.6-src.zip"/>
+	<classpathentry kind="lib" path="/run-jetty-run/lib/servlet-api-2.5-6.1.6.jar" sourcepath="/run-jetty-run/lib/jetty-6.1.6-src.zip"/>
 	<classpathentry kind="lib" path="/run-jetty-run/lib/jsp-2.1.jar"/>
 	<classpathentry kind="lib" path="/run-jetty-run/lib/jsp-api-2.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
