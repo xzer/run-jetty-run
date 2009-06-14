@@ -18,6 +18,7 @@
 package runjettyrun;
 
 import java.lang.management.ManagementFactory;
+import java.util.Collections;
 
 import javax.management.MBeanServer;
 
@@ -104,6 +105,16 @@ public class Bootstrap {
     WebAppContext web = new WebAppContext();
     web.setContextPath(context);
     web.setWar(webAppDir);
+
+    // Fix issue 7, File locking on windows/Disable Jetty's locking of static files
+    //    http://code.google.com/p/run-jetty-run/issues/detail?id=7
+    // by disabling the use of the file mapped buffers.  The default Jetty behavior is
+    // intended to provide a performance boost, but run-jetty-run is focused on
+    // development (especially debugging) of web apps, not high-performance production
+    // serving of static content.  Therefore, I'm not worried about the performance
+    // degradation of this change.  My only concern is that there might be a need to
+    // test this feature that I'm disabling.
+    web.setInitParams(Collections.singletonMap("org.mortbay.jetty.servlet.Default.useFileMappedBuffer", "false"));
 
     if (webAppClassPath != null) {
       ProjectClassLoader loader = new ProjectClassLoader(web, webAppClassPath);
