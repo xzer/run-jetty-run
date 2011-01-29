@@ -17,8 +17,15 @@
  */
 package runjettyrun;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.management.ManagementFactory;
+import java.net.DatagramSocket;
+import java.net.ServerSocket;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import javax.management.MBeanServer;
 
@@ -27,114 +34,216 @@ import org.mortbay.jetty.nio.SelectChannelConnector;
 import org.mortbay.jetty.security.SslSocketConnector;
 import org.mortbay.jetty.webapp.WebAppContext;
 import org.mortbay.management.MBeanContainer;
+import org.mortbay.util.Scanner;
 
 /**
  * Started up by the plugin's runner. Starts Jetty.
  * 
- * @author hillenius, jsynge
+ * @author hillenius, jsynge, jumperchen
  */
 public class Bootstrap {
 
-  /**
-   * Main function, starts the jetty server.
-   * 
-   * @param args
-   */
-  public static void main(String[] args) throws Exception {
+	private static Server server;
 
-    String context = System.getProperty("rjrcontext");
-    String webAppDir = System.getProperty("rjrwebapp");
-    Integer port = Integer.getInteger("rjrport");
-    Integer sslport = Integer.getInteger("rjrsslport");
-    String webAppClassPath = System.getProperty("rjrclasspath");
-    String keystore = System.getProperty("rjrkeystore");
-    String password = System.getProperty("rjrpassword");
-    String keyPassword = System.getProperty("rjrkeypassword");
+	static WebAppContext web;
 
-    if (context == null) {
-      throw new IllegalStateException(
-          "you need to provide argument -Drjrcontext");
-    }
-    if (webAppDir == null) {
-      throw new IllegalStateException(
-          "you need to provide argument -Drjrwebapp");
-    }
-    if (port == null && sslport == null) {
-      throw new IllegalStateException(
-          "you need to provide argument -Drjrport and/or -Drjrsslport");
-    }
+	/**
+	 * Main function, starts the jetty server.
+	 * 
+	 * @param args
+	 */
+	public static void main(String[] args) throws Exception {
 
-    Server server = new Server();
+		boolean loggerparam = false;
+		if (loggerparam) {
+			String[] propkeys = new String[] { "rjrcontext", "rjrwebapp", "rjrport", "rjrsslport", "rjrkeystore",
+					"rjrpassword", "rjrclasspath", "rjrkeypassword", "rjrscanintervalseconds", "rjrenablescanner",
+					"rjrenablessl"
+			};
+			for(String key:propkeys){
+				System.err.println("-D"+key+"="+System.getProperty(key));
+			}
+		}
+		String context = System.getProperty("rjrcontext");
+		String webAppDir = System.getProperty("rjrwebapp");
+		Integer port = Integer.getInteger("rjrport");
+		Integer sslport = Integer.getInteger("rjrsslport");
+		String keystore = System.getProperty("rjrkeystore");
+		String password = System.getProperty("rjrpassword");
+		final String webAppClassPath = System.getProperty("rjrclasspath");
+		String keyPassword = System.getProperty("rjrkeypassword");
+		Integer scanIntervalSeconds = Integer.getInteger("rjrscanintervalseconds");
+		Boolean enablescanner = Boolean.getBoolean("rjrenablescanner");
 
-    if (port != null) {
-      SelectChannelConnector connector = new SelectChannelConnector();
-      connector.setPort(port);
+		Boolean enablessl = Boolean.getBoolean("rjrenablessl");
 
-      if (sslport != null) {
-        connector.setConfidentialPort(sslport);
-      }
+		if (context == null) {
+			throw new IllegalStateException("you need to provide argument -Drjrcontext");
+		}
+		if (webAppDir == null) {
+			throw new IllegalStateException("you need to provide argument -Drjrwebapp");
+		}
+		if (port == null && sslport == null) {
+			throw new IllegalStateException("you need to provide argument -Drjrport and/or -Drjrsslport");
+		}
 
-      server.addConnector(connector);
-    }
+		server = new Server();
 
-    if (sslport != null) {
-      if (keystore == null) {
-        throw new IllegalStateException(
-            "you need to provide argument -Drjrkeystore with -Drjrsslport");
-      }
-      if (password == null) {
-        throw new IllegalStateException(
-            "you need to provide argument -Drjrpassword with -Drjrsslport");
-      }
-      if (keyPassword == null) {
-        throw new IllegalStateException(
-            "you need to provide argument -Drjrkeypassword with -Drjrsslport");
-      }
+		if (port != null) {
+			if (!available(port)) {
+				throw new IllegalStateException("port :" + port + " already in use!");
+			}
+			SelectChannelConnector connector = new SelectChannelConnector();
+			connector.setPort(port);
 
-      SslSocketConnector sslConnector = new SslSocketConnector();
-      sslConnector.setKeystore(keystore);
-      sslConnector.setPassword(password);
-      sslConnector.setKeyPassword(keyPassword);
+			if (enablessl && sslport != null) {
+				connector.setConfidentialPort(sslport);
+			}
 
-      sslConnector.setMaxIdleTime(30000);
-      sslConnector.setPort(sslport);
+			server.addConnector(connector);
+		}
 
-      server.addConnector(sslConnector);
-    }
+		if (enablessl && sslport != null) {
+			if (!available(sslport)) {
+				throw new IllegalStateException("SSL port :" + sslport + " already in use!");
+			}
+			if (keystore == null) {
+				throw new IllegalStateException("you need to provide argument -Drjrkeystore with -Drjrsslport");
+			}
+			if (password == null) {
+				throw new IllegalStateException("you need to provide argument -Drjrpassword with -Drjrsslport");
+			}
+			if (keyPassword == null) {
+				throw new IllegalStateException("you need to provide argument -Drjrkeypassword with -Drjrsslport");
+			}
 
-    WebAppContext web = new WebAppContext();
-    web.setContextPath(context);
-    web.setWar(webAppDir);
+			SslSocketConnector sslConnector = new SslSocketConnector();
+			sslConnector.setKeystore(keystore);
+			sslConnector.setPassword(password);
+			sslConnector.setKeyPassword(keyPassword);
 
-    // Fix issue 7, File locking on windows/Disable Jetty's locking of static files
-    //    http://code.google.com/p/run-jetty-run/issues/detail?id=7
-    // by disabling the use of the file mapped buffers.  The default Jetty behavior is
-    // intended to provide a performance boost, but run-jetty-run is focused on
-    // development (especially debugging) of web apps, not high-performance production
-    // serving of static content.  Therefore, I'm not worried about the performance
-    // degradation of this change.  My only concern is that there might be a need to
-    // test this feature that I'm disabling.
-    web.setInitParams(Collections.singletonMap("org.mortbay.jetty.servlet.Default.useFileMappedBuffer", "false"));
+			sslConnector.setMaxIdleTime(30000);
+			sslConnector.setPort(sslport);
 
-    if (webAppClassPath != null) {
-      ProjectClassLoader loader = new ProjectClassLoader(web, webAppClassPath);
-      web.setClassLoader(loader);
-    }
+			server.addConnector(sslConnector);
+		}
 
-    server.addHandler(web);
+		web = new WebAppContext();
+		web.setContextPath(context);
+		web.setWar(webAppDir);
+//		web.setBaseResource(Resource.newResource("c:/workspace/zkdemo/src/archive"));
+		// Fix issue 7, File locking on windows/Disable Jetty's locking of
+		// static files
+		// http://code.google.com/p/run-jetty-run/issues/detail?id=7
+		// by disabling the use of the file mapped buffers. The default Jetty
+		// behavior is
+		// intended to provide a performance boost, but run-jetty-run is focused
+		// on
+		// development (especially debugging) of web apps, not high-performance
+		// production
+		// serving of static content. Therefore, I'm not worried about the
+		// performance
+		// degradation of this change. My only concern is that there might be a
+		// need to
+		// test this feature that I'm disabling.
+		web.setInitParams(Collections.singletonMap("org.mortbay.jetty.servlet.Default.useFileMappedBuffer", "false"));
 
-    MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
-    MBeanContainer mBeanContainer = new MBeanContainer(mBeanServer);
-    server.getContainer().addEventListener(mBeanContainer);
-    mBeanContainer.start();
+		if (webAppClassPath != null) {
+			ProjectClassLoader loader = new ProjectClassLoader(web, webAppClassPath);
+			web.setClassLoader(loader);
+		}
 
-    try {
-      server.start();
-      server.join();
-    } catch (Exception e) {
-      e.printStackTrace();
-      System.exit(100);
-    }
-    return;
-  }
+		server.addHandler(web);
+
+		MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
+		MBeanContainer mBeanContainer = new MBeanContainer(mBeanServer);
+		server.getContainer().addEventListener(mBeanContainer);
+		mBeanContainer.start();
+
+		// configureScanner
+		if (enablescanner) {
+			final ArrayList<File> scanList = new ArrayList<File>();
+			if (webAppClassPath != null) {
+				for (URL url : ((ProjectClassLoader) web.getClassLoader()).getURLs()) {
+					File f = new File(url.getFile());
+					if (f.isDirectory()) {
+						scanList.add(f);
+					}
+				}
+			}
+
+			// startScanner
+			Scanner scanner = new Scanner();
+			scanner.setReportExistingFilesOnStartup(false);
+			scanner.setScanInterval(scanIntervalSeconds);
+			scanner.setScanDirs(scanList);
+			scanner.addListener(new Scanner.BulkListener() {
+
+				public void filesChanged(List changes) {
+					try {
+						// boolean reconfigure = changes.contains(getProject()
+						// .getFile().getCanonicalPath());
+						System.err.println("Stopping webapp ...");
+						
+						web.stop();
+						server.stop();//I haven't test this
+
+						if (webAppClassPath != null) {
+							ProjectClassLoader loader = new ProjectClassLoader(web, webAppClassPath, false);
+							web.setClassLoader(loader);
+						}
+						System.err.println("Restarting webapp ...");
+						server.start();						
+						web.start();
+						System.err.println("Restart completed.");
+					} catch (Exception e) {
+						System.err.println("Error reconfiguring/restarting webapp after change in watched files");
+						e.printStackTrace();
+					}
+				}
+			});
+			System.err.println("Starting scanner at interval of " + scanIntervalSeconds + " seconds.");
+			scanner.start();
+		}
+
+		try {
+			server.start();
+			server.join();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(100);
+		}
+		return;
+	}
+
+	private static boolean available(int port) {
+		if (port <= 0) {
+			throw new IllegalArgumentException("Invalid start port: " + port);
+		}
+
+		ServerSocket ss = null;
+		DatagramSocket ds = null;
+		try {
+			ss = new ServerSocket(port);
+			ss.setReuseAddress(true);
+			ds = new DatagramSocket(port);
+			ds.setReuseAddress(true);
+			return true;
+		} catch (IOException e) {
+		} finally {
+			if (ds != null) {
+				ds.close();
+			}
+
+			if (ss != null) {
+				try {
+					ss.close();
+				} catch (IOException e) {
+					/* should not be thrown */
+				}
+			}
+		}
+
+		return false;
+	}
 }

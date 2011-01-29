@@ -35,6 +35,10 @@ public class ProjectClassLoader extends WebAppClassLoader {
   private boolean initialized = false;
 
   public ProjectClassLoader(WebAppContext context, String projectClassPath)
+  throws IOException {
+	  this(context, projectClassPath, true);
+  }
+  public ProjectClassLoader(WebAppContext context, String projectClassPath, boolean logger)
       throws IOException {
     super(context);
 
@@ -59,7 +63,7 @@ public class ProjectClassLoader extends WebAppClassLoader {
         index = length;
       if (index > start) {
         String entry = projectClassPath.substring(start, index);
-        System.err.println("ProjectClassLoader: entry="+entry);
+        if (logger) System.err.println("ProjectClassLoader: entry="+entry);
         super.addClassPath(entry);
       }
       start = index + 1;
