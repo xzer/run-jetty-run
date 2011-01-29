@@ -52,5 +52,45 @@
             id="RunJettyRunWebAppClassPathProvider">
       </classpathProvider>
    </extension>
-
+    <extension point="org.eclipse.debug.ui.launchShortcuts">
+        <shortcut
+            id="RunJettyRunWebAppShortcut"
+            class="runjettyrun.JettyLaunchShortcut"
+            label="Jetty Server"
+            icon="icons/jetty.gif"
+            modes="run, debug">
+                <perspective id="org.eclipse.jdt.ui.JavaPerspective"/>
+                <perspective id="org.eclipse.jdt.ui.JavaHierarchyPerspective"/>
+                <perspective id="org.eclipse.jdt.ui.JavaBrowsingPerspective"/>
+                <perspective id="org.eclipse.debug.ui.DebugPerspective"/>
+        </shortcut>
+    </extension>
+    <extension
+          point="org.eclipse.ui.commands">
+       <command
+             categoryId="runjettyrun.commands"
+             id="runjettyrun.commands.runjetty"
+             name="Debug Jetty Web Application">
+       </command>
+       <category
+             id="runjettyrun.commands"
+             name="Run Jetty Run">
+       </category>
+    </extension>
+    <extension
+          point="org.eclipse.ui.handlers">
+       <handler
+             class="runjettyrun.handlers.RunJettyHandler"
+             commandId="runjettyrun.commands.runjetty">
+       </handler>
+    </extension>
+    <extension
+          point="org.eclipse.ui.bindings">
+       <key
+             commandId="runjettyrun.commands.runjetty"
+             contextId="org.eclipse.ui.contexts.window"
+             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"           
+             sequence="Alt+Z">
+       </key>
+    </extension>
 </plugin>

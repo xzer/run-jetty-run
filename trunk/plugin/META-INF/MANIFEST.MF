@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Run Jetty Run Plug-in
 Bundle-SymbolicName: runjettyrun;singleton:=true
-Bundle-Version: 1.1.1
+Bundle-Version: 1.2.beta1
 Bundle-Activator: runjettyrun.Plugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
@@ -19,3 +19,6 @@ Eclipse-LazyStart: true
 Bundle-ClassPath: .
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-Vendor: http://code.google.com/p/run-jetty-run/
+Export-Package: runjettyrun,
+ runjettyrun.handlers,
+ runjettyrun.utils
