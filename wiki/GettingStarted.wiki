@@ -19,8 +19,7 @@ These options are required:
   * Web application directory (inside the Project)
   * Context (can just be "/")
   * A web server port (either HTTP, HTTPS or both)
-  * Can't load server runtime lib , if you are developing with servlet ,
-    using servlet-ap jar files instead of server runtime.
+  * Can't load any server runtime lib, if you are developing with servlet , using servlet-api jar instead of server runtime.
 
 If an HTTPS port is specified, these options area also required:
 
@@ -36,4 +35,3 @@ Run Jetty Run, or the various projects of that are part of the [http://wicket.ap
   * Extend Run Jetty Run, and feed your changes back so that others can benefit
 
 Have fun with it!
-
