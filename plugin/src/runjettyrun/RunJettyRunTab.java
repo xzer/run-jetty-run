@@ -702,9 +702,15 @@ public class RunJettyRunTab extends JavaLaunchTab {
 			initializeJavaProject(javaElement, configuration);
 
 		IWorkbenchPage page = JDIDebugUIPlugin.getActivePage();
-		if (page != null) {
-			FileEditorInput editorinput = (FileEditorInput ) page.getActiveEditor().getEditorInput().getAdapter(FileEditorInput.class);
-
+		if (page != null ) {
+			
+			FileEditorInput editorinput = null;
+			try{
+				editorinput = (FileEditorInput ) page.getActiveEditor().getEditorInput().getAdapter(FileEditorInput.class);
+			}catch(NullPointerException npe){
+				//for a bug with ActiveEditor is null. (means user not editing any item)
+				//if it's a NPE , we just skip it directly...since it's a add-on.
+			}
 			if(editorinput != null ){
 				try{
 					configuration.setAttribute(ATTR_PROJECT_NAME, editorinput.getFile().getProject().getName());
