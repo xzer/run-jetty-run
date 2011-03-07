@@ -43,6 +43,8 @@ import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.jdt.launching.StandardClasspathProvider;
 import org.osgi.framework.Bundle;
 
+import runjettyrun.utils.RunJettyRunClasspathUtil;
+
 public class JettyLaunchConfigurationClassPathProvider extends
     StandardClasspathProvider {
 
@@ -57,7 +59,7 @@ public class JettyLaunchConfigurationClassPathProvider extends
     boolean useDefault = configuration.getAttribute(
         IJavaLaunchConfigurationConstants.ATTR_DEFAULT_CLASSPATH, true);
     if (useDefault) {
-      classpath = filterWebInfLibs(classpath, configuration);
+      classpath = RunJettyRunClasspathUtil.filterWebInfLibs(classpath, configuration);
       classpath = addJettyAndBootstrap(classpath, configuration);
 
     } else {
@@ -121,60 +123,6 @@ public class JettyLaunchConfigurationClassPathProvider extends
     }
   }
 
-  private IRuntimeClasspathEntry[] filterWebInfLibs(
-      IRuntimeClasspathEntry[] defaults, ILaunchConfiguration configuration) {
-
-    IJavaModel javaModel = JavaCore.create(ResourcesPlugin.getWorkspace()
-        .getRoot());
-    String projectName = null;
-    String webAppDirName = null;
-    try {
-      projectName = configuration.getAttribute(
-          IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME, "");
-      webAppDirName = configuration.getAttribute(Plugin.ATTR_WEBAPPDIR, "");
-    } catch (CoreException e) {
-      Plugin.logError(e);
-    }
-
-    if (projectName == null || projectName.trim().equals("")
-        || webAppDirName == null || webAppDirName.trim().equals("")) {
-      return defaults;
-    }
-
-    IJavaProject project = javaModel.getJavaProject(projectName);
-    if (project == null) {
-      return defaults;
-    }
-
-    // this should be fine since the plugin checks whether WEB-INF exists
-    IFolder webInfDir = project.getProject().getFolder(new Path(webAppDirName))
-        .getFolder("WEB-INF");
-    if (webInfDir == null || !webInfDir.exists()) {
-      return defaults;
-    }
-    IFolder lib = webInfDir.getFolder("lib");
-    if (lib == null || !lib.exists()) {
-      return defaults;
-    }
-
-    // ok, so we have a WEB-INF/lib dir, which means that we should filter
-    // out the entries in there since if the user wants those entries, they
-    // should be part of the project definition already
-    List<IRuntimeClasspathEntry> keep = new ArrayList<IRuntimeClasspathEntry>();
-    for (int i = 0; i < defaults.length; i++) {
-      if (defaults[i].getType() != IRuntimeClasspathEntry.ARCHIVE) {
-        keep.add(defaults[i]);
-        continue;
-      }
-      IResource resource = defaults[i].getResource();
-      if (resource != null && !resource.getParent().equals(lib)) {
-        keep.add(defaults[i]);
-        continue;
-      }
-    }
-
-    return keep.toArray(new IRuntimeClasspathEntry[keep.size()]);
-  }
 
   /*
    * James Synge: overriding so that I can block the inclusion of external
