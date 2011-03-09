@@ -237,6 +237,10 @@ public class JettyLaunchConfigurationType extends
 			List<String> runtimeVmArgs, String cfgAttr, String argName)
 			throws CoreException {
 		String value = configuration.getAttribute(cfgAttr, "");
+		
+		if("webapp".equals(argName)&& "/".equals(value)){
+			value="./";
+		}
 		if (value.length() == 0)
 			return;
 		String arg = "-Drjr" + argName + "=" + value;
