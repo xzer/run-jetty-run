@@ -500,6 +500,11 @@ public class RunJettyRunTab extends JavaLaunchTab {
 	private String scanWebAppDir(String projectName) {
 		IProject project = getProject(projectName);
 		if (project != null) {
+			
+			if(project.getFolder(new Path("WEB-INF")).exists()){
+				return "/";
+			}
+			
 			try {
 				IContainer webInf = scanWEBINF(project);
 				if (webInf != null && webInf.exists()) {
@@ -586,13 +591,21 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		}
 		String directory = fWebAppDirText.getText().trim();
 		if (!"".equals(directory.trim())) {
-			IFolder folder = project.getFolder(directory);
+			//means use project folder as webapp folder
+			
+			IContainer folder = null;
+			if("/".equals(directory))
+				folder = project;
+			else
+				folder = project.getFolder(directory);
+				
 			if (!folder.exists()) {
 				setErrorMessage(MessageFormat.format("Folder {0} does not exist in project {1}", directory,
 						project.getName()));
 				return false;
 			}
-			IFile file = project.getFile(new Path(directory + "/WEB-INF/web.xml"));
+			
+			IFile file = folder.getFile(new Path("WEB-INF/web.xml"));
 			if (!file.exists()) {
 				setErrorMessage(MessageFormat.format(
 						"Directory {0} does not contain WEB-INF/web.xml; it is not a valid web application directory",
