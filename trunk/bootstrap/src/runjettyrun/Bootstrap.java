@@ -131,7 +131,7 @@ public class Bootstrap {
 		web = new WebAppContext();
 		web.setContextPath(context);
 		web.setWar(webAppDir);
-//		web.setBaseResource(Resource.newResource("c:/workspace/zkdemo/src/archive"));
+		
 		// Fix issue 7, File locking on windows/Disable Jetty's locking of
 		// static files
 		// http://code.google.com/p/run-jetty-run/issues/detail?id=7
