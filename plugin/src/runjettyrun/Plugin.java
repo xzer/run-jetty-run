@@ -86,7 +86,7 @@ public class Plugin extends AbstractUIPlugin {
 			+ ".ENABLE_SCANNER_ATTR";
 
 	/** used to calculate the jars to include. */
-	public static final String JETTY_VERSION = "6.1.6";
+	public static final String JETTY_VERSION = "6.1.26";
 
 	// The shared instance
 	private static Plugin plugin;

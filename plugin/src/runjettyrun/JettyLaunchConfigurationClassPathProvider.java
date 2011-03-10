@@ -85,8 +85,7 @@ public class JettyLaunchConfigurationClassPathProvider extends
         + Plugin.JETTY_VERSION);
     addRelativeArchiveEntry(entries, installUrl, "jetty-management-"
         + Plugin.JETTY_VERSION);
-    addRelativeArchiveEntry(entries, installUrl, "servlet-api-2.5-"
-        + Plugin.JETTY_VERSION);
+    addRelativeArchiveEntry(entries, installUrl, "servlet-api-2.5-20081211");
     addRelativeArchiveEntry(entries, installUrl, "jsp-api-2.1");
     addRelativeArchiveEntry(entries, installUrl, "jsp-2.1");
     addRelativeArchiveEntry(entries, installUrl, "core-3.1.1");
