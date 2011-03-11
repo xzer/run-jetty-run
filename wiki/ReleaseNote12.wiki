@@ -1,5 +1,5 @@
+#summary RunJettyRun 1.2 Release Note 2011/03/11
 #labels Phase-Design,Featured,Release-Note,1.2
-#RunJettyRun 1.2 Release Note 2011/03/11
 
 = Publish Date =
 
