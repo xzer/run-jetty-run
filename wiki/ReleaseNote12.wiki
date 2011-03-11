@@ -9,10 +9,7 @@
 
 It's a newer version for Run Jetty Run!
 
-We update the Jetty version from 6.1.6 to 6.1.26, 
-and accept the enhance for "source scanner".
-
-Add port defect / keybinding and some useful feature , and fix some annoying bug.
+We updated the Jetty version from 6.1.6 to 6.1.26, accepted the enhance for "source scanner", add port defect , keybinding , some useful features , and fix some annoying bug.
 
 
 = Details =
