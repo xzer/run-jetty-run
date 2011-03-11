@@ -24,13 +24,13 @@ Please check the accpected defect list below:
  * Issue #51 Add keybinding to start server 
 
 
-If you find any bug , please feel free to post a new bug to let me know. Thanks.
+If you find any bug , please feel free to post a new bug to let us know. Thanks.
 
 
 
 = Next Milestone =
 
-Here we list the defects I am going to do in version 1.2.1 ; 
+Here we list the defects we are going to do in version 1.2.1 ; 
 
 And plan to release it before May.
 
@@ -40,4 +40,7 @@ And plan to release it before May.
  * Check the compatibility with Jetty 7/Jetty 8 .
 
 
+
 And thanks James Synge , Eelco Hillenius for building a such good project and invited me to join the project.
+
+I wish I could make it better...
