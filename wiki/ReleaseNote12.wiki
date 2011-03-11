@@ -1,0 +1,46 @@
+#labels Phase-Design,Featured,Release-Note,1.2
+#RunJettyRun 1.2 Release Note 2011/03/11
+
+= Publish Date =
+
+2011/03/11
+
+= Introduction =
+
+It's a newer version for Run Jetty Run!
+
+We update the Jetty version from 6.1.6 to 6.1.26, 
+and accept the enhance for "source scanner".
+
+Add port defect / keybinding and some useful feature , and fix some annoying bug.
+
+
+= Details =
+
+Please check the accpected and fixed defect list below:
+
+ * Issue #8 Add scanner to restart the server when classes change
+ * Issue #13 Warn if port is already in use  
+ * Issue #33 Use latest version of Jetty  
+ * Issue #44 Can't specify project dir as webapp dir  
+ * Issue #50 Jars under WEB-INF/lib aren't found unless on eclipse projects classpath   
+ * Issue #51 Add keybinding to start server 
+
+
+If you find any bug , please feel free to post a new bug to let me know. Thanks.
+
+
+
+= Next Milestone =
+
+Here we list the defects I am going to do in version 1.2.1 ; 
+
+And plan to release it before May.
+
+
+ * Issue #45 etty pulls all jars in maven dependency hierarchy instead of resolved dependencies  * This one is the major one in next version. *
+ 
+ * Check the compatibility with Jetty 7/Jetty 8 .
+
+
+And thanks James Synge , Eelco Hillenius for building a such good project and invited me to join the project.
