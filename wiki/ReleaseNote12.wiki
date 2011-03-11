@@ -14,7 +14,7 @@ We updated the Jetty version from 6.1.6 to 6.1.26, accepted the enhance for "sou
 
 = Details =
 
-Please check the accpected and fixed defect list below:
+Please check the accpected defect list below:
 
  * Issue #8 Add scanner to restart the server when classes change
  * Issue #13 Warn if port is already in use  
