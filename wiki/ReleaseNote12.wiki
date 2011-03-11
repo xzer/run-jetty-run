@@ -27,6 +27,12 @@ Please check the accpected defect list below:
 If you find any bug , please feel free to post a new bug to let us know. Thanks.
 
 
+= Notice =
+
+If you run a existing project and get a ClassNotFound Exception in bootstrap , 
+it's caused by you customized the RJR classpath in "Run Configuration" , 
+you might need to restore default entrys to get newer jetty package works.
+
 
 = Next Milestone =
 
