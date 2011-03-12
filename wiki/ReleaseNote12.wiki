@@ -46,7 +46,7 @@ And plan to release it before May.
  
  * Check the compatibility with Jetty 7/Jetty 8 .
 
-
+ * Other tasks http://code.google.com/p/run-jetty-run/issues/list?q=label:1.2 
 
 And thanks James Synge , Eelco Hillenius for building a such good project and invited me to join the project.
 
