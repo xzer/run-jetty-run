@@ -500,11 +500,11 @@ public class RunJettyRunTab extends JavaLaunchTab {
 	private String scanWebAppDir(String projectName) {
 		IProject project = getProject(projectName);
 		if (project != null) {
-			
+
 			if(project.getFolder(new Path("WEB-INF")).exists()){
 				return "/";
 			}
-			
+
 			try {
 				IContainer webInf = scanWEBINF(project);
 				if (webInf != null && webInf.exists()) {
@@ -592,19 +592,19 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		String directory = fWebAppDirText.getText().trim();
 		if (!"".equals(directory.trim())) {
 			//means use project folder as webapp folder
-			
+
 			IContainer folder = null;
 			if("/".equals(directory))
 				folder = project;
 			else
 				folder = project.getFolder(directory);
-				
+
 			if (!folder.exists()) {
 				setErrorMessage(MessageFormat.format("Folder {0} does not exist in project {1}", directory,
 						project.getName()));
 				return false;
 			}
-			
+
 			IFile file = folder.getFile(new Path("WEB-INF/web.xml"));
 			if (!file.exists()) {
 				setErrorMessage(MessageFormat.format(
@@ -716,7 +716,7 @@ public class RunJettyRunTab extends JavaLaunchTab {
 
 		IWorkbenchPage page = JDIDebugUIPlugin.getActivePage();
 		if (page != null ) {
-			
+
 			FileEditorInput editorinput = null;
 			try{
 				editorinput = (FileEditorInput ) page.getActiveEditor().getEditorInput().getAdapter(FileEditorInput.class);
@@ -783,6 +783,7 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		configuration.setAttribute(Plugin.ATTR_SCANINTERVALSECONDS, "5");
 		configuration.setAttribute(Plugin.ATTR_ENABLE_SCANNER,true);
 
+		configuration.setAttribute(Plugin.ATTR_ENABLE_MAVEN_TEST_CLASSES,true);
 		return;
 	}
 
