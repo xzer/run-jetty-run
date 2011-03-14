@@ -63,12 +63,12 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.dialogs.ContainerSelectionDialog;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 import org.eclipse.ui.part.FileEditorInput;
 
+import runjettyrun.utils.ProjectUtil;
 import runjettyrun.utils.RunJettyRunLaunchConfigurationUtil;
 
 /**
@@ -113,7 +113,12 @@ public class RunJettyRunTab extends JavaLaunchTab {
 	private Button fWebappScanButton;
 
 	private Button fEnablebox;
+	
+	private Button fMavenDisableTestClassesBox;
 
+	private Group mavenGroup= null;
+	
+	private boolean isMavenProject = false;
 	/**
 	 * Construct.
 	 */
@@ -137,6 +142,8 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		createPortEditor(comp);
 		createVerticalSpacer(comp, 1);
 		createJettyOptionsEditor(comp);
+		createVerticalSpacer(comp, 1);
+		createMavenEditor(comp);
 		createVerticalSpacer(comp, 1);
 		setControl(comp);
 		// PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(),
@@ -165,12 +172,7 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		gd = createHFillGridData();
 		fProjText.setLayoutData(gd);
 		fProjText.setFont(font);
-		fProjText.addModifyListener(new ModifyListener() {
-
-			public void modifyText(ModifyEvent e) {
-				updateLaunchConfigurationDialog();
-			}
-		});
+		fProjText.addModifyListener(new UpdateModfiyListener());
 		fProjButton = createPushButton(group, "&Browse...", null);
 		fProjButton.addSelectionListener(new ButtonListener() {
 
@@ -179,6 +181,40 @@ public class RunJettyRunTab extends JavaLaunchTab {
 			}
 		});
 	}
+	
+	/**
+	 * create a group for M2E config.
+	 *
+	 * @param parent
+	 *            the parent composite
+	 */
+	private void createMavenEditor(Composite parent) {
+		Font font = parent.getFont();
+		mavenGroup = new Group(parent, SWT.NONE);
+		mavenGroup.setVisible(isMavenProject);
+		mavenGroup.setText("Maven");
+		GridData gd = createHFillGridData();
+		mavenGroup.setLayoutData(gd);
+		GridLayout layout = new GridLayout();
+		layout.numColumns = 2;
+		mavenGroup.setLayout(layout);
+		mavenGroup.setFont(font);
+		
+
+		fMavenDisableTestClassesBox = createCheckButton(mavenGroup, "Disable test-classes for maven");
+		gd = new GridData();
+		gd.horizontalAlignment = SWT.LEFT;
+		fMavenDisableTestClassesBox.setLayoutData(gd);
+		//update configuration directly when user select it.
+		fMavenDisableTestClassesBox.addSelectionListener(new ButtonListener() {
+			public void widgetSelected(SelectionEvent e) {
+				updateLaunchConfigurationDialog();
+			}
+		});
+		
+	}
+	
+	
 
 	private GridData createHFillGridData() {
 		GridData gd = new GridData();
@@ -214,12 +250,7 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		new Label(group, SWT.LEFT).setText("HTTP");
 
 		fPortText = new Text(group, SWT.SINGLE | SWT.BORDER);
-		fPortText.addModifyListener(new ModifyListener() {
-
-			public void modifyText(ModifyEvent e) {
-				updateLaunchConfigurationDialog();
-			}
-		});
+		fPortText.addModifyListener(new UpdateModfiyListener());
 		gd = createHFillGridData();
 		fPortText.setLayoutData(gd);
 		fPortText.setFont(font);
@@ -245,7 +276,6 @@ public class RunJettyRunTab extends JavaLaunchTab {
 
 		fSSLPortText = new Text(group, SWT.SINGLE | SWT.BORDER);
 		fSSLPortText.addModifyListener(new ModifyListener() {
-
 			public void modifyText(ModifyEvent e) {
 				if (fSSLPortText.getText().trim().length() == 0) {
 					setSSLSettingEnabled(false);
@@ -264,12 +294,7 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		new Label(group, SWT.LEFT).setText("Keystore");
 		fKeystoreText = new Text(group, SWT.SINGLE | SWT.BORDER);
 
-		fKeystoreText.addModifyListener(new ModifyListener() {
-
-			public void modifyText(ModifyEvent e) {
-				updateLaunchConfigurationDialog();
-			}
-		});
+		fKeystoreText.addModifyListener(new UpdateModfiyListener());
 		gd = createHFillGridData();
 		gd.horizontalSpan = 2;
 		fKeystoreText.setLayoutData(gd);
@@ -291,12 +316,7 @@ public class RunJettyRunTab extends JavaLaunchTab {
 
 		new Label(group, SWT.LEFT).setText("Password");
 		fPasswordText = new Text(group, SWT.SINGLE | SWT.BORDER);
-		fPasswordText.addModifyListener(new ModifyListener() {
-
-			public void modifyText(ModifyEvent e) {
-				updateLaunchConfigurationDialog();
-			}
-		});
+		fPasswordText.addModifyListener(new UpdateModfiyListener());
 		gd = createHFillGridData();
 		fPasswordText.setLayoutData(gd);
 		fPasswordText.setFont(font);
@@ -304,12 +324,7 @@ public class RunJettyRunTab extends JavaLaunchTab {
 
 		new Label(group, SWT.LEFT).setText("Key Password");
 		fKeyPasswordText = new Text(group, SWT.SINGLE | SWT.BORDER);
-		fKeyPasswordText.addModifyListener(new ModifyListener() {
-
-			public void modifyText(ModifyEvent e) {
-				updateLaunchConfigurationDialog();
-			}
-		});
+		fKeyPasswordText.addModifyListener(new UpdateModfiyListener());
 		gd = createHFillGridData();
 		fKeyPasswordText.setLayoutData(gd);
 		fKeyPasswordText.setFont(font);
@@ -353,12 +368,7 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		new Label(group, SWT.LEFT).setText("Context");
 
 		fContextText = new Text(group, SWT.SINGLE | SWT.BORDER);
-		fContextText.addModifyListener(new ModifyListener() {
-
-			public void modifyText(ModifyEvent e) {
-				updateLaunchConfigurationDialog();
-			}
-		});
+		fContextText.addModifyListener(new UpdateModfiyListener());
 		new Label(group, SWT.SINGLE);
 
 		gd = createHFillGridData();
@@ -369,12 +379,7 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		// Row 2: "WebApp dir", Text field, "Browse..." Button
 		new Label(group, SWT.LEFT).setText("WebApp dir");
 		fWebAppDirText = new Text(group, SWT.SINGLE | SWT.BORDER);
-		fWebAppDirText.addModifyListener(new ModifyListener() {
-
-			public void modifyText(ModifyEvent e) {
-				updateLaunchConfigurationDialog();
-			}
-		});
+		fWebAppDirText.addModifyListener(new UpdateModfiyListener());
 		gd = createHFillGridData();
 		fWebAppDirText.setLayoutData(gd);
 		fWebAppDirText.setFont(font);
@@ -404,12 +409,7 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		// Row 3: Scan interval seconds
 		new Label(group, SWT.LEFT).setText("Scan Interval Seconds");
 		fScanText = new Text(group, SWT.SINGLE | SWT.BORDER);
-		fScanText.addModifyListener(new ModifyListener() {
-
-			public void modifyText(ModifyEvent e) {
-				updateLaunchConfigurationDialog();
-			}
-		});
+		fScanText.addModifyListener(new UpdateModfiyListener());
 		gd = createHFillGridData();
 
 		fScanText.setLayoutData(gd);
@@ -428,6 +428,8 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		gd = new GridData();
 		gd.horizontalSpan = 2;
 		fEnablebox.setLayoutData(gd);
+		
+		
 		return;
 	}
 
@@ -458,7 +460,15 @@ public class RunJettyRunTab extends JavaLaunchTab {
 	public void initializeFrom(ILaunchConfiguration configuration) {
 		super.initializeFrom(configuration);
 		try {
-			fProjText.setText(configuration.getAttribute(ATTR_PROJECT_NAME, ""));
+			String projectname = configuration.getAttribute(ATTR_PROJECT_NAME, "");
+			fProjText.setText(projectname);
+			
+			IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectname);
+			if(project!=null){
+				isMavenProject = true;
+				mavenGroup.setVisible(true);
+			}
+			
 
 			fPortText.setText(configuration.getAttribute(Plugin.ATTR_PORT, ""));
 
@@ -475,6 +485,8 @@ public class RunJettyRunTab extends JavaLaunchTab {
 			fScanText.setText(configuration.getAttribute(Plugin.ATTR_SCANINTERVALSECONDS, ""));
 			fEnablebox.setSelection(configuration.getAttribute(Plugin.ATTR_ENABLE_SCANNER, true));
 			fScanText.setEnabled(fEnablebox.getSelection());
+			
+			fMavenDisableTestClassesBox.setSelection(configuration.getAttribute(Plugin.ATTR_ENABLE_MAVEN_TEST_CLASSES, true));
 
 			setSSLSettingEnabled(fEnableSSLbox.getSelection());
 		} catch (CoreException e) {
@@ -696,6 +708,8 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		configuration.setAttribute(Plugin.ATTR_SCANINTERVALSECONDS, fScanText.getText());
 
 		configuration.setAttribute(Plugin.ATTR_ENABLE_SCANNER, fEnablebox.getSelection());
+		
+		configuration.setAttribute(Plugin.ATTR_ENABLE_MAVEN_TEST_CLASSES, fMavenDisableTestClassesBox.getSelection());
 
 	}
 
@@ -838,9 +852,12 @@ public class RunJettyRunTab extends JavaLaunchTab {
 
 	private void handleProjectButtonSelected() {
 		IJavaProject project = chooseJavaProject();
-		if (project == null) {
-			return;
-		}
+		
+		if (project == null) return;
+		
+		isMavenProject = ProjectUtil.isMavenProject(project.getProject());
+		if(mavenGroup!=null ) mavenGroup.setVisible(isMavenProject);
+		
 		String projectName = project.getElementName();
 		fProjText.setText(projectName);
 	}
@@ -859,5 +876,16 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		String res = dialog.open();
 		if (res != null)
 			fKeystoreText.setText(res);
+	}
+	
+	/**
+	 * If it's modified , just update the configuration directly.
+	 * @author TonyQ
+	 *
+	 */
+	private class UpdateModfiyListener implements ModifyListener{
+		public void modifyText(ModifyEvent e) {
+			updateLaunchConfigurationDialog();
+		}
 	}
 }
