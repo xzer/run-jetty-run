@@ -88,6 +88,12 @@ public class Plugin extends AbstractUIPlugin {
 	/** used to calculate the jars to include. */
 	public static final String JETTY_VERSION = "6.1.26";
 
+	/**
+	 * filter test-classes or not
+	 */
+	public static final String ATTR_ENABLE_MAVEN_TEST_CLASSES = Plugin.PLUGIN_ID
+			+ ".ENABLE_MAVEN_TEST_CLASSES_ATTR";
+
 	// The shared instance
 	private static Plugin plugin;
 

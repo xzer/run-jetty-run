@@ -94,10 +94,16 @@ public class RunJettyRunClasspathResolver {
 				 */
 				if(entries[i].getType()== IRuntimeClasspathEntry.CONTAINER &&
 						MAVEN_CONTAINER_ID.equals(entries[i].getVariableName())
-				){
+				)
 					temp = computeMavenContainerEntries(entries[i],configuration);
-				}else temp = JavaRuntime.resolveRuntimeClasspathEntry(entries[i], configuration);
+				else temp = JavaRuntime.resolveRuntimeClasspathEntry(entries[i], configuration);
+
+
+				boolean skipTestClasses = configuration.getAttribute(Plugin.ATTR_ENABLE_MAVEN_TEST_CLASSES,true);
 				for (int j = 0; j < temp.length; j++) {
+					if(skipTestClasses && temp[j].getLocation() != null && temp[j].getLocation().endsWith("test-classes")){
+						continue;
+					}
 					resolved.add(temp[j]);
 				}
 			}
@@ -153,9 +159,11 @@ public class RunJettyRunClasspathResolver {
 					IRuntimeClasspathEntry[] entries = JavaRuntime.resolveRuntimeClasspathEntry(new RuntimeClasspathEntry(cpe), jp);
 					for (int j = 0; j < entries.length; j++) {
 						IRuntimeClasspathEntry e =  entries[j];
-						if (!resolved.contains(e)) {
+
+						//skip test-classes for included maven project.
+						if (!resolved.contains(e) && ( e.getLocation()==null || e.getLocation().endsWith("test-classes") ))
 							resolved.add(entries[j]);
-						}
+
 					}
 					/**
 					 * end
