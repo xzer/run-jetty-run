@@ -464,9 +464,9 @@ public class RunJettyRunTab extends JavaLaunchTab {
 			fProjText.setText(projectname);
 			
 			IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectname);
-			if(project!=null){
-				isMavenProject = true;
-				mavenGroup.setVisible(true);
+			if(project != null ){
+				isMavenProject = ProjectUtil.isMavenProject(project);
+				if(mavenGroup!=null ) mavenGroup.setVisible(isMavenProject);
 			}
 			
 
