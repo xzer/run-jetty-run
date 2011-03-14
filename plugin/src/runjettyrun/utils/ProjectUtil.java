@@ -3,13 +3,14 @@ package runjettyrun.utils;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.part.FileEditorInput;
 
 public class ProjectUtil {
-
+	public static String MAVEN_NATURE_ID = "org.maven.ide.eclipse.maven2Nature";
+	
 	public static IResource getSelectedResource(IWorkbenchWindow window){
 		IEditorInput editorinput = window.getActivePage().getActiveEditor().getEditorInput();
 		FileEditorInput fileEditorInput = (FileEditorInput) editorinput.getAdapter(FileEditorInput.class);
@@ -47,5 +48,13 @@ public class ProjectUtil {
 			folder = project.getFolder(webappdir);
 	
 		return folder;
+	}
+	
+	public static  boolean isMavenProject(IProject project) {
+		try {
+			return project!=null && project.hasNature(MAVEN_NATURE_ID);
+		} catch (CoreException e) {
+			return false;
+		}
 	}
 }

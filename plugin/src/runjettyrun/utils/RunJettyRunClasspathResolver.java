@@ -32,17 +32,7 @@ public class RunJettyRunClasspathResolver {
 	/**
 	 * reference to M2E project , 20101115 version.
 	 */
-	private static String MAVEN_NATURE_ID = "org.maven.ide.eclipse.maven2Nature";
 	private static String MAVEN_CONTAINER_ID = "org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER";
-
-
-	private static  boolean isMavenProject(IProject project) {
-		try {
-			return project!=null && project.hasNature(MAVEN_NATURE_ID);
-		} catch (CoreException e) {
-			return false;
-		}
-	}
 
 	public static IRuntimeClasspathEntry[] resolveClasspath(IRuntimeClasspathEntry[] entries,ILaunchConfiguration configuration ) throws CoreException {
 
@@ -53,7 +43,7 @@ public class RunJettyRunClasspathResolver {
 			return entries;
 		}
 
-		if(isMavenProject(proj.getProject())){
+		if(ProjectUtil.isMavenProject(proj.getProject())){
 			return resolvedMavenProjectClasspath(entries,configuration);
 		}else{
 			IRuntimeClasspathProvider provider = new StandardClasspathProvider();
