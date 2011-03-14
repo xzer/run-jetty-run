@@ -45,7 +45,7 @@ And plan to release it before May.
  * Issue #52 RJR get wrong classpath in M2Eclipse
   * *This one is the major one in next version.*
  
- * Check the compatibility with Jetty 7/Jetty 8 .
+ * ~~Check the compatibility with Jetty 7/Jetty 8 . ~~ (Move to milestone for 1.2.2 )
 
  * Other tasks http://code.google.com/p/run-jetty-run/issues/list?q=label:1.2 
 
