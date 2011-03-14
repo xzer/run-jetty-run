@@ -42,7 +42,7 @@ Here we list the defects we are going to do in version 1.2.1 ;
 And plan to release it before May.
 
 
- * Issue #45 Jetty pulls all jars in maven dependency hierarchy instead of resolved dependencies  
+ * Issue #52 RJR get wrong classpath in M2Eclipse
   * *This one is the major one in next version.*
  
  * Check the compatibility with Jetty 7/Jetty 8 .
