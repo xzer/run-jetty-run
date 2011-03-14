@@ -27,11 +27,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -39,12 +37,11 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.launching.AbstractJavaLaunchConfigurationDelegate;
 import org.eclipse.jdt.launching.ExecutionArguments;
 import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
-import org.eclipse.jdt.launching.IRuntimeClasspathProvider;
 import org.eclipse.jdt.launching.IVMRunner;
 import org.eclipse.jdt.launching.JavaRuntime;
-import org.eclipse.jdt.launching.StandardClasspathProvider;
 import org.eclipse.jdt.launching.VMRunnerConfiguration;
 
+import runjettyrun.utils.RunJettyRunClasspathResolver;
 import runjettyrun.utils.RunJettyRunClasspathUtil;
 
 /**
@@ -100,11 +97,11 @@ public class JettyLaunchConfigurationType extends
 			Map vmAttributesMap = getVMSpecificAttributesMap(configuration);
 
 			// Class paths
-			
+
 			//here the classpath means for the Jetty Server , not for the application! by TonyQ 2011/3/7
 			String[] classpath = getClasspath(configuration);
-			
-			
+
+
 			//here the classpath is really for web app.
 			String[] webAppClasspathArray = getProjectClasspath(configuration);
 			String webAppClasspath = null;
@@ -237,7 +234,7 @@ public class JettyLaunchConfigurationType extends
 			List<String> runtimeVmArgs, String cfgAttr, String argName)
 			throws CoreException {
 		String value = configuration.getAttribute(cfgAttr, "");
-		
+
 		if("webapp".equals(argName)&& "/".equals(value)){
 			value="./";
 		}
@@ -279,9 +276,9 @@ public class JettyLaunchConfigurationType extends
 			return new String[0];
 		}
 
-		IRuntimeClasspathEntry[] entries = 
+		IRuntimeClasspathEntry[] entries =
 			RunJettyRunClasspathUtil.filterWebInfLibs(JavaRuntime.computeUnresolvedRuntimeClasspath(proj),configuration);
-		
+
 
 		// Remove JRE entry/entries.
 
@@ -303,8 +300,8 @@ public class JettyLaunchConfigurationType extends
 		// Resolve the entries to actual file/folder locations.
 
 		entries = entryList.toArray(new IRuntimeClasspathEntry[0]);
-		IRuntimeClasspathProvider provider = new StandardClasspathProvider();
-		entries = provider.resolveClasspath(entries, configuration);
+
+		entries = RunJettyRunClasspathResolver.resolveClasspath(entries, configuration);
 
 		// entries = JavaRuntime.resolveRuntimeClasspath(entries,
 		// configuration);
@@ -319,10 +316,10 @@ public class JettyLaunchConfigurationType extends
 				}
 			}
 		}
-		
+
 		locations.addAll( RunJettyRunClasspathUtil.getWebInfLibLocations(configuration) );
-		
+
 		return (String[]) locations.toArray(new String[locations.size()]);
 	}
-	
+
 }
