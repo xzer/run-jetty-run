@@ -66,21 +66,20 @@ public class JettyLaunchConfigurationType extends
 
 	private String provideClasspath(ILaunchConfiguration configuration) throws CoreException{
 		String[] webAppClasspathArray = getProjectClasspath(configuration);
-		String webAppClasspath = null;
-		{
-			StringBuilder sb = new StringBuilder();
-			for (int i = 0; i < webAppClasspathArray.length; i++) {
-				String path = webAppClasspathArray[i];
-				if (sb.length() > 0)
-					sb.append(File.pathSeparator);
-				sb.append(path);
-			}
-			webAppClasspath = sb.toString();
+		String webAppClasspath = "";
+		
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < webAppClasspathArray.length; i++) {
+			String path = webAppClasspathArray[i];
+			if (sb.length() > 0)
+				sb.append(File.pathSeparator);
+			sb.append(path);
 		}
+		webAppClasspath = sb.toString();
+		
 		/**
 		 * The smallest limit for windows XP is 2048
 		 */
-		System.err.println(webAppClasspath.length());
 		if(webAppClasspath.length() > 1024){
 			File f = prepareClasspathFile(configuration,webAppClasspath);
 			webAppClasspath = "file://"+f.getAbsolutePath();
@@ -134,15 +133,7 @@ public class JettyLaunchConfigurationType extends
 
 			//here the classpath is really for web app.
 			String webAppClasspath = provideClasspath(configuration);
-
-			/**
-			 * The smallest limit for windows XP is 2048
-			 */
-			if(webAppClasspath.length() > 1024){
-				File f = prepareClasspathFile(configuration,webAppClasspath);
-				webAppClasspath = "file://"+f.getAbsolutePath();
-			}
-			
+		
 			// Create VM configuration
 			VMRunnerConfiguration runConfig = new VMRunnerConfiguration(
 					mainTypeName, classpath);
@@ -195,20 +186,17 @@ public class JettyLaunchConfigurationType extends
 	
 	private File prepareClasspathFile(ILaunchConfiguration configuration,String classpath){
 		IPath path = Plugin.getDefault().getStateLocation().append(configuration.getName()+".classpath");
-//		if(path.toFile().canWrite()){
-			File f = path.toFile();
-			try{
-			    BufferedWriter out = new BufferedWriter(new OutputStreamWriter
-                        (new FileOutputStream(f,false),"UTF8"));
-				out.write(classpath);
-				out.close();
-				return f;
-			}catch(IOException e){
-				return null;
-			}
-//		}else{
-//			return null;
-//		}
+		File f = path.toFile();
+		try{
+		    BufferedWriter out = new BufferedWriter(new OutputStreamWriter
+                    (new FileOutputStream(f,false),"UTF8"));
+			out.write(classpath);
+			out.close();
+			return f;
+		}catch(IOException e){
+			return null;
+		}
+
 	}
 
 	/**
