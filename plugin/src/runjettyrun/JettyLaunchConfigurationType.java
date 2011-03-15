@@ -17,7 +17,11 @@
  */
 package runjettyrun;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,6 +32,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.debug.core.DebugException;
@@ -59,6 +64,31 @@ public class JettyLaunchConfigurationType extends
 	private static HashMap<String,ILaunch> launcher = new HashMap<String,ILaunch>();
 
 
+	private String provideClasspath(ILaunchConfiguration configuration) throws CoreException{
+		String[] webAppClasspathArray = getProjectClasspath(configuration);
+		String webAppClasspath = null;
+		{
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0; i < webAppClasspathArray.length; i++) {
+				String path = webAppClasspathArray[i];
+				if (sb.length() > 0)
+					sb.append(File.pathSeparator);
+				sb.append(path);
+			}
+			webAppClasspath = sb.toString();
+		}
+		/**
+		 * The smallest limit for windows XP is 2048
+		 */
+		System.err.println(webAppClasspath.length());
+		if(webAppClasspath.length() > 1024){
+			File f = prepareClasspathFile(configuration,webAppClasspath);
+			webAppClasspath = "file://"+f.getAbsolutePath();
+		}
+		
+		return webAppClasspath;
+		
+	}
 	public void launch(ILaunchConfiguration configuration, String mode,
 			ILaunch launch, IProgressMonitor monitor) throws CoreException {
 
@@ -103,19 +133,16 @@ public class JettyLaunchConfigurationType extends
 
 
 			//here the classpath is really for web app.
-			String[] webAppClasspathArray = getProjectClasspath(configuration);
-			String webAppClasspath = null;
-			{
-				StringBuilder sb = new StringBuilder();
-				for (int i = 0; i < webAppClasspathArray.length; i++) {
-					String path = webAppClasspathArray[i];
-					if (sb.length() > 0)
-						sb.append(File.pathSeparator);
-					sb.append(path);
-				}
-				webAppClasspath = sb.toString();
-			}
+			String webAppClasspath = provideClasspath(configuration);
 
+			/**
+			 * The smallest limit for windows XP is 2048
+			 */
+			if(webAppClasspath.length() > 1024){
+				File f = prepareClasspathFile(configuration,webAppClasspath);
+				webAppClasspath = "file://"+f.getAbsolutePath();
+			}
+			
 			// Create VM configuration
 			VMRunnerConfiguration runConfig = new VMRunnerConfiguration(
 					mainTypeName, classpath);
@@ -123,6 +150,8 @@ public class JettyLaunchConfigurationType extends
 			runConfig.setEnvironment(envp);
 
 			List<String> runtimeVmArgs = getJettyArgs(configuration);
+			
+			
 			runtimeVmArgs.add("-Drjrclasspath=" + webAppClasspath);
 			runtimeVmArgs.addAll(Arrays.asList(execArgs.getVMArgumentsArray()));
 
@@ -153,8 +182,7 @@ public class JettyLaunchConfigurationType extends
 			checkOldLauncher(configuration, launch);
 			// Launch the configuration - 1 unit of work
 			runner.run(runConfig, launch, monitor);
-
-
+			
 			// check for cancellation
 			if (monitor.isCanceled()) {
 				return;
@@ -163,6 +191,24 @@ public class JettyLaunchConfigurationType extends
 			monitor.done();
 		}
 
+	}
+	
+	private File prepareClasspathFile(ILaunchConfiguration configuration,String classpath){
+		IPath path = Plugin.getDefault().getStateLocation().append(configuration.getName()+".classpath");
+//		if(path.toFile().canWrite()){
+			File f = path.toFile();
+			try{
+			    BufferedWriter out = new BufferedWriter(new OutputStreamWriter
+                        (new FileOutputStream(f,false),"UTF8"));
+				out.write(classpath);
+				out.close();
+				return f;
+			}catch(IOException e){
+				return null;
+			}
+//		}else{
+//			return null;
+//		}
 	}
 
 	/**

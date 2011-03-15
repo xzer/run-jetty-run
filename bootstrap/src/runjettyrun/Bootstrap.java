@@ -17,8 +17,11 @@
  */
 package runjettyrun;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.management.ManagementFactory;
 import java.net.DatagramSocket;
 import java.net.ServerSocket;
@@ -28,6 +31,7 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.management.MBeanServer;
+import javax.management.RuntimeErrorException;
 
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.nio.SelectChannelConnector;
@@ -70,7 +74,7 @@ public class Bootstrap {
 		Integer sslport = Integer.getInteger("rjrsslport");
 		String keystore = System.getProperty("rjrkeystore");
 		String password = System.getProperty("rjrpassword");
-		final String webAppClassPath = System.getProperty("rjrclasspath");
+		final String webAppClassPath = resovleWebappClasspath();
 		String keyPassword = System.getProperty("rjrkeypassword");
 		Integer scanIntervalSeconds = Integer.getInteger("rjrscanintervalseconds");
 		Boolean enablescanner = Boolean.getBoolean("rjrenablescanner");
@@ -214,6 +218,31 @@ public class Bootstrap {
 			System.exit(100);
 		}
 		return;
+	}
+	
+	private static String resovleWebappClasspath(){
+		String classpath = System.getProperty("rjrclasspath");
+		
+		if(classpath!=null && classpath.startsWith("file://")){
+			try{
+				String filePath = classpath.substring(7);
+				
+				BufferedReader br =new BufferedReader(new InputStreamReader(new FileInputStream(filePath),"UTF-8"));
+				StringBuffer sb = new StringBuffer();
+				String str = br.readLine();
+				while(str!=null){
+					sb.append(str);
+					str = br.readLine();
+				}
+				return sb.toString();
+				
+			}catch(IOException e){
+				System.err.println("read classpath failed!");
+				throw new RuntimeException(" read classpath failed ",e);
+			}
+		}
+		
+		return classpath;
 	}
 
 	private static boolean available(int port) {
