@@ -261,6 +261,10 @@ public class JettyLaunchConfigurationType extends
 
 		addOptionalAttrx(configuration, runtimeVmArgs,
 				Plugin.ATTR_ENABLE_SSL, "enablessl");
+		
+		addOptionalAttrx(configuration, runtimeVmArgs,
+				Plugin.ATTR_ENABLE_PARENT_LOADER_PRIORITY, "parentloaderpriority");
+		
 		return runtimeVmArgs;
 	}
 

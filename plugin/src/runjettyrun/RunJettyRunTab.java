@@ -114,7 +114,9 @@ public class RunJettyRunTab extends JavaLaunchTab {
 
 	private Button fEnablebox;
 	
-	private Button fMavenDisableTestClassesBox;
+	private Button fEnableMavenDisableTestClassesBox;
+	
+	private Button fEnableParentLoadPriorityBox;
 
 	private Group mavenGroup= null;
 	
@@ -201,12 +203,12 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		mavenGroup.setFont(font);
 		
 
-		fMavenDisableTestClassesBox = createCheckButton(mavenGroup, "Disable test-classes for maven");
+		fEnableMavenDisableTestClassesBox = createCheckButton(mavenGroup, "Disable test-classes for maven");
 		gd = new GridData();
 		gd.horizontalAlignment = SWT.LEFT;
-		fMavenDisableTestClassesBox.setLayoutData(gd);
+		fEnableMavenDisableTestClassesBox.setLayoutData(gd);
 		//update configuration directly when user select it.
-		fMavenDisableTestClassesBox.addSelectionListener(new ButtonListener() {
+		fEnableMavenDisableTestClassesBox.addSelectionListener(new ButtonListener() {
 			public void widgetSelected(SelectionEvent e) {
 				updateLaunchConfigurationDialog();
 			}
@@ -430,6 +432,18 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		fEnablebox.setLayoutData(gd);
 		
 		
+		//Row4 Parent Loader Priority
+		fEnableParentLoadPriorityBox = createCheckButton(group, "ParentLoadPriority");
+		gd = new GridData();
+		gd.horizontalAlignment = SWT.LEFT;
+		fEnableParentLoadPriorityBox.setLayoutData(gd);
+		//update configuration directly when user select it.
+		fEnableParentLoadPriorityBox.addSelectionListener(new ButtonListener() {
+			public void widgetSelected(SelectionEvent e) {
+				updateLaunchConfigurationDialog();
+			}
+		});
+		
 		return;
 	}
 
@@ -486,7 +500,9 @@ public class RunJettyRunTab extends JavaLaunchTab {
 			fEnablebox.setSelection(configuration.getAttribute(Plugin.ATTR_ENABLE_SCANNER, true));
 			fScanText.setEnabled(fEnablebox.getSelection());
 			
-			fMavenDisableTestClassesBox.setSelection(configuration.getAttribute(Plugin.ATTR_ENABLE_MAVEN_TEST_CLASSES, true));
+			fEnableMavenDisableTestClassesBox.setSelection(configuration.getAttribute(Plugin.ATTR_ENABLE_MAVEN_TEST_CLASSES, true));
+			
+			fEnableParentLoadPriorityBox.setSelection(configuration.getAttribute(Plugin.ATTR_ENABLE_PARENT_LOADER_PRIORITY, true));
 
 			setSSLSettingEnabled(fEnableSSLbox.getSelection());
 		} catch (CoreException e) {
@@ -709,7 +725,9 @@ public class RunJettyRunTab extends JavaLaunchTab {
 
 		configuration.setAttribute(Plugin.ATTR_ENABLE_SCANNER, fEnablebox.getSelection());
 		
-		configuration.setAttribute(Plugin.ATTR_ENABLE_MAVEN_TEST_CLASSES, fMavenDisableTestClassesBox.getSelection());
+		configuration.setAttribute(Plugin.ATTR_ENABLE_PARENT_LOADER_PRIORITY, fEnableParentLoadPriorityBox.getSelection());
+		
+		configuration.setAttribute(Plugin.ATTR_ENABLE_MAVEN_TEST_CLASSES, fEnableMavenDisableTestClassesBox.getSelection());
 
 	}
 
@@ -798,6 +816,8 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		configuration.setAttribute(Plugin.ATTR_ENABLE_SCANNER,true);
 
 		configuration.setAttribute(Plugin.ATTR_ENABLE_MAVEN_TEST_CLASSES,true);
+		configuration.setAttribute(Plugin.ATTR_ENABLE_PARENT_LOADER_PRIORITY,true);
+		
 		return;
 	}
 

@@ -94,6 +94,10 @@ public class Plugin extends AbstractUIPlugin {
 	public static final String ATTR_ENABLE_MAVEN_TEST_CLASSES = Plugin.PLUGIN_ID
 			+ ".ENABLE_MAVEN_TEST_CLASSES_ATTR";
 
+	public static final String ATTR_ENABLE_PARENT_LOADER_PRIORITY = Plugin.PLUGIN_ID
+	+ ".ENABLE_PARENT_LOADER_PRIORITY_ATTR";
+
+	
 	// The shared instance
 	private static Plugin plugin;
 
