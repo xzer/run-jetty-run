@@ -78,7 +78,8 @@ public class Bootstrap {
 		String keyPassword = System.getProperty("rjrkeypassword");
 		Integer scanIntervalSeconds = Integer.getInteger("rjrscanintervalseconds");
 		Boolean enablescanner = Boolean.getBoolean("rjrenablescanner");
-
+		Boolean parentLoaderPriority = getBoolean("rjrparentloaderpriority",true);
+		
 		Boolean enablessl = Boolean.getBoolean("rjrenablessl");
 
 		if (context == null) {
@@ -133,6 +134,12 @@ public class Bootstrap {
 		}
 
 		web = new WebAppContext();
+		
+		if(parentLoaderPriority){
+			web.setParentLoaderPriority(true);
+			System.err.println("ParentLoaderPriority enabled");
+		}
+		
 		web.setContextPath(context);
 		web.setWar(webAppDir);
 		
@@ -156,7 +163,7 @@ public class Bootstrap {
 			ProjectClassLoader loader = new ProjectClassLoader(web, webAppClassPath);
 			web.setClassLoader(loader);
 		}
-
+		
 		server.addHandler(web);
 
 		MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
@@ -220,6 +227,21 @@ public class Bootstrap {
 		return;
 	}
 	
+	private static Boolean getBoolean(String propertiesKey,boolean def){
+		String val = System.getProperty(propertiesKey);
+		
+		Boolean ret = def;
+		if(val != null){
+			try{
+				ret = Boolean.parseBoolean(val);
+			}catch(Exception e){
+				
+			}
+			
+		}
+		return ret;
+		
+	}
 	private static String resovleWebappClasspath(){
 		String classpath = System.getProperty("rjrclasspath");
 		
