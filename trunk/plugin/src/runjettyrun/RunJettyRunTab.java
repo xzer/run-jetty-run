@@ -69,6 +69,8 @@ import org.eclipse.ui.dialogs.ContainerSelectionDialog;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 import org.eclipse.ui.part.FileEditorInput;
 
+import com.sun.org.apache.xalan.internal.xsltc.dom.StripWhitespaceFilter;
+
 import runjettyrun.utils.BrowserUtil;
 import runjettyrun.utils.ProjectUtil;
 import runjettyrun.utils.RunJettyRunLaunchConfigurationUtil;
@@ -198,7 +200,7 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		
 		mavenGroup = new Group(parent, SWT.NONE);
 		mavenGroup.setVisible(isMavenProject);
-		mavenGroup.setText("Maven");
+		mavenGroup.setText("RunJettyRun Support for M2Eclipse");
 		mavenGroup.setLayoutData(createHFillGridData());
 		{
 			GridLayout layout = new GridLayout();
@@ -397,7 +399,7 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		group.setLayoutData(createHFillGridData());
 		{
 			GridLayout layout = new GridLayout();
-			layout.numColumns = 4;
+			layout.numColumns = 6;
 			group.setLayout(layout);
 		}
 		group.setFont(font);
@@ -410,13 +412,8 @@ public class RunJettyRunTab extends JavaLaunchTab {
 
 		fContextText = new Text(group, SWT.SINGLE | SWT.BORDER);
 		fContextText.addModifyListener(_updatedListener);
-		fContextText.setLayoutData(createHFillGridData(2,-1));
+		fContextText.setLayoutData(createHFillGridData(5,-1));
 		fContextText.setFont(font);
-
-		/*
-		 --------------------------------------------------------------------- */
-		
-		new Label(group, SWT.SINGLE);
 		
 		/*
 		 --------------------------------------------------------------------- */
@@ -430,7 +427,7 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		
 		fWebAppDirText = new Text(group, SWT.SINGLE | SWT.BORDER);
 		fWebAppDirText.addModifyListener(_updatedListener);
-		fWebAppDirText.setLayoutData(createHFillGridData());
+		fWebAppDirText.setLayoutData(createHFillGridData(3,-1));
 		fWebAppDirText.setFont(font);
 		
 		/*
@@ -468,7 +465,7 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		fScanText = new Text(group, SWT.SINGLE | SWT.BORDER);
 		fScanText.addModifyListener(_updatedListener);
 
-		fScanText.setLayoutData(createHFillGridData());
+		fScanText.setLayoutData(createHFillGridData(3,-1));
 		fScanText.setFont(font);
 		fScanText.setTextLimit(5);
 
@@ -512,10 +509,14 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		
 		UIUtil.createLink(group, SWT.NONE ,"<a href=\"http://communitymapbuilder.org/display/JETTY/Classloading\">(?)</a>");
 		
+		
 		/*
 		 --------------------------------------------------------------------- */
 		
-		UIUtil.createLink(group, SWT.NONE ,"...You could set <a href=\"http://communitymapbuilder.org/display/JETTY/SystemProperties\">more control </a> in VM argument.");
+		Link systemProperties = UIUtil.createLink(group, SWT.NONE ,"...You could set "+
+				"<a href=\"http://communitymapbuilder.org/display/JETTY/SystemProperties\">"+
+				"more control </a> in VM argument.(-Dket=value) ");
+		systemProperties.setLayoutData(createHFillGridData(6, SWT.RIGHT));
 		
 		return;
 	}
