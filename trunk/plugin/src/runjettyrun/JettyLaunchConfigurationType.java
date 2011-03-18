@@ -153,14 +153,12 @@ public class JettyLaunchConfigurationType extends
 
 		monitor.beginTask(
 				MessageFormat.format("{0}...", configuration.getName()), 3); //$NON-NLS-1$
+		
 		// check for cancellation
-		if (monitor.isCanceled()) {
-			return;
-		}
+		if (monitor.isCanceled()) return;
+		
 		try {
 			monitor.subTask("verifying installation");
-
-			IVMRunner runner = getVMRunner(configuration, mode);
 
 			// Program & VM arguments
 			ExecutionArguments execArgs = new ExecutionArguments(getVMArguments(configuration),
@@ -186,29 +184,28 @@ public class JettyLaunchConfigurationType extends
 			runConfig.setBootClassPath(getBootpath(configuration));
 
 			// check for cancellation
-			if (monitor.isCanceled()) {
-				return;
-			}
+			if (monitor.isCanceled()) return;
+			
 			// stop in main
 			prepareStopInMain(configuration);
 
 			// done the verification phase
 			monitor.worked(1);
-
 			monitor.subTask("Creating source locator");
 			// set the default source locator if required
 			setDefaultSourceLocator(launch, configuration);
+			
+			
 			monitor.worked(1);
-
 			terminateOldRJRLauncher(configuration, launch);
 			registerRJRLauncher(configuration, launch);
+			
 			// Launch the configuration - 1 unit of work
-			runner.run(runConfig, launch, monitor);
+			getVMRunner(configuration, mode).run(runConfig, launch, monitor);
 			
 			// check for cancellation
-			if (monitor.isCanceled()) {
-				return;
-			}
+			if (monitor.isCanceled()) return;
+			
 		} finally {
 			monitor.done();
 		}
