@@ -151,7 +151,9 @@ public class RunJettyRunClasspathResolver {
 						IRuntimeClasspathEntry e =  entries[j];
 
 						//skip test-classes for included maven project.
-						if (!resolved.contains(e) && ( e.getLocation()==null || e.getLocation().endsWith("test-classes") ))
+						boolean testClasses =  e.getLocation()!=null && e.getLocation().endsWith("test-classes");
+						
+						if (!(resolved.contains(e) || testClasses))
 							resolved.add(entries[j]);
 
 					}
