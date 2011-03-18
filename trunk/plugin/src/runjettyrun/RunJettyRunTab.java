@@ -62,14 +62,17 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.dialogs.ContainerSelectionDialog;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 import org.eclipse.ui.part.FileEditorInput;
 
+import runjettyrun.utils.BrowserUtil;
 import runjettyrun.utils.ProjectUtil;
 import runjettyrun.utils.RunJettyRunLaunchConfigurationUtil;
+import runjettyrun.utils.UIUtil;
 
 /**
  * Launch tab for the RunJettyRun plugin.
@@ -503,11 +506,20 @@ public class RunJettyRunTab extends JavaLaunchTab {
 				updateLaunchConfigurationDialog();
 			}
 		});
+
+		/*
+		 --------------------------------------------------------------------- */
+		
+		UIUtil.createLink(group, SWT.NONE ,"<a href=\"http://communitymapbuilder.org/display/JETTY/Classloading\">(?)</a>");
 		
 		/*
 		 --------------------------------------------------------------------- */
+		
+		UIUtil.createLink(group, SWT.NONE ,"...You could set <a href=\"http://communitymapbuilder.org/display/JETTY/SystemProperties\">more control </a> in VM argument.");
+		
 		return;
 	}
+
 
 	@Override
 	public Image getImage() {
