@@ -62,9 +62,9 @@ public class JettyLaunchConfigurationType extends
 
 
 	/**
-	 * Here's what the WebApp classpath. That means all the classpath here just like WEB-INF/classes or WEB-INF/lib , 
+	 * Here's what the WebApp classpath. That means all the classpath here just like WEB-INF/classes or WEB-INF/lib ,
 	 * which is only for the specific webapp project and will not used for the Jetty Instance.
-	 * 
+	 *
 	 * @param configuration
 	 * @return
 	 * @throws CoreException
@@ -72,7 +72,7 @@ public class JettyLaunchConfigurationType extends
 	private String getWebappClasspath(ILaunchConfiguration configuration) throws CoreException{
 		String[] webAppClasspathArray = getProjectClasspath(configuration);
 		String webAppClasspath = "";
-		
+
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < webAppClasspathArray.length; i++) {
 			String path = webAppClasspathArray[i];
@@ -81,7 +81,7 @@ public class JettyLaunchConfigurationType extends
 			sb.append(path);
 		}
 		webAppClasspath = sb.toString();
-		
+
 		/**
 		 * The smallest limit for windows XP is 2048
 		 */
@@ -89,14 +89,14 @@ public class JettyLaunchConfigurationType extends
 			File f = prepareClasspathFile(configuration,webAppClasspath);
 			webAppClasspath = "file://"+f.getAbsolutePath();
 		}
-		
+
 		return webAppClasspath;
-		
+
 	}
-	
+
 	/**
 	 * Get working directory's absolute folder path.
-	 *  
+	 *
 	 * @param configuration
 	 * @return return the path if exist, or return null.
 	 * @throws CoreException
@@ -104,16 +104,16 @@ public class JettyLaunchConfigurationType extends
 	private String getWorkingDirectoryAbsolutePath(ILaunchConfiguration configuration) throws CoreException{
 		File workingDir = verifyWorkingDirectory(configuration);
 		String workingDirName = null;
-		if (workingDir != null) 
+		if (workingDir != null)
 			workingDirName = workingDir.getAbsolutePath();
-		
+
 		return workingDirName;
 	}
-	
+
 	/**
 	 * I prefer to change the name to JettyClasspath to make it more clear.
 	 * This classpath means how the RunJettyRun to get the Jetty bundle.
-	 * 
+	 *
 	 * If you change the classpath , that might means you are changing the Jetty version or something on it.
 	 * @param configuration
 	 * @return
@@ -122,8 +122,8 @@ public class JettyLaunchConfigurationType extends
 	private String[] getJettyClasspath(ILaunchConfiguration configuration) throws CoreException {
 		return getClasspath(configuration);
 	}
-	
-	
+
+
 	/**
 	 * get Runtime arguments , and prepare the webapp classpath for the program.
 	 * @param configuration
@@ -133,16 +133,16 @@ public class JettyLaunchConfigurationType extends
 	 */
 	private String[] getRuntimeArguments(ILaunchConfiguration configuration,String[] oringinalVMArguments,String webappClasspath ) throws CoreException{
 		List<String> runtimeVmArgs = getJettyArgs(configuration);
-		
+
 		//Here the classpath is really for web app.
 		runtimeVmArgs.add("-Drjrclasspath=" +  webappClasspath);
 		runtimeVmArgs.addAll(Arrays.asList(oringinalVMArguments));
 
 		return runtimeVmArgs.toArray(new String[runtimeVmArgs.size()]);
 	}
-	
+
 	/**
-	 * The launcher ! 
+	 * The launcher !
 	 */
 	public void launch(ILaunchConfiguration configuration, String mode,
 			ILaunch launch, IProgressMonitor monitor) throws CoreException {
@@ -153,10 +153,10 @@ public class JettyLaunchConfigurationType extends
 
 		monitor.beginTask(
 				MessageFormat.format("{0}...", configuration.getName()), 3); //$NON-NLS-1$
-		
+
 		// check for cancellation
 		if (monitor.isCanceled()) return;
-		
+
 		try {
 			monitor.subTask("verifying installation");
 
@@ -165,18 +165,18 @@ public class JettyLaunchConfigurationType extends
 					getProgramArguments(configuration));
 
 			// Create VM configuration
-			//here the classpath means for the Jetty Server , not for the application! by TonyQ 2011/3/7			
+			//here the classpath means for the Jetty Server , not for the application! by TonyQ 2011/3/7
 			VMRunnerConfiguration runConfig = new VMRunnerConfiguration(
 					Plugin.BOOTSTRAP_CLASS_NAME , getJettyClasspath(configuration));
 			runConfig.setProgramArguments(execArgs.getProgramArgumentsArray());
 
 			// Environment variables
 			runConfig.setEnvironment(getEnvironment(configuration));
-	
+
 			//Here prepare the classpath is really for webapp in Runtime Arguments , too.
 			runConfig.setVMArguments(getRuntimeArguments(configuration,execArgs.getVMArgumentsArray(),
 					getWebappClasspath(configuration)));
-			
+
 			runConfig.setWorkingDirectory(getWorkingDirectoryAbsolutePath(configuration));
 			runConfig.setVMSpecificAttributesMap(getVMSpecificAttributesMap(configuration));
 
@@ -185,7 +185,7 @@ public class JettyLaunchConfigurationType extends
 
 			// check for cancellation
 			if (monitor.isCanceled()) return;
-			
+
 			// stop in main
 			prepareStopInMain(configuration);
 
@@ -194,18 +194,18 @@ public class JettyLaunchConfigurationType extends
 			monitor.subTask("Creating source locator");
 			// set the default source locator if required
 			setDefaultSourceLocator(launch, configuration);
-			
-			
+
+
 			monitor.worked(1);
 			terminateOldRJRLauncher(configuration, launch);
 			registerRJRLauncher(configuration, launch);
-			
+
 			// Launch the configuration - 1 unit of work
 			getVMRunner(configuration, mode).run(runConfig, launch, monitor);
-			
+
 			// check for cancellation
 			if (monitor.isCanceled()) return;
-			
+
 		} finally {
 			monitor.done();
 		}
@@ -213,9 +213,9 @@ public class JettyLaunchConfigurationType extends
 	}
 	/**
 	 * A private helper to prepare a classpath file to workspace metadata,
-	 * we use this to prevent classpath too long which was caused the problem 
-	 * for reaching Windows command length limitation. 
-	 * 
+	 * we use this to prevent classpath too long which was caused the problem
+	 * for reaching Windows command length limitation.
+	 *
 	 * @param configuration
 	 * @param classpath
 	 * @return
@@ -235,10 +235,10 @@ public class JettyLaunchConfigurationType extends
 
 	}
 
-	
+
 	/**
 	 * Terminate old Run-Jetty-Run launcher which use same port if exist.
-	 * 
+	 *
 	 * @param configuration
 	 * @param launch
 	 * @throws CoreException
@@ -260,7 +260,7 @@ public class JettyLaunchConfigurationType extends
 		}
 	}
 	/**
-	 * register a port for RJR Launcher 
+	 * register a port for RJR Launcher
 	 * @param configuration
 	 * @param launch
 	 * @throws CoreException
@@ -273,9 +273,9 @@ public class JettyLaunchConfigurationType extends
 		if(!"".equals(port) ) launcher.put(port,launch);
 		if(enableSSL && !"".equals(sslPort))
 			launcher.put(sslPort,launch);
-		
+
 	}
-	
+
 	private List<String> getJettyArgs(ILaunchConfiguration configuration)
 			throws CoreException {
 
@@ -303,10 +303,13 @@ public class JettyLaunchConfigurationType extends
 
 		addOptionalAttrx(configuration, runtimeVmArgs,
 				Plugin.ATTR_ENABLE_SSL, "enablessl");
-		
+
+		addOptionalAttrx(configuration, runtimeVmArgs,
+				Plugin.ATTR_ENABLE_NEED_CLIENT_AUTH, "needclientauth");
+
 		addOptionalAttrx(configuration, runtimeVmArgs,
 				Plugin.ATTR_ENABLE_PARENT_LOADER_PRIORITY, "parentloaderpriority");
-		
+
 		return runtimeVmArgs;
 	}
 

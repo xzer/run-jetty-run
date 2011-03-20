@@ -105,23 +105,25 @@ public class RunJettyRunTab extends JavaLaunchTab {
 	private Text fWebAppDirText;
 
 	private Button fProjButton;
-	
+
 	private Button fEnableSSLbox;
-	
+
+	private Button fEnableNeedClientAuth;
+
 	private Button fKeystoreButton;
-	
+
 	private Button fWebappDirButton;
 
 	private Button fWebappScanButton;
 
 	private Button fEnablebox;
-	
+
 	private Button fEnableMavenDisableTestClassesBox;
-	
+
 	private Button fEnableParentLoadPriorityBox;
 
 	private Group mavenGroup= null;
-	
+
 	private boolean isMavenProject = false;
 	/**
 	 * Construct.
@@ -129,7 +131,7 @@ public class RunJettyRunTab extends JavaLaunchTab {
 	public RunJettyRunTab() {
 	}
 
-	
+
 	public void createControl(Composite parent) {
 		Composite comp = new Composite(parent, SWT.NONE);
 		comp.setFont(parent.getFont());
@@ -168,7 +170,7 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		Group group = new Group(parent, SWT.NONE);
 		group.setText("Project");
 		group.setLayoutData(createHFillGridData());
-		
+
 		GridLayout layout = new GridLayout();
 		layout.numColumns = 2;
 		group.setLayout(layout);
@@ -185,7 +187,7 @@ public class RunJettyRunTab extends JavaLaunchTab {
 			}
 		});
 	}
-	
+
 	/**
 	 * create a group for M2E config.
 	 *
@@ -194,10 +196,10 @@ public class RunJettyRunTab extends JavaLaunchTab {
 	 */
 	private void createMavenEditor(Composite parent) {
 		Font font = parent.getFont();
-		
+
 		/*
 		 --------------------------------------------------------------------- */
-		
+
 		mavenGroup = new Group(parent, SWT.NONE);
 		mavenGroup.setVisible(isMavenProject);
 		mavenGroup.setText("RunJettyRun Support for M2Eclipse");
@@ -208,10 +210,10 @@ public class RunJettyRunTab extends JavaLaunchTab {
 			mavenGroup.setLayout(layout);
 		}
 		mavenGroup.setFont(font);
-		
+
 		/*
 		 --------------------------------------------------------------------- */
-		
+
 		fEnableMavenDisableTestClassesBox = createCheckButton(mavenGroup, "Disable test-classes for maven");
 		{
 			GridData gd = new GridData();
@@ -224,10 +226,10 @@ public class RunJettyRunTab extends JavaLaunchTab {
 				updateLaunchConfigurationDialog();
 			}
 		});
-		
+
 	}
-	
-	
+
+
 
 	private GridData createHFillGridData() {
 		GridData gd = new GridData();
@@ -242,7 +244,7 @@ public class RunJettyRunTab extends JavaLaunchTab {
 			gd.horizontalAlignment = position;
 		if(span !=-1 )
 			gd.horizontalSpan = span;
-		
+
 		return gd;
 	}
 
@@ -264,21 +266,21 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		group.setLayoutData(createHFillGridData());
 		{
 			GridLayout layout = new GridLayout();
-			layout.numColumns = 4;
+			layout.numColumns = 5;
 			group.setLayout(layout);
-		}		
+		}
 		group.setFont(font);
 
 		// HTTP and HTTPS ports
-		
+
 		/*
 		 --------------------------------------------------------------------- */
-		
+
 		new Label(group, SWT.LEFT).setText("HTTP");
 
 		/*
 		 --------------------------------------------------------------------- */
-		
+
 		fPortText = new Text(group, SWT.SINGLE | SWT.BORDER);
 		fPortText.addModifyListener(_updatedListener);
 		fPortText.setLayoutData(createHFillGridData());
@@ -288,7 +290,7 @@ public class RunJettyRunTab extends JavaLaunchTab {
 
 		/*
 		 --------------------------------------------------------------------- */
-		
+
 		fEnableSSLbox = createCheckButton(group, "HTTPS");
 		fEnableSSLbox.addSelectionListener(new ButtonListener() {
 
@@ -297,15 +299,16 @@ public class RunJettyRunTab extends JavaLaunchTab {
 				updateLaunchConfigurationDialog();
 			}
 		});
-		
+
 		{
 			GridData gd = new GridData();
 			gd.horizontalAlignment = SWT.RIGHT;
 			fEnableSSLbox.setLayoutData(gd);
 		}
+
 		/*
 		 --------------------------------------------------------------------- */
-		
+
 		fSSLPortText = new Text(group, SWT.SINGLE | SWT.BORDER);
 		fSSLPortText.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
@@ -317,18 +320,33 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		fSSLPortText.setLayoutData(createHFillGridData());
 		fSSLPortText.setFont(font);
 
-		// keystore
 
+		/*
+		 *SslSocketConnector
+		 */
+		/*
+		 --------------------------------------------------------------------- */
+
+		fEnableNeedClientAuth = createCheckButton(group, "NeedClientAuth");
+		fEnableNeedClientAuth.addSelectionListener(new ButtonListener() {
+			public void widgetSelected(SelectionEvent e) {
+				updateLaunchConfigurationDialog();
+			}
+		});
+
+		/*
+		 --------------------------------------------------------------------- */
+		// keystore
 		new Label(group, SWT.LEFT).setText("Keystore");
 		/*
 		 --------------------------------------------------------------------- */
-		
+
 		fKeystoreText = new Text(group, SWT.SINGLE | SWT.BORDER);
 		fKeystoreText.addModifyListener(_updatedListener);
-		fKeystoreText.setLayoutData(createHFillGridData(2,-1));
+		fKeystoreText.setLayoutData(createHFillGridData(3,-1));
 		fKeystoreText.setFont(font);
 		fKeystoreText.setEnabled(false);
-		
+
 		/*
 		 --------------------------------------------------------------------- */
 
@@ -343,13 +361,13 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		fKeystoreButton.setLayoutData( new GridData());
 		/*
 		 --------------------------------------------------------------------- */
-		
+
 		// Password and Key Password (not sure exactly how used by keystore)
 
 		new Label(group, SWT.LEFT).setText("Password");
 		/*
 		 --------------------------------------------------------------------- */
-		
+
 		fPasswordText = new Text(group, SWT.SINGLE | SWT.BORDER);
 		fPasswordText.addModifyListener(_updatedListener);
 		fPasswordText.setLayoutData(createHFillGridData());
@@ -359,7 +377,7 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		/*
 		 --------------------------------------------------------------------- */
 		new Label(group, SWT.LEFT).setText("Key Password");
-		
+
 		/*
 		 --------------------------------------------------------------------- */
 		fKeyPasswordText = new Text(group, SWT.SINGLE | SWT.BORDER);
@@ -406,7 +424,7 @@ public class RunJettyRunTab extends JavaLaunchTab {
 
 		/*
 		 --------------------------------------------------------------------- */
-		
+
 		// Row 1: "Context", Text field (2 columns)
 		new Label(group, SWT.LEFT).setText("Context");
 
@@ -414,25 +432,25 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		fContextText.addModifyListener(_updatedListener);
 		fContextText.setLayoutData(createHFillGridData(5,-1));
 		fContextText.setFont(font);
-		
-		/*
-		 --------------------------------------------------------------------- */
-		
-		// Row 2: "WebApp dir", Text field, "Browse..." Button
-		new Label(group, SWT.LEFT).setText("WebApp dir");
-		
 
 		/*
 		 --------------------------------------------------------------------- */
-		
+
+		// Row 2: "WebApp dir", Text field, "Browse..." Button
+		new Label(group, SWT.LEFT).setText("WebApp dir");
+
+
+		/*
+		 --------------------------------------------------------------------- */
+
 		fWebAppDirText = new Text(group, SWT.SINGLE | SWT.BORDER);
 		fWebAppDirText.addModifyListener(_updatedListener);
 		fWebAppDirText.setLayoutData(createHFillGridData(3,-1));
 		fWebAppDirText.setFont(font);
-		
+
 		/*
 		 --------------------------------------------------------------------- */
-		
+
 		fWebappDirButton = createPushButton(group, "&Browse...", null);
 		fWebappDirButton.addSelectionListener(new ButtonListener() {
 
@@ -459,7 +477,7 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		 --------------------------------------------------------------------- */
 		// Row 3: Scan interval seconds
 		new Label(group, SWT.LEFT).setText("Scan Interval Seconds");
-		
+
 		/*
 		 --------------------------------------------------------------------- */
 		fScanText = new Text(group, SWT.SINGLE | SWT.BORDER);
@@ -471,7 +489,7 @@ public class RunJettyRunTab extends JavaLaunchTab {
 
 		/*
 		 --------------------------------------------------------------------- */
-		
+
 		fEnablebox = createCheckButton(group, "Enable Scanner");
 		fEnablebox.addSelectionListener(new ButtonListener() {
 
@@ -485,13 +503,13 @@ public class RunJettyRunTab extends JavaLaunchTab {
 			gd.horizontalSpan = 2;
 			fEnablebox.setLayoutData(gd);
 		}
-		
+
 		/*
 		 --------------------------------------------------------------------- */
-		
+
 		//Row4 Parent Loader Priority
 		fEnableParentLoadPriorityBox = createCheckButton(group, "ParentLoadPriority");
-		
+
 		{
 			GridData gd = new GridData();
 			gd.horizontalAlignment = SWT.LEFT;
@@ -506,18 +524,18 @@ public class RunJettyRunTab extends JavaLaunchTab {
 
 		/*
 		 --------------------------------------------------------------------- */
-		
+
 		UIUtil.createLink(group, SWT.NONE ,"<a href=\"http://communitymapbuilder.org/display/JETTY/Classloading\">(?)</a>");
-		
-		
+
+
 		/*
 		 --------------------------------------------------------------------- */
-		
+
 		Link systemProperties = UIUtil.createLink(group, SWT.NONE ,"...You could set "+
 				"<a href=\"http://communitymapbuilder.org/display/JETTY/SystemProperties\">"+
 				"more control </a> in VM argument.(-Dket=value) ");
 		systemProperties.setLayoutData(createHFillGridData(6, SWT.RIGHT));
-		
+
 		return;
 	}
 
@@ -542,7 +560,7 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		fKeystoreButton.setEnabled(b);
 		fPasswordText.setEnabled(b);
 		fKeyPasswordText.setEnabled(b);
-
+		fEnableNeedClientAuth.setEnabled(b);
 		return;
 	}
 
@@ -551,17 +569,20 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		try {
 			String projectname = configuration.getAttribute(ATTR_PROJECT_NAME, "");
 			fProjText.setText(projectname);
-			
+
 			IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectname);
 			if(project != null ){
 				isMavenProject = ProjectUtil.isMavenProject(project);
 				if(mavenGroup!=null ) mavenGroup.setVisible(isMavenProject);
 			}
-			
+
 
 			fPortText.setText(configuration.getAttribute(Plugin.ATTR_PORT, ""));
 
 			fEnableSSLbox.setSelection(configuration.getAttribute(Plugin.ATTR_ENABLE_SSL, false));
+			fEnableNeedClientAuth.setSelection(configuration.getAttribute(Plugin.ATTR_ENABLE_NEED_CLIENT_AUTH, false));
+
+
 			fSSLPortText.setText(configuration.getAttribute(Plugin.ATTR_SSL_PORT, ""));
 			fKeystoreText.setText(configuration.getAttribute(Plugin.ATTR_KEYSTORE, ""));
 			fPasswordText.setText(configuration.getAttribute(Plugin.ATTR_PWD, ""));
@@ -574,9 +595,9 @@ public class RunJettyRunTab extends JavaLaunchTab {
 			fScanText.setText(configuration.getAttribute(Plugin.ATTR_SCANINTERVALSECONDS, ""));
 			fEnablebox.setSelection(configuration.getAttribute(Plugin.ATTR_ENABLE_SCANNER, true));
 			fScanText.setEnabled(fEnablebox.getSelection());
-			
+
 			fEnableMavenDisableTestClassesBox.setSelection(configuration.getAttribute(Plugin.ATTR_ENABLE_MAVEN_TEST_CLASSES, true));
-			
+
 			fEnableParentLoadPriorityBox.setSelection(configuration.getAttribute(Plugin.ATTR_ENABLE_PARENT_LOADER_PRIORITY, true));
 
 			setSSLSettingEnabled(fEnableSSLbox.getSelection());
@@ -789,6 +810,7 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		configuration.setAttribute(Plugin.ATTR_SSL_PORT, fSSLPortText.getText());
 
 		configuration.setAttribute(Plugin.ATTR_ENABLE_SSL, fEnableSSLbox.getSelection());
+		configuration.setAttribute(Plugin.ATTR_ENABLE_NEED_CLIENT_AUTH, fEnableNeedClientAuth.getSelection());
 
 		configuration.setAttribute(Plugin.ATTR_KEYSTORE, fKeystoreText.getText());
 		configuration.setAttribute(Plugin.ATTR_PWD, fPasswordText.getText());
@@ -799,9 +821,9 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		configuration.setAttribute(Plugin.ATTR_SCANINTERVALSECONDS, fScanText.getText());
 
 		configuration.setAttribute(Plugin.ATTR_ENABLE_SCANNER, fEnablebox.getSelection());
-		
+
 		configuration.setAttribute(Plugin.ATTR_ENABLE_PARENT_LOADER_PRIORITY, fEnableParentLoadPriorityBox.getSelection());
-		
+
 		configuration.setAttribute(Plugin.ATTR_ENABLE_MAVEN_TEST_CLASSES, fEnableMavenDisableTestClassesBox.getSelection());
 
 	}
@@ -887,12 +909,15 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		configuration.setAttribute(Plugin.ATTR_WEBAPPDIR, detectDefaultWebappdir(projectName));
 		configuration.setAttribute(Plugin.ATTR_ENABLE_SSL,false);
 
+		configuration.setAttribute(Plugin.ATTR_ENABLE_NEED_CLIENT_AUTH,false);
+
+
 		configuration.setAttribute(Plugin.ATTR_SCANINTERVALSECONDS, "5");
 		configuration.setAttribute(Plugin.ATTR_ENABLE_SCANNER,true);
 
 		configuration.setAttribute(Plugin.ATTR_ENABLE_MAVEN_TEST_CLASSES,true);
 		configuration.setAttribute(Plugin.ATTR_ENABLE_PARENT_LOADER_PRIORITY,true);
-		
+
 		return;
 	}
 
@@ -947,12 +972,12 @@ public class RunJettyRunTab extends JavaLaunchTab {
 
 	private void handleProjectButtonSelected() {
 		IJavaProject project = chooseJavaProject();
-		
+
 		if (project == null) return;
-		
+
 		isMavenProject = ProjectUtil.isMavenProject(project.getProject());
 		if(mavenGroup!=null ) mavenGroup.setVisible(isMavenProject);
-		
+
 		String projectName = project.getElementName();
 		fProjText.setText(projectName);
 	}

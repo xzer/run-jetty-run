@@ -64,6 +64,13 @@ public class Plugin extends AbstractUIPlugin {
 	public static final String ATTR_ENABLE_SSL = Plugin.PLUGIN_ID
 			+ ".ENABLE_SSL_ATTR";
 
+	/**
+	 * configuration attribute for need client auth.
+	 */
+	public static final String ATTR_ENABLE_NEED_CLIENT_AUTH = Plugin.PLUGIN_ID
+	+ ".ENABLE_NEED_CLIENT_AUTH_ATTR";
+
+
 	/** configuration attribute for the SSL port to run Jetty on. */
 	public static final String ATTR_SSL_PORT = Plugin.PLUGIN_ID
 			+ ".SSL_PORT_ATTR";
@@ -97,7 +104,7 @@ public class Plugin extends AbstractUIPlugin {
 	public static final String ATTR_ENABLE_PARENT_LOADER_PRIORITY = Plugin.PLUGIN_ID
 	+ ".ENABLE_PARENT_LOADER_PRIORITY_ATTR";
 
-	
+
 	// The shared instance
 	private static Plugin plugin;
 
