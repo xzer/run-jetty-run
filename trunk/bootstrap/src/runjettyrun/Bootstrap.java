@@ -1,14 +1,14 @@
 /*
  * $Id$
  * $HeadURL$
- * 
+ *
  * ==============================================================================
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -42,7 +42,7 @@ import org.mortbay.util.Scanner;
 
 /**
  * Started up by the plugin's runner. Starts Jetty.
- * 
+ *
  * @author hillenius, jsynge, jumperchen
  */
 public class Bootstrap {
@@ -53,7 +53,7 @@ public class Bootstrap {
 
 	/**
 	 * Main function, starts the jetty server.
-	 * 
+	 *
 	 * @param args
 	 */
 	public static void main(String[] args) throws Exception {
@@ -79,8 +79,9 @@ public class Bootstrap {
 		Integer scanIntervalSeconds = Integer.getInteger("rjrscanintervalseconds");
 		Boolean enablescanner = Boolean.getBoolean("rjrenablescanner");
 		Boolean parentLoaderPriority = getBoolean("rjrparentloaderpriority",true);
-		
+
 		Boolean enablessl = Boolean.getBoolean("rjrenablessl");
+		Boolean needClientAuth = Boolean.getBoolean("rjrneedclientauth");
 
 		if (context == null) {
 			throw new IllegalStateException("you need to provide argument -Drjrcontext");
@@ -127,6 +128,10 @@ public class Bootstrap {
 			sslConnector.setPassword(password);
 			sslConnector.setKeyPassword(keyPassword);
 
+			if(needClientAuth){
+				System.err.println("Enable NeedClientAuth.");
+				sslConnector.setNeedClientAuth(needClientAuth);
+			}
 			sslConnector.setMaxIdleTime(30000);
 			sslConnector.setPort(sslport);
 
@@ -134,15 +139,15 @@ public class Bootstrap {
 		}
 
 		web = new WebAppContext();
-		
+
 		if(parentLoaderPriority){
 			web.setParentLoaderPriority(true);
 			System.err.println("ParentLoaderPriority enabled");
 		}
-		
+
 		web.setContextPath(context);
 		web.setWar(webAppDir);
-		
+
 		// Fix issue 7, File locking on windows/Disable Jetty's locking of
 		// static files
 		// http://code.google.com/p/run-jetty-run/issues/detail?id=7
@@ -163,7 +168,7 @@ public class Bootstrap {
 			ProjectClassLoader loader = new ProjectClassLoader(web, webAppClassPath);
 			web.setClassLoader(loader);
 		}
-		
+
 		server.addHandler(web);
 
 		MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
@@ -195,7 +200,7 @@ public class Bootstrap {
 						// boolean reconfigure = changes.contains(getProject()
 						// .getFile().getCanonicalPath());
 						System.err.println("Stopping webapp ...");
-						
+
 						web.stop();
 						server.stop();//I haven't test this
 
@@ -204,7 +209,7 @@ public class Bootstrap {
 							web.setClassLoader(loader);
 						}
 						System.err.println("Restarting webapp ...");
-						server.start();						
+						server.start();
 						web.start();
 						System.err.println("Restart completed.");
 					} catch (Exception e) {
@@ -226,29 +231,29 @@ public class Bootstrap {
 		}
 		return;
 	}
-	
+
 	private static Boolean getBoolean(String propertiesKey,boolean def){
 		String val = System.getProperty(propertiesKey);
-		
+
 		Boolean ret = def;
 		if(val != null){
 			try{
 				ret = Boolean.parseBoolean(val);
 			}catch(Exception e){
-				
+
 			}
-			
+
 		}
 		return ret;
-		
+
 	}
 	private static String resovleWebappClasspath(){
 		String classpath = System.getProperty("rjrclasspath");
-		
+
 		if(classpath!=null && classpath.startsWith("file://")){
 			try{
 				String filePath = classpath.substring(7);
-				
+
 				BufferedReader br =new BufferedReader(new InputStreamReader(new FileInputStream(filePath),"UTF-8"));
 				StringBuffer sb = new StringBuffer();
 				String str = br.readLine();
@@ -257,13 +262,13 @@ public class Bootstrap {
 					str = br.readLine();
 				}
 				return sb.toString();
-				
+
 			}catch(IOException e){
 				System.err.println("read classpath failed!");
 				throw new RuntimeException(" read classpath failed ",e);
 			}
 		}
-		
+
 		return classpath;
 	}
 
