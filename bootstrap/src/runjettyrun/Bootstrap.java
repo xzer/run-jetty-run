@@ -31,7 +31,6 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.management.MBeanServer;
-import javax.management.RuntimeErrorException;
 
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.nio.SelectChannelConnector;
