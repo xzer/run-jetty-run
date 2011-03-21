@@ -24,11 +24,15 @@ import java.net.URL;
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
+
+import runjettyrun.container.RunJettyRunContainerResolver;
 
 /**
  * The activator class controls the plug-in life cycle.
@@ -105,15 +109,22 @@ public class Plugin extends AbstractUIPlugin {
 	+ ".ENABLE_PARENT_LOADER_PRIORITY_ATTR";
 
 
+	public static final String CONTAINER_RJR_BOOTSTRAP = "RJRBootstrap";
+	public static final String CONTAINER_RJR_JETTY6 = "RJRJetty6";
+
 	// The shared instance
 	private static Plugin plugin;
 
 	public Plugin() {
+		JavaRuntime.addContainerResolver(new RunJettyRunContainerResolver(),CONTAINER_RJR_BOOTSTRAP);
+		JavaRuntime.addContainerResolver(new RunJettyRunContainerResolver(),CONTAINER_RJR_JETTY6);
+		//containerIdentifier
 	}
 
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
+
 	}
 
 	public void stop(BundleContext context) throws Exception {
