@@ -69,9 +69,6 @@ import org.eclipse.ui.dialogs.ContainerSelectionDialog;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 import org.eclipse.ui.part.FileEditorInput;
 
-import com.sun.org.apache.xalan.internal.xsltc.dom.StripWhitespaceFilter;
-
-import runjettyrun.utils.BrowserUtil;
 import runjettyrun.utils.ProjectUtil;
 import runjettyrun.utils.RunJettyRunLaunchConfigurationUtil;
 import runjettyrun.utils.UIUtil;
@@ -81,6 +78,7 @@ import runjettyrun.utils.UIUtil;
  *
  * @author hillenius, James Synge
  */
+@SuppressWarnings("restriction")
 public class RunJettyRunTab extends JavaLaunchTab {
 
 

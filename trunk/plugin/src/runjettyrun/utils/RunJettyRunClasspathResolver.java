@@ -28,6 +28,7 @@ import runjettyrun.Plugin;
  * @author TonyQ
  *
  */
+@SuppressWarnings("restriction")
 public class RunJettyRunClasspathResolver {
 	/**
 	 * reference to M2E project , 20101115 version.
@@ -52,7 +53,7 @@ public class RunJettyRunClasspathResolver {
 	}
 
 	private static IRuntimeClasspathEntry[] resolvedMavenProjectClasspath(IRuntimeClasspathEntry[] entries,ILaunchConfiguration configuration)throws CoreException{
-		Set all = new LinkedHashSet(entries.length);
+		Set<IRuntimeClasspathEntry> all = new LinkedHashSet<IRuntimeClasspathEntry>(entries.length);
 		for (int i = 0; i < entries.length; i++) {
 			IRuntimeClasspathEntry[] resolved = resolveRuntimeClasspathEntry(entries[i], configuration);
 			for (int j = 0; j < resolved.length; j++) {
@@ -76,7 +77,7 @@ public class RunJettyRunClasspathResolver {
 //			return resolver.resolveRuntimeClasspathEntry(entry, configuration);
 			IRuntimeClasspathEntry2 entry2 = (IRuntimeClasspathEntry2)entry;
 			IRuntimeClasspathEntry[] entries = entry2.getRuntimeClasspathEntries(configuration);
-			List resolved = new ArrayList();
+			List<IRuntimeClasspathEntry> resolved = new ArrayList<IRuntimeClasspathEntry>();
 			for (int i = 0; i < entries.length; i++) {
 				IRuntimeClasspathEntry[] temp = null;
 				/**
@@ -134,7 +135,7 @@ public class RunJettyRunClasspathResolver {
 				property = IRuntimeClasspathEntry.BOOTSTRAP_CLASSES;
 				break;
 		}
-		List resolved = new ArrayList(cpes.length);
+		List<IRuntimeClasspathEntry> resolved = new ArrayList<IRuntimeClasspathEntry>(cpes.length);
 
 			for (int i = 0; i < cpes.length; i++) {
 				IClasspathEntry cpe = cpes[i];
@@ -154,7 +155,7 @@ public class RunJettyRunClasspathResolver {
 						boolean testClasses =  e.getLocation()!=null && e.getLocation().endsWith("test-classes");
 						
 						if (!(resolved.contains(e) || testClasses))
-							resolved.add(entries[j]);
+							resolved.add(e);
 
 					}
 					/**

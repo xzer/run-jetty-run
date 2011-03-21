@@ -1,7 +1,6 @@
 package runjettyrun.container;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.internal.launching.RuntimeClasspathEntry;
@@ -9,8 +8,6 @@ import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
 import org.eclipse.jdt.launching.IRuntimeClasspathEntry2;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.w3c.dom.Element;
-
-import runjettyrun.Plugin;
 
 @SuppressWarnings("restriction")
 public class RunJettyRunContainerRuntimeClasspathEntry extends RuntimeClasspathEntry implements IRuntimeClasspathEntry2 {

@@ -32,11 +32,9 @@ import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.jdt.launching.StandardClasspathProvider;
 
-import runjettyrun.container.RunJettyRunContainerClasspathEntry;
 import runjettyrun.container.RunJettyRunContainerRuntimeClasspathEntry;
 import runjettyrun.utils.RunJettyRunClasspathUtil;
 
-@SuppressWarnings("restriction")
 public class JettyLaunchConfigurationClassPathProvider extends
     StandardClasspathProvider {
 
