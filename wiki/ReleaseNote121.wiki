@@ -11,6 +11,9 @@ It's a newer version for Run Jetty Run again!
 
 Clean all bugfix and add some option for RJR.
 
+= Update Site =
+
+http://run-jetty-run.googlecode.com/svn/trunk/updatesite
 
 = Details =
 
