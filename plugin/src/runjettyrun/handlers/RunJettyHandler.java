@@ -12,7 +12,6 @@ import org.eclipse.ui.internal.WorkbenchWindow;
  * @see org.eclipse.core.commands.IHandler
  * @see org.eclipse.core.commands.AbstractHandler
  */
-@SuppressWarnings("restriction")
 public class RunJettyHandler extends AbstractHandler {
 	/**
 	 * The constructor.

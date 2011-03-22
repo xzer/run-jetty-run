@@ -7,7 +7,6 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.internal.core.ClasspathAttribute;
 import org.eclipse.jdt.internal.core.ClasspathEntry;
 
-@SuppressWarnings("restriction")
 public class RunJettyRunContainerClasspathEntry extends ClasspathEntry {
 
 	public RunJettyRunContainerClasspathEntry(String containerName) {

@@ -538,7 +538,6 @@ public class RunJettyRunTab extends JavaLaunchTab {
 	}
 
 
-	@Override
 	public Image getImage() {
 		return Plugin.getJettyIcon();
 	}

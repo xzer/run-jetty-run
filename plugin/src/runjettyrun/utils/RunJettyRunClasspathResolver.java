@@ -153,7 +153,7 @@ public class RunJettyRunClasspathResolver {
 
 						//skip test-classes for included maven project.
 						boolean testClasses =  e.getLocation()!=null && e.getLocation().endsWith("test-classes");
-						
+
 						if (!(resolved.contains(e) || testClasses))
 							resolved.add(e);
 

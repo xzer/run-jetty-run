@@ -71,7 +71,6 @@ public class ProjectClassLoader extends WebAppClassLoader {
    * see Issue #53 for more detail
    * http://code.google.com/p/run-jetty-run/issues/detail?id=53
    */
-  @Override
   public Class loadClass(String name) throws ClassNotFoundException
   {
 	  try{
@@ -81,7 +80,6 @@ public class ProjectClassLoader extends WebAppClassLoader {
 	  }
   }
 
-  @Override
   public void addClassPath(String classPath) throws IOException {
 
     if (initialized) {
@@ -97,7 +95,6 @@ public class ProjectClassLoader extends WebAppClassLoader {
     return;
   }
 
-  @Override
   public void addJars(Resource lib) {
     if (initialized) {
       /*

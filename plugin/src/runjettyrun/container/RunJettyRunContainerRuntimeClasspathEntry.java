@@ -9,7 +9,6 @@ import org.eclipse.jdt.launching.IRuntimeClasspathEntry2;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.w3c.dom.Element;
 
-@SuppressWarnings("restriction")
 public class RunJettyRunContainerRuntimeClasspathEntry extends RuntimeClasspathEntry implements IRuntimeClasspathEntry2 {
 
 	public RunJettyRunContainerRuntimeClasspathEntry(String containerName,
@@ -24,27 +23,22 @@ public class RunJettyRunContainerRuntimeClasspathEntry extends RuntimeClasspathE
 		super(entry, classpathProperty);
 	}
 
-	@Override
 	public void initializeFrom(Element memento) throws CoreException {
 	}
 
-	@Override
 	public String getTypeId() {
-		return "runjettyrun.cotnainer";
+		return "runjettyrun.cotnainer." + getVariableName();
 	}
 
-	@Override
 	public boolean isComposite() {
 		return true;
 	}
 
-	@Override
 	public IRuntimeClasspathEntry[] getRuntimeClasspathEntries(
 			ILaunchConfiguration configuration) throws CoreException {
 		return JavaRuntime.resolveRuntimeClasspathEntry(this, configuration);
 	}
 
-	@Override
 	public String getName() {
 		return getVariableName();
 	}
