@@ -41,7 +41,6 @@ public class JettyLaunchConfigurationClassPathProvider extends
   public JettyLaunchConfigurationClassPathProvider() {
   }
 
-  @Override
   public IRuntimeClasspathEntry[] computeUnresolvedClasspath(
       ILaunchConfiguration configuration) throws CoreException {
     IRuntimeClasspathEntry[] classpath = super
@@ -85,7 +84,6 @@ public class JettyLaunchConfigurationClassPathProvider extends
    * .eclipse.jdt.launching.IRuntimeClasspathEntry[],
    * org.eclipse.debug.core.ILaunchConfiguration)
    */
-  @Override
   public IRuntimeClasspathEntry[] resolveClasspath(
       IRuntimeClasspathEntry[] entries, ILaunchConfiguration configuration)
       throws CoreException {

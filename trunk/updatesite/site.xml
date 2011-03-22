@@ -18,5 +18,8 @@
    <feature url="features/runjettyrun_feature_1.2.0.jar" id="runjettyrun_feature" version="1.2">
       <category name="Jetty Integration"/>
    </feature>
+   <feature url="features/runjettyrun_feature_1.2.1.jar" id="runjettyrun_feature" version="1.2.1">
+      <category name="Jetty Integration"/>
+   </feature>
    <category-def name="Jetty Integration" label="Jetty Integration"/>
 </site>

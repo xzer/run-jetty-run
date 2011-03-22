@@ -201,14 +201,12 @@ public class Bootstrap {
 						System.err.println("Stopping webapp ...");
 
 						web.stop();
-						server.stop();//I haven't test this
 
 						if (webAppClassPath != null) {
 							ProjectClassLoader loader = new ProjectClassLoader(web, webAppClassPath, false);
 							web.setClassLoader(loader);
 						}
 						System.err.println("Restarting webapp ...");
-						server.start();
 						web.start();
 						System.err.println("Restart completed.");
 					} catch (Exception e) {

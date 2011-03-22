@@ -23,27 +23,24 @@ import runjettyrun.Plugin;
 public class RunJettyRunContainerResolver implements
 		IRuntimeClasspathEntryResolver2 {
 
-	@Override
 	public IVMInstall resolveVMInstall(IClasspathEntry entry)
 			throws CoreException {
 		return null;
 	}
 
-	@Override
 	public IRuntimeClasspathEntry[] resolveRuntimeClasspathEntry(
 			IRuntimeClasspathEntry entry, IJavaProject project)
 			throws CoreException {
 		return resolvedEntry(entry);
 
 	}
-	@Override
+
 	public IRuntimeClasspathEntry[] resolveRuntimeClasspathEntry(
 			IRuntimeClasspathEntry entry, ILaunchConfiguration configuration)
 			throws CoreException {
 		return resolvedEntry(entry);
 	}
 
-	@Override
 	public boolean isVMInstallReference(IClasspathEntry entry) {
 		return false;
 	}
