@@ -15,6 +15,11 @@ Clean some bugfix and add some option for RJR.
 
 http://run-jetty-run.googlecode.com/svn/trunk/updatesite
 
+
+= New Configuration view =
+
+http://run-jetty-run.googlecode.com/svn/trunk/updatesite/jetty-run-configuration-1.2.1.png
+
 = Details =
 
 Please check the accpected defect list below:
