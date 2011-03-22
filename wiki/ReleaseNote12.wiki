@@ -5,6 +5,9 @@
 
 2011/03/11
 
+= Update Site =
+http://run-jetty-run.googlecode.com/svn/trunk/updatesite
+
 = Introduction =
 
 It's a newer version for Run Jetty Run!
