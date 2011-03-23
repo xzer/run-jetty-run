@@ -3,8 +3,8 @@ package runjettyrun.handlers;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
-import org.eclipse.ui.internal.WorkbenchWindow;
 
 /**
  * Our sample handler extends AbstractHandler, an IHandler base class.
@@ -25,7 +25,7 @@ public class RunJettyHandler extends AbstractHandler {
 	 */
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 
-		WorkbenchWindow window = (WorkbenchWindow) HandlerUtil
+		IWorkbenchWindow window = (IWorkbenchWindow) HandlerUtil
 				.getActiveWorkbenchWindowChecked(event);
 
 		RunJettyRunLaunch.launch(window);

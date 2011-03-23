@@ -32,7 +32,7 @@ import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.jdt.launching.StandardClasspathProvider;
 
-import runjettyrun.container.RunJettyRunContainerRuntimeClasspathEntry;
+import runjettyrun.container.RunJettyRunContainerClasspathEntry;
 import runjettyrun.utils.RunJettyRunClasspathUtil;
 
 public class JettyLaunchConfigurationClassPathProvider extends
@@ -65,8 +65,8 @@ public class JettyLaunchConfigurationClassPathProvider extends
 
     List<IRuntimeClasspathEntry> entries = new ArrayList<IRuntimeClasspathEntry>();
     entries.addAll(Arrays.asList(existing));
-    entries.add(new RunJettyRunContainerRuntimeClasspathEntry(Plugin.CONTAINER_RJR_BOOTSTRAP,IRuntimeClasspathEntry.USER_CLASSES));
-    entries.add(new RunJettyRunContainerRuntimeClasspathEntry(Plugin.CONTAINER_RJR_JETTY6,IRuntimeClasspathEntry.USER_CLASSES));
+    entries.add(new RunJettyRunContainerClasspathEntry(Plugin.CONTAINER_RJR_BOOTSTRAP,IRuntimeClasspathEntry.USER_CLASSES));
+    entries.add(new RunJettyRunContainerClasspathEntry(Plugin.CONTAINER_RJR_JETTY6,IRuntimeClasspathEntry.USER_CLASSES));
     return entries.toArray(new IRuntimeClasspathEntry[entries.size()]);
 
   }
