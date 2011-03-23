@@ -4,22 +4,27 @@
       run-jetty-run Eclipse plugin
    </description>
    <feature url="features/runjettyrun_feature_1.0.0.jar" id="runjettyrun_feature" version="1.0.0">
-      <category name="Jetty Integration"/>
+      <category name="RunJettyRun 1.0"/>
    </feature>
    <feature url="features/runjettyrun_feature_1.0.1.jar" id="runjettyrun_feature" version="1.0.1">
-      <category name="Jetty Integration"/>
+      <category name="RunJettyRun 1.0"/>
    </feature>
    <feature url="features/runjettyrun_feature_1.1.0.jar" id="runjettyrun_feature" version="1.1.0">
-      <category name="Jetty Integration"/>
+      <category name="RunJettyRun 1.1"/>
    </feature>
    <feature url="features/runjettyrun_feature_1.1.1.jar" id="runjettyrun_feature" version="1.1.1">
-      <category name="Jetty Integration"/>
+      <category name="RunJettyRun 1.1"/>
    </feature>
    <feature url="features/runjettyrun_feature_1.2.0.jar" id="runjettyrun_feature" version="1.2">
-      <category name="Jetty Integration"/>
+      <category name="RunJettyRun 1.2"/>
    </feature>
    <feature url="features/runjettyrun_feature_1.2.1.jar" id="runjettyrun_feature" version="1.2.1">
-      <category name="Jetty Integration"/>
+      <category name="RunJettyRun 1.2"/>
+   </feature>   
+   <feature url="features/runjettyrun_feature_1.2.1.1.jar" id="runjettyrun_feature" version="1.2.1.1">
+      <category name="RunJettyRun 1.2"/>
    </feature>
-   <category-def name="Jetty Integration" label="Jetty Integration"/>
+   <category-def name="RunJettyRun 1.2" label="RunJettyRun 1.2"/>
+   <category-def name="RunJettyRun 1.1" label="RunJettyRun 1.1"/>
+   <category-def name="RunJettyRun 1.0" label="RunJettyRun 1.0"/>
 </site>
