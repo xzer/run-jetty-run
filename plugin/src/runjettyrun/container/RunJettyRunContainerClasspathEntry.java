@@ -286,8 +286,6 @@ public class RunJettyRunContainerClasspathEntry implements IClasspathEntry,
 		return JavaRuntime.resolveRuntimeClasspathEntry(this, configuration);
 	}
 
-
-	@Override
 	public String getName() {
 		return getVariableName();
 	}
