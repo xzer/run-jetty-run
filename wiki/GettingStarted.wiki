@@ -19,13 +19,19 @@ These options are required:
   * Web application directory (inside the Project)
   * Context (can just be "/")
   * A web server port (either HTTP, HTTPS or both)
-  * Can't load any server runtime lib, if you are developing with servlet , using servlet-api jar instead of server runtime.
 
 If an HTTPS port is specified, these options area also required:
 
   * Keystore file (typically `.keystore` in the user's home directory)
   * The keystore password (used to check the integrity of the keystore)
   * The key password (required to unlock the key)
+
+
+For the classpath tab , you could find more detail in [Classpath].
+
+
+It may have conflict with *server runtime lib*, if you are developing with servlet , using servlet-api jar instead of server runtime.
+
 
 If you need more control than Run Jetty Run provides, you have choices:
 
