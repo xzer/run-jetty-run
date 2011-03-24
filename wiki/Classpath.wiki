@@ -8,7 +8,7 @@ We are going to talk about the Classpath details in Run-Jetty-Run.
 There are two classpaths we need to discuss it here.
 
   # Jetty Container Classpath , which used for our bootstrap 
-  # Web App classpath , in a general wab app , it's the jars in WEB-INF/classes , WEB-INF/lib 
+  # Web App classpath , in a general wab app , it's the classes/jars in WEB-INF/classes , WEB-INF/lib 
 
   Most case of user need to care is Web App classpath.
 
