@@ -4,7 +4,7 @@
 We are going to talk about the Classpath details in Run-Jetty-Run.
 
 
-There's two classpath we need to discuss it here.
+There are two classpaths we need to discuss it here.
 
   # Jetty Container Classpath , which used for our bootstrap 
   # Web App classpath , in a general wab app , it's the jars in WEB-INF/classes , WEB-INF/lib 
@@ -15,29 +15,33 @@ There's two classpath we need to discuss it here.
 == Web App Classpath Details ==
 
 
-it will load the all the Classpath in your Java Build Path , 
-It locate at project context menu -> propesties -> java build path.
+It will load the all the Classpath in your Java Build Path , 
+It locate at project context menu -> properties -> Java Build Path.
 
-http://run-jetty-run.googlecode.com/svn/trunk/updatesite/javabuildpath.png
-
-
-
-For all "Source"(?) , "Projects" , "Libraries" list on it , 
+  http://run-jetty-run.googlecode.com/svn/trunk/updatesite/javabuildpath.png
 
 
-And for additional , as what user complained , we add the jars in web-inf/lib after Run-Jetty-Run 1.2. ( Issue #50  )
+It will load
 
-It's very straight forward and make it maven supportable.
+  * Source(#1) 
+  * Projects
+  * Libraries
+  * WEB-INF/lib/`*`.jar (since Run-Jetty-Run 1.2 (@see Issue #50  ))
+
+It's very straight forward and make it *M2Eclipse supportable*.
+
+Yep , we don't load WEB-INF/classes by default so far , 
+and I think it's enough for use to load the source directly. 
+If you need it , please post a feature request.
 
 
 
 == Jetty Classpath Details ==
   
-http://run-jetty-run.googlecode.com/svn/trunk/updatesite/RJRConfigurationClasspath.png
+  http://run-jetty-run.googlecode.com/svn/trunk/updatesite/RJRConfigurationClasspath.png
 
 
-(It's the view after the 1.2.1 and a bit different in path , 
- we use container to handle the classpath to avoid the absolute path.)
+(It's the view since the 1.2.1 and a bit different in past,we use container to handle the Classpath to avoid the absolute path.)
 
 
   * It's located in Run-Jetty-Run Run configuration , and only releated to the Jetty Bundle.(6.1.6 in past , 6.1.26 after 1.2 )  
@@ -53,5 +57,11 @@ it's web app stuff and should be placed in WebApp classpath, not containers.
 
   
 = More =
+
+#1 Actually it's not loading the source folder .
+if you do have  resources or java classes in source , but you got a ClassNotFound or 404 ,
+please check if your target output folder exist the mapping class or resource,
+sometime clean the project may make it work.(It's usually a defect for Eclipse builder.)
+
 
 If it's not working as expect , please post a bug.
