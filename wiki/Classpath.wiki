@@ -1,0 +1,57 @@
+#summary To explain how Run-Jetty-Run load jars
+
+= Introduction =
+We are going to talk about the Classpath details in Run-Jetty-Run.
+
+
+There's two classpath we need to discuss it here.
+
+  # Jetty Container Classpath , which used for our bootstrap 
+  # Web App classpath , in a general wab app , it's the jars in WEB-INF/classes , WEB-INF/lib 
+
+  Most case of user need to care is Web App classpath.
+
+
+== Web App Classpath Details ==
+
+
+it will load the all the Classpath in your Java Build Path , 
+It locate at project context menu -> propesties -> java build path.
+
+http://run-jetty-run.googlecode.com/svn/trunk/updatesite/javabuildpath.png
+
+
+
+For all "Source"(?) , "Projects" , "Libraries" list on it , 
+
+
+And for additional , as what user complained , we add the jars in web-inf/lib after Run-Jetty-Run 1.2. ( Issue #50  )
+
+It's very straight forward and make it maven supportable.
+
+
+
+== Jetty Classpath Details ==
+  
+http://run-jetty-run.googlecode.com/svn/trunk/updatesite/RJRConfigurationClasspath.png
+
+
+(It's the view after the 1.2.1 and a bit different in path , 
+ we use container to handle the classpath to avoid the absolute path.)
+
+
+  * It's located in Run-Jetty-Run Run configuration , and only releated to the Jetty Bundle.(6.1.6 in past , 6.1.26 after 1.2 )  
+    * You could replace it with any Jetty6 version one by one.(I haven't test it with Jetty 7 / Jetty 8. )
+
+  * Run-Jetty-Run bootstrap jar for a Jetty launcher in our implementation. (It's a must have.)
+
+
+
+Note: * Usually you don't need to add any container Classpath here * , all the framework/lib like Spring/Hibernate/Struts , 
+it's web app stuff and should be placed in WebApp classpath, not containers.
+
+
+  
+= More =
+
+If it's not working as expect , please post a bug.
