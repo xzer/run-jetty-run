@@ -31,7 +31,7 @@ It will load
 It's very straight forward and make it *M2Eclipse supportable*.
 
 Yep , we don't load WEB-INF/classes by default so far , 
-and I think it's enough for use to load the source directly. 
+and I think it's enough to load the source folder directly. 
 If you need it , please post a feature request.
 
 
