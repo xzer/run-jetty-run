@@ -15,14 +15,6 @@ Clean some bugfix and add some option for RJR.
 
 http://run-jetty-run.googlecode.com/svn/trunk/updatesite
 
-= Support Eclipse Version =
-
-3.6 
-(
- For some reason I used wrong API , so it's not compatible before 3.5,
- @see Issue #56
-)
-
 
 = New Configuration view =
 
