@@ -1,4 +1,5 @@
 #summary To explain how Run-Jetty-Run load jars
+#labels Featured
 
 = Introduction =
 We are going to talk about the Classpath details in Run-Jetty-Run.
