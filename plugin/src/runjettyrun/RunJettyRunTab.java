@@ -622,17 +622,18 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		IProject project = getProject(projectName);
 		if (project != null) {
 
-			if(project.getFolder(new Path("WEB-INF")).exists()){
+			IFolder pwebinf= project.getFolder(new Path("WEB-INF"));
+			if(pwebinf.exists() && pwebinf.getFile("web.xml").exists()){
 				return "/";
 			}
 
 			try {
 				IContainer webInf = scanWEBINF(project);
-				if (webInf != null && webInf.exists()) {
+				if (webInf != null && webInf.exists() && webInf.getFile(new Path("web.xml")).exists()) {
 					return ((IFolder) webInf).getParent().getProjectRelativePath().toString();
 				}
 			} catch (Exception e) {
-
+				e.printStackTrace();
 			}
 		}
 		return "";
@@ -645,8 +646,10 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		IContainer result = null;
 		for (IResource ir : resuorces) {
 			if (ir.getType() == IResource.FOLDER) {
+
 				if ("WEB-INF".equals(ir.getName())) {
-					return (IFolder) ir;
+					if ( ((IFolder)ir).getFile("web.xml").exists())
+						return (IFolder) ir;
 				} else {
 					result = scanWEBINF((IFolder) ir);
 					if (result != null)
