@@ -27,19 +27,29 @@ public class RunJettyRunLaunchConfigurationUtil {
 		try {
 			for (ILaunchConfiguration lc : lnmanger.getLaunchConfigurations()) {
 
-				String currentProjectName = lc
-						.getAttribute(
-								IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME,
-								"");
-				if (currentProjectName.equals(projectName)) {
+				if (isSupported(lc, projectName))
 					return lc;
-				}
 
 			}
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	private static boolean isSupported(ILaunchConfiguration launch,
+			String projectname) throws CoreException {
+		String currentProjectName = launch.getAttribute(
+				IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME, "");
+		if (!currentProjectName.equals(projectname)) return false;
+
+		if("".equals(launch.getAttribute(Plugin.ATTR_CONTEXT,"")))
+			return false;
+
+		if("".equals(launch.getAttribute(Plugin.ATTR_WEBAPPDIR,"")))
+			return false;
+
+		return true;
 	}
 
 	public static boolean validation(ILaunchConfiguration config) {
