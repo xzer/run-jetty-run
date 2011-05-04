@@ -20,6 +20,8 @@ package runjettyrun;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IStatus;
@@ -32,6 +34,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 import runjettyrun.container.RunJettyRunContainerResolver;
+import runjettyrun.extensions.IJettyPackageProvider;
 
 /**
  * The activator class controls the plug-in life cycle.
@@ -71,8 +74,7 @@ public class Plugin extends AbstractUIPlugin {
 	 * configuration attribute for need client auth.
 	 */
 	public static final String ATTR_ENABLE_NEED_CLIENT_AUTH = Plugin.PLUGIN_ID
-	+ ".ENABLE_NEED_CLIENT_AUTH_ATTR";
-
+			+ ".ENABLE_NEED_CLIENT_AUTH_ATTR";
 
 	/** configuration attribute for the SSL port to run Jetty on. */
 	public static final String ATTR_SSL_PORT = Plugin.PLUGIN_ID
@@ -105,23 +107,33 @@ public class Plugin extends AbstractUIPlugin {
 			+ ".ENABLE_MAVEN_TEST_CLASSES_ATTR";
 
 	public static final String ATTR_ENABLE_PARENT_LOADER_PRIORITY = Plugin.PLUGIN_ID
-	+ ".ENABLE_PARENT_LOADER_PRIORITY_ATTR";
-
+			+ ".ENABLE_PARENT_LOADER_PRIORITY_ATTR";
 
 	public static final String CONTAINER_RJR_BOOTSTRAP = "RJRBootstrap";
 	public static final String CONTAINER_RJR_JETTY6 = "RJRJetty6";
+	public static final String CONTAINER_RJR_JETTY6_JNDI = "RJRJetty6JNDI";
+
+	public static final String ATTR_ENABLE_JNDI = Plugin.PLUGIN_ID
+			+ ".ENABLE_JNDI_ATTR";
 
 	// The shared instance
 	private static Plugin plugin;
 
+	private List<IJettyPackageProvider> extensions;
+
 	public Plugin() {
-		JavaRuntime.addContainerResolver(new RunJettyRunContainerResolver(),CONTAINER_RJR_BOOTSTRAP);
-		JavaRuntime.addContainerResolver(new RunJettyRunContainerResolver(),CONTAINER_RJR_JETTY6);
-		//containerIdentifier
+		JavaRuntime.addContainerResolver(new RunJettyRunContainerResolver(),
+				CONTAINER_RJR_BOOTSTRAP);
+		JavaRuntime.addContainerResolver(new RunJettyRunContainerResolver(),
+				CONTAINER_RJR_JETTY6);
+		JavaRuntime.addContainerResolver(new RunJettyRunContainerResolver(),
+				CONTAINER_RJR_JETTY6_JNDI);
+		// containerIdentifier
 	}
 
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
+		extensions = new ArrayList<IJettyPackageProvider>();
 		plugin = this;
 
 	}
@@ -129,6 +141,35 @@ public class Plugin extends AbstractUIPlugin {
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
 		super.stop(context);
+		extensions.clear();
+		extensions = null;
+	}
+
+	public void addRunJettyRunPackageProvider(IJettyPackageProvider provider) {
+		if (provider.getName() == null) {
+			throw new IllegalArgumentException("provider's name can't be null.");
+		}
+		this.extensions.add(provider);
+	}
+
+	public void removeRunJettyRunPackageProvider(IJettyPackageProvider provider) {
+
+		ArrayList<IJettyPackageProvider> list = new ArrayList<IJettyPackageProvider>();
+
+		for (IJettyPackageProvider jpp : extensions) {
+			if (jpp.getName() == null || provider.getName() == null)
+				throw new IllegalStateException(
+						"provider's name can't be null.");
+
+			if (jpp.getName().equals(provider.getName()))
+				list.add(jpp);
+
+		}
+		this.extensions.removeAll(list);
+	}
+
+	public IJettyPackageProvider[] getProviders(){
+		return extensions.toArray(new IJettyPackageProvider[0]);
 	}
 
 	public static Plugin getDefault() {
