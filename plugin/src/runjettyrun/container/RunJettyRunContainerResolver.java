@@ -52,7 +52,23 @@ public class RunJettyRunContainerResolver implements
 		if(Plugin.CONTAINER_RJR_JETTY6.equals(entry.getVariableName()))
 			return getJetty6();
 
+		if(Plugin.CONTAINER_RJR_JETTY6_JNDI.equals(entry.getVariableName()))
+			return getJetty6JNDI();
+
 		return new IRuntimeClasspathEntry[0];
+	}
+
+	private IRuntimeClasspathEntry[] getJetty6JNDI() {
+		List<IRuntimeClasspathEntry> entries = new ArrayList<IRuntimeClasspathEntry>();
+		Bundle bundle = Plugin.getDefault().getBundle();
+		URL installUrl = bundle.getEntry("/");
+		addRelativeArchiveEntry(entries, installUrl, "jetty-naming-"
+				+ Plugin.JETTY_VERSION);
+		addRelativeArchiveEntry(entries, installUrl, "jetty-plus-"
+				+ Plugin.JETTY_VERSION);
+		addRelativeArchiveEntry(entries, installUrl, "activation-1.1.1");
+		addRelativeArchiveEntry(entries, installUrl, "mail-1.4");
+		return entries.toArray(new IRuntimeClasspathEntry[0]);
 	}
 
 	private IRuntimeClasspathEntry[] getBootstrap() {
@@ -80,7 +96,7 @@ public class RunJettyRunContainerResolver implements
 		addRelativeArchiveEntry(entries, installUrl, "jsp-2.1");
 		addRelativeArchiveEntry(entries, installUrl, "core-3.1.1");
 
-		return entries.toArray(new IRuntimeClasspathEntry[entries.size()]);
+		return entries.toArray(new IRuntimeClasspathEntry[0]);
 	}
 
 	private void addRelativeArchiveEntry(List<IRuntimeClasspathEntry> entries,

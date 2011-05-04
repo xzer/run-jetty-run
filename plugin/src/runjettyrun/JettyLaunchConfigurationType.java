@@ -307,6 +307,9 @@ public class JettyLaunchConfigurationType extends
 		addOptionalAttrx(configuration, runtimeVmArgs,
 				Plugin.ATTR_ENABLE_PARENT_LOADER_PRIORITY, "parentloaderpriority");
 
+		addOptionalAttrx(configuration, runtimeVmArgs,
+				Plugin.ATTR_ENABLE_JNDI, "enbaleJNDI");
+
 		return runtimeVmArgs;
 	}
 

@@ -69,6 +69,7 @@ import org.eclipse.ui.dialogs.ContainerSelectionDialog;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 import org.eclipse.ui.part.FileEditorInput;
 
+import runjettyrun.extensions.IJettyPackageProvider;
 import runjettyrun.utils.ProjectUtil;
 import runjettyrun.utils.RunJettyRunLaunchConfigurationUtil;
 import runjettyrun.utils.UIUtil;
@@ -83,6 +84,8 @@ public class RunJettyRunTab extends JavaLaunchTab {
 
 
 	private UpdateModfiyListener _updatedListener = new UpdateModfiyListener();
+
+	private String currentJettyVersion = IJettyPackageProvider.JETTY_6_1_26;
 
 	private Text fProjText;
 
@@ -123,6 +126,8 @@ public class RunJettyRunTab extends JavaLaunchTab {
 	private Group mavenGroup= null;
 
 	private boolean isMavenProject = false;
+
+	private Button fEnableJNDI;
 	/**
 	 * Construct.
 	 */
@@ -226,8 +231,6 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		});
 
 	}
-
-
 
 	private GridData createHFillGridData() {
 		GridData gd = new GridData();
@@ -520,6 +523,19 @@ public class RunJettyRunTab extends JavaLaunchTab {
 			}
 		});
 
+		fEnableJNDI = createCheckButton(group, "JNDI Support");
+		{
+			GridData gd = new GridData();
+			gd.horizontalAlignment = SWT.LEFT;
+			fEnableJNDI.setLayoutData(gd);
+		}
+		//update configuration directly when user select it.
+		fEnableJNDI.addSelectionListener(new ButtonListener() {
+			public void widgetSelected(SelectionEvent e) {
+				updateLaunchConfigurationDialog();
+			}
+		});
+
 		/*
 		 --------------------------------------------------------------------- */
 
@@ -591,6 +607,7 @@ public class RunJettyRunTab extends JavaLaunchTab {
 
 			fScanText.setText(configuration.getAttribute(Plugin.ATTR_SCANINTERVALSECONDS, ""));
 			fEnablebox.setSelection(configuration.getAttribute(Plugin.ATTR_ENABLE_SCANNER, true));
+			fEnableJNDI.setSelection(configuration.getAttribute(Plugin.ATTR_ENABLE_JNDI, false));
 			fScanText.setEnabled(fEnablebox.getSelection());
 
 			fEnableMavenDisableTestClassesBox.setSelection(configuration.getAttribute(Plugin.ATTR_ENABLE_MAVEN_TEST_CLASSES, true));
@@ -811,6 +828,8 @@ public class RunJettyRunTab extends JavaLaunchTab {
 
 		configuration.setAttribute(Plugin.ATTR_ENABLE_SSL, fEnableSSLbox.getSelection());
 		configuration.setAttribute(Plugin.ATTR_ENABLE_NEED_CLIENT_AUTH, fEnableNeedClientAuth.getSelection());
+
+		configuration.setAttribute(Plugin.ATTR_ENABLE_JNDI,fEnableJNDI.getSelection());
 
 		configuration.setAttribute(Plugin.ATTR_KEYSTORE, fKeystoreText.getText());
 		configuration.setAttribute(Plugin.ATTR_PWD, fPasswordText.getText());

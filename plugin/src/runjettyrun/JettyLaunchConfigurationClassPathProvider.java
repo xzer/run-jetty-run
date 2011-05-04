@@ -53,9 +53,19 @@ public class JettyLaunchConfigurationClassPathProvider extends
 
     } else {
       // recover persisted classpath
-      return recoverRuntimePath(configuration,
+      classpath =  recoverRuntimePath(configuration,
           IJavaLaunchConfigurationConstants.ATTR_CLASSPATH);
     }
+    try {
+		if(configuration.getAttribute(Plugin.ATTR_ENABLE_JNDI,false)){
+		    List<IRuntimeClasspathEntry> entries = new ArrayList<IRuntimeClasspathEntry>();
+		    entries.addAll(Arrays.asList(classpath));
+			entries.add(new RunJettyRunContainerClasspathEntry(Plugin.CONTAINER_RJR_JETTY6_JNDI,IRuntimeClasspathEntry.USER_CLASSES));
+			return entries.toArray(new IRuntimeClasspathEntry[0]);
+		}
+	} catch (CoreException e) {
+	}
+
     return classpath;
   }
 
@@ -67,7 +77,8 @@ public class JettyLaunchConfigurationClassPathProvider extends
     entries.addAll(Arrays.asList(existing));
     entries.add(new RunJettyRunContainerClasspathEntry(Plugin.CONTAINER_RJR_BOOTSTRAP,IRuntimeClasspathEntry.USER_CLASSES));
     entries.add(new RunJettyRunContainerClasspathEntry(Plugin.CONTAINER_RJR_JETTY6,IRuntimeClasspathEntry.USER_CLASSES));
-    return entries.toArray(new IRuntimeClasspathEntry[entries.size()]);
+
+    return entries.toArray(new IRuntimeClasspathEntry[0]);
 
   }
 
