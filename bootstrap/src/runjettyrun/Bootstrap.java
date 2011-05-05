@@ -59,12 +59,12 @@ public class Bootstrap {
 
 		boolean loggerparam = false;
 		if (loggerparam) {
-			String[] propkeys = new String[] { "rjrcontext", "rjrwebapp", "rjrport", "rjrsslport", "rjrkeystore",
-					"rjrpassword", "rjrclasspath", "rjrkeypassword", "rjrscanintervalseconds", "rjrenablescanner",
-					"rjrenablessl"
-			};
-			for(String key:propkeys){
-				System.err.println("-D"+key+"="+System.getProperty(key));
+			String[] propkeys = new String[] { "rjrcontext", "rjrwebapp",
+					"rjrport", "rjrsslport", "rjrkeystore", "rjrpassword",
+					"rjrclasspath", "rjrkeypassword", "rjrscanintervalseconds",
+					"rjrenablescanner", "rjrenablessl", "rjrenbaleJNDI" };
+			for (String key : propkeys) {
+				System.err.println("-D" + key + "=" + System.getProperty(key));
 			}
 		}
 		String context = System.getProperty("rjrcontext");
@@ -75,28 +75,53 @@ public class Bootstrap {
 		String password = System.getProperty("rjrpassword");
 		final String webAppClassPath = resovleWebappClasspath();
 		String keyPassword = System.getProperty("rjrkeypassword");
-		Integer scanIntervalSeconds = Integer.getInteger("rjrscanintervalseconds");
+		Integer scanIntervalSeconds = Integer
+				.getInteger("rjrscanintervalseconds");
 		Boolean enablescanner = Boolean.getBoolean("rjrenablescanner");
-		Boolean parentLoaderPriority = getBoolean("rjrparentloaderpriority",true);
+		Boolean parentLoaderPriority = getBoolean("rjrparentloaderpriority",
+				true);
 
 		Boolean enablessl = Boolean.getBoolean("rjrenablessl");
 		Boolean needClientAuth = Boolean.getBoolean("rjrneedclientauth");
+		Boolean enableJNDI = Boolean.getBoolean("rjrenbaleJNDI");
+
+		ArrayList<String> configuration = new ArrayList<String>();
+		if (enableJNDI) {
+			configuration.add("org.mortbay.jetty.webapp.WebInfConfiguration");
+			configuration.add("org.mortbay.jetty.plus.webapp.EnvConfiguration");
+			configuration.add("org.mortbay.jetty.plus.webapp.Configuration");
+			configuration
+					.add("org.mortbay.jetty.webapp.JettyWebXmlConfiguration");
+			configuration.add("org.mortbay.jetty.webapp.TagLibConfiguration");
+		}
+		String rjrConfiguration = System.getProperty("rjrconfigurationclasses",
+				"");
+		if (!"".equals(rjrConfiguration)) {
+			String[] configs = rjrConfiguration.split(";");
+			for (String conf : configs) {
+				configuration.add(conf);
+			}
+		}
 
 		if (context == null) {
-			throw new IllegalStateException("you need to provide argument -Drjrcontext");
+			throw new IllegalStateException(
+					"you need to provide argument -Drjrcontext");
 		}
 		if (webAppDir == null) {
-			throw new IllegalStateException("you need to provide argument -Drjrwebapp");
+			throw new IllegalStateException(
+					"you need to provide argument -Drjrwebapp");
 		}
 		if (port == null && sslport == null) {
-			throw new IllegalStateException("you need to provide argument -Drjrport and/or -Drjrsslport");
+			throw new IllegalStateException(
+					"you need to provide argument -Drjrport and/or -Drjrsslport");
 		}
 
 		server = new Server();
 
 		if (port != null) {
 			if (!available(port)) {
-				throw new IllegalStateException("port :" + port + " already in use!");
+				throw new IllegalStateException("port :" + port
+						+ " already in use!");
 			}
 			SelectChannelConnector connector = new SelectChannelConnector();
 			connector.setPort(port);
@@ -110,16 +135,20 @@ public class Bootstrap {
 
 		if (enablessl && sslport != null) {
 			if (!available(sslport)) {
-				throw new IllegalStateException("SSL port :" + sslport + " already in use!");
+				throw new IllegalStateException("SSL port :" + sslport
+						+ " already in use!");
 			}
 			if (keystore == null) {
-				throw new IllegalStateException("you need to provide argument -Drjrkeystore with -Drjrsslport");
+				throw new IllegalStateException(
+						"you need to provide argument -Drjrkeystore with -Drjrsslport");
 			}
 			if (password == null) {
-				throw new IllegalStateException("you need to provide argument -Drjrpassword with -Drjrsslport");
+				throw new IllegalStateException(
+						"you need to provide argument -Drjrpassword with -Drjrsslport");
 			}
 			if (keyPassword == null) {
-				throw new IllegalStateException("you need to provide argument -Drjrkeypassword with -Drjrsslport");
+				throw new IllegalStateException(
+						"you need to provide argument -Drjrkeypassword with -Drjrsslport");
 			}
 
 			SslSocketConnector sslConnector = new SslSocketConnector();
@@ -127,7 +156,7 @@ public class Bootstrap {
 			sslConnector.setPassword(password);
 			sslConnector.setKeyPassword(keyPassword);
 
-			if(needClientAuth){
+			if (needClientAuth) {
 				System.err.println("Enable NeedClientAuth.");
 				sslConnector.setNeedClientAuth(needClientAuth);
 			}
@@ -139,7 +168,7 @@ public class Bootstrap {
 
 		web = new WebAppContext();
 
-		if(parentLoaderPriority){
+		if (parentLoaderPriority) {
 			web.setParentLoaderPriority(true);
 			System.err.println("ParentLoaderPriority enabled");
 		}
@@ -147,6 +176,16 @@ public class Bootstrap {
 		web.setContextPath(context);
 		web.setWar(webAppDir);
 
+		/**
+		 * open a way to set the configuration classes
+		 */
+		if (configuration.size() != 0) {
+			web.setConfigurationClasses(configuration.toArray(new String[0]));
+
+			for (String conf : configuration) {
+				System.err.println("Enable config class:" + conf);
+			}
+		}
 		// Fix issue 7, File locking on windows/Disable Jetty's locking of
 		// static files
 		// http://code.google.com/p/run-jetty-run/issues/detail?id=7
@@ -161,10 +200,13 @@ public class Bootstrap {
 		// degradation of this change. My only concern is that there might be a
 		// need to
 		// test this feature that I'm disabling.
-		web.setInitParams(Collections.singletonMap("org.mortbay.jetty.servlet.Default.useFileMappedBuffer", "false"));
+		web.setInitParams(Collections.singletonMap(
+				"org.mortbay.jetty.servlet.Default.useFileMappedBuffer",
+				"false"));
 
 		if (webAppClassPath != null) {
-			ProjectClassLoader loader = new ProjectClassLoader(web, webAppClassPath);
+			ProjectClassLoader loader = new ProjectClassLoader(web,
+					webAppClassPath);
 			web.setClassLoader(loader);
 		}
 
@@ -179,7 +221,8 @@ public class Bootstrap {
 		if (enablescanner) {
 			final ArrayList<File> scanList = new ArrayList<File>();
 			if (webAppClassPath != null) {
-				for (URL url : ((ProjectClassLoader) web.getClassLoader()).getURLs()) {
+				for (URL url : ((ProjectClassLoader) web.getClassLoader())
+						.getURLs()) {
 					File f = new File(url.getFile());
 					if (f.isDirectory()) {
 						scanList.add(f);
@@ -203,19 +246,22 @@ public class Bootstrap {
 						web.stop();
 
 						if (webAppClassPath != null) {
-							ProjectClassLoader loader = new ProjectClassLoader(web, webAppClassPath, false);
+							ProjectClassLoader loader = new ProjectClassLoader(
+									web, webAppClassPath, false);
 							web.setClassLoader(loader);
 						}
 						System.err.println("Restarting webapp ...");
 						web.start();
 						System.err.println("Restart completed.");
 					} catch (Exception e) {
-						System.err.println("Error reconfiguring/restarting webapp after change in watched files");
+						System.err
+								.println("Error reconfiguring/restarting webapp after change in watched files");
 						e.printStackTrace();
 					}
 				}
 			});
-			System.err.println("Starting scanner at interval of " + scanIntervalSeconds + " seconds.");
+			System.err.println("Starting scanner at interval of "
+					+ scanIntervalSeconds + " seconds.");
 			scanner.start();
 		}
 
@@ -229,14 +275,14 @@ public class Bootstrap {
 		return;
 	}
 
-	private static Boolean getBoolean(String propertiesKey,boolean def){
+	private static Boolean getBoolean(String propertiesKey, boolean def) {
 		String val = System.getProperty(propertiesKey);
 
 		Boolean ret = def;
-		if(val != null){
-			try{
+		if (val != null) {
+			try {
 				ret = Boolean.parseBoolean(val);
-			}catch(Exception e){
+			} catch (Exception e) {
 
 			}
 
@@ -244,25 +290,27 @@ public class Bootstrap {
 		return ret;
 
 	}
-	private static String resovleWebappClasspath(){
+
+	private static String resovleWebappClasspath() {
 		String classpath = System.getProperty("rjrclasspath");
 
-		if(classpath!=null && classpath.startsWith("file://")){
-			try{
+		if (classpath != null && classpath.startsWith("file://")) {
+			try {
 				String filePath = classpath.substring(7);
 
-				BufferedReader br =new BufferedReader(new InputStreamReader(new FileInputStream(filePath),"UTF-8"));
+				BufferedReader br = new BufferedReader(new InputStreamReader(
+						new FileInputStream(filePath), "UTF-8"));
 				StringBuffer sb = new StringBuffer();
 				String str = br.readLine();
-				while(str!=null){
+				while (str != null) {
 					sb.append(str);
 					str = br.readLine();
 				}
 				return sb.toString();
 
-			}catch(IOException e){
+			} catch (IOException e) {
 				System.err.println("read classpath failed!");
-				throw new RuntimeException(" read classpath failed ",e);
+				throw new RuntimeException(" read classpath failed ", e);
 			}
 		}
 
