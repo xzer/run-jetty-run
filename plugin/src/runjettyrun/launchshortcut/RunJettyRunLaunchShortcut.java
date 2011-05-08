@@ -1,5 +1,7 @@
 package runjettyrun.launchshortcut;
 
+import java.util.HashSet;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -76,6 +78,8 @@ public class RunJettyRunLaunchShortcut implements ILaunchShortcut2 {
 
 				wc = configType.newInstance(null, launchConfigName);
 				RunJettyRunTab.initDefaultConfiguration(wc, type.getProject(), launchConfigName);
+				//set mapped resource , let next time we could execute this directly from menuitem.
+				wc.setMappedResources(new IResource[] {type});
 				config = wc.doSave();
 			}else{
 				showError("Project is not a regular webapp project (missing WEB-INF\\web.xml");
@@ -99,9 +103,6 @@ public class RunJettyRunLaunchShortcut implements ILaunchShortcut2 {
 	}
 
 	public void launch(IResource ir,String mode){
-		if(ir == null) {
-
-		}
 		ILaunchConfiguration config = findLaunchConfiguration(ir);
 		if (config == null) {
 			config = createConfiguration(ir);
@@ -112,11 +113,15 @@ public class RunJettyRunLaunchShortcut implements ILaunchShortcut2 {
 	}
 
 	public ILaunchConfiguration[] getLaunchConfigurations(ISelection selection) {
-		return new ILaunchConfiguration[]{findLaunchConfiguration(getLaunchableResource(selection))};
+		ILaunchConfiguration launchconf = findLaunchConfiguration(getLaunchableResource(selection));
+		if(launchconf == null) return null;
+		return new ILaunchConfiguration[]{launchconf};
 	}
 
 	public ILaunchConfiguration[] getLaunchConfigurations(IEditorPart editorpart) {
-		return new ILaunchConfiguration[]{findLaunchConfiguration(getLaunchableResource(editorpart))};
+		ILaunchConfiguration launchconf = findLaunchConfiguration(getLaunchableResource(editorpart));
+		if(launchconf == null) return null;
+		return new ILaunchConfiguration[]{launchconf};
 	}
 
 	public IResource getLaunchableResource(ISelection selection) {

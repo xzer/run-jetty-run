@@ -48,7 +48,7 @@ public class Bootstrap {
 
 	private static Server server;
 
-	static WebAppContext web;
+	private static WebAppContext web;
 
 	/**
 	 * Main function, starts the jetty server.
@@ -87,12 +87,7 @@ public class Bootstrap {
 
 		ArrayList<String> configuration = new ArrayList<String>();
 		if (enableJNDI) {
-			configuration.add("org.mortbay.jetty.webapp.WebInfConfiguration");
-			configuration.add("org.mortbay.jetty.plus.webapp.EnvConfiguration");
-			configuration.add("org.mortbay.jetty.plus.webapp.Configuration");
-			configuration
-					.add("org.mortbay.jetty.webapp.JettyWebXmlConfiguration");
-			configuration.add("org.mortbay.jetty.webapp.TagLibConfiguration");
+			initJNDIConfiguration(configuration);
 		}
 		String rjrConfiguration = System.getProperty("rjrconfigurationclasses",
 				"");
@@ -134,36 +129,7 @@ public class Bootstrap {
 		}
 
 		if (enablessl && sslport != null) {
-			if (!available(sslport)) {
-				throw new IllegalStateException("SSL port :" + sslport
-						+ " already in use!");
-			}
-			if (keystore == null) {
-				throw new IllegalStateException(
-						"you need to provide argument -Drjrkeystore with -Drjrsslport");
-			}
-			if (password == null) {
-				throw new IllegalStateException(
-						"you need to provide argument -Drjrpassword with -Drjrsslport");
-			}
-			if (keyPassword == null) {
-				throw new IllegalStateException(
-						"you need to provide argument -Drjrkeypassword with -Drjrsslport");
-			}
-
-			SslSocketConnector sslConnector = new SslSocketConnector();
-			sslConnector.setKeystore(keystore);
-			sslConnector.setPassword(password);
-			sslConnector.setKeyPassword(keyPassword);
-
-			if (needClientAuth) {
-				System.err.println("Enable NeedClientAuth.");
-				sslConnector.setNeedClientAuth(needClientAuth);
-			}
-			sslConnector.setMaxIdleTime(30000);
-			sslConnector.setPort(sslport);
-
-			server.addConnector(sslConnector);
+			initSSL(server, sslport, keystore, password, keyPassword, needClientAuth);
 		}
 
 		web = new WebAppContext();
@@ -212,57 +178,11 @@ public class Bootstrap {
 
 		server.addHandler(web);
 
-		MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
-		MBeanContainer mBeanContainer = new MBeanContainer(mBeanServer);
-		server.getContainer().addEventListener(mBeanContainer);
-		mBeanContainer.start();
+		initMBeanServer(server);
 
 		// configureScanner
 		if (enablescanner) {
-			final ArrayList<File> scanList = new ArrayList<File>();
-			if (webAppClassPath != null) {
-				for (URL url : ((ProjectClassLoader) web.getClassLoader())
-						.getURLs()) {
-					File f = new File(url.getFile());
-					if (f.isDirectory()) {
-						scanList.add(f);
-					}
-				}
-			}
-
-			// startScanner
-			Scanner scanner = new Scanner();
-			scanner.setReportExistingFilesOnStartup(false);
-			scanner.setScanInterval(scanIntervalSeconds);
-			scanner.setScanDirs(scanList);
-			scanner.addListener(new Scanner.BulkListener() {
-
-				public void filesChanged(List changes) {
-					try {
-						// boolean reconfigure = changes.contains(getProject()
-						// .getFile().getCanonicalPath());
-						System.err.println("Stopping webapp ...");
-
-						web.stop();
-
-						if (webAppClassPath != null) {
-							ProjectClassLoader loader = new ProjectClassLoader(
-									web, webAppClassPath, false);
-							web.setClassLoader(loader);
-						}
-						System.err.println("Restarting webapp ...");
-						web.start();
-						System.err.println("Restart completed.");
-					} catch (Exception e) {
-						System.err
-								.println("Error reconfiguring/restarting webapp after change in watched files");
-						e.printStackTrace();
-					}
-				}
-			});
-			System.err.println("Starting scanner at interval of "
-					+ scanIntervalSeconds + " seconds.");
-			scanner.start();
+			initScanner(web,webAppClassPath,scanIntervalSeconds);
 		}
 
 		try {
@@ -273,6 +193,102 @@ public class Bootstrap {
 			System.exit(100);
 		}
 		return;
+	}
+
+	private static void initJNDIConfiguration(List configuration){
+		configuration.add("org.mortbay.jetty.webapp.WebInfConfiguration");
+		configuration.add("org.mortbay.jetty.plus.webapp.EnvConfiguration");
+		configuration.add("org.mortbay.jetty.plus.webapp.Configuration");
+		configuration
+				.add("org.mortbay.jetty.webapp.JettyWebXmlConfiguration");
+		configuration.add("org.mortbay.jetty.webapp.TagLibConfiguration");
+	}
+
+	private static void initSSL(Server server,int sslport,String keystore,String password,String keyPassword,boolean needClientAuth){
+		if (!available(sslport)) {
+			throw new IllegalStateException("SSL port :" + sslport
+					+ " already in use!");
+		}
+		if (keystore == null) {
+			throw new IllegalStateException(
+					"you need to provide argument -Drjrkeystore with -Drjrsslport");
+		}
+		if (password == null) {
+			throw new IllegalStateException(
+					"you need to provide argument -Drjrpassword with -Drjrsslport");
+		}
+		if (keyPassword == null) {
+			throw new IllegalStateException(
+					"you need to provide argument -Drjrkeypassword with -Drjrsslport");
+		}
+
+		SslSocketConnector sslConnector = new SslSocketConnector();
+		sslConnector.setKeystore(keystore);
+		sslConnector.setPassword(password);
+		sslConnector.setKeyPassword(keyPassword);
+
+		if (needClientAuth) {
+			System.err.println("Enable NeedClientAuth.");
+			sslConnector.setNeedClientAuth(needClientAuth);
+		}
+		sslConnector.setMaxIdleTime(30000);
+		sslConnector.setPort(sslport);
+
+		server.addConnector(sslConnector);
+	}
+	private static void initMBeanServer(Server server){
+		MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
+		MBeanContainer mBeanContainer = new MBeanContainer(mBeanServer);
+		server.getContainer().addEventListener(mBeanContainer);
+		mBeanContainer.start();
+	}
+
+	private static void initScanner(final WebAppContext web,final
+			String webAppClassPath,int scanIntervalSeconds){
+		final ArrayList<File> scanList = new ArrayList<File>();
+		if (webAppClassPath != null) {
+			for (URL url : ((ProjectClassLoader) web.getClassLoader())
+					.getURLs()) {
+				File f = new File(url.getFile());
+				if (f.isDirectory()) {
+					scanList.add(f);
+				}
+			}
+		}
+
+		// startScanner
+		Scanner scanner = new Scanner();
+		scanner.setReportExistingFilesOnStartup(false);
+		scanner.setScanInterval(scanIntervalSeconds);
+		scanner.setScanDirs(scanList);
+		scanner.addListener(new Scanner.BulkListener() {
+
+			public void filesChanged(List changes) {
+				try {
+					// boolean reconfigure = changes.contains(getProject()
+					// .getFile().getCanonicalPath());
+					System.err.println("Stopping webapp ...");
+
+					web.stop();
+
+					if (webAppClassPath != null) {
+						ProjectClassLoader loader = new ProjectClassLoader(
+								web, webAppClassPath, false);
+						web.setClassLoader(loader);
+					}
+					System.err.println("Restarting webapp ...");
+					web.start();
+					System.err.println("Restart completed.");
+				} catch (Exception e) {
+					System.err
+							.println("Error reconfiguring/restarting webapp after change in watched files");
+					e.printStackTrace();
+				}
+			}
+		});
+		System.err.println("Starting scanner at interval of "
+				+ scanIntervalSeconds + " seconds.");
+		scanner.start();
 	}
 
 	private static Boolean getBoolean(String propertiesKey, boolean def) {
