@@ -82,7 +82,6 @@ import runjettyrun.utils.UIUtil;
 @SuppressWarnings("restriction")
 public class RunJettyRunTab extends JavaLaunchTab {
 
-
 	private UpdateModfiyListener _updatedListener = new UpdateModfiyListener();
 
 	private String currentJettyVersion = IJettyPackageProvider.JETTY_6_1_26;
@@ -123,17 +122,17 @@ public class RunJettyRunTab extends JavaLaunchTab {
 
 	private Button fEnableParentLoadPriorityBox;
 
-	private Group mavenGroup= null;
+	private Group mavenGroup = null;
 
 	private boolean isMavenProject = false;
 
 	private Button fEnableJNDI;
+
 	/**
 	 * Construct.
 	 */
 	public RunJettyRunTab() {
 	}
-
 
 	public void createControl(Composite parent) {
 		Composite comp = new Composite(parent, SWT.NONE);
@@ -201,7 +200,8 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		Font font = parent.getFont();
 
 		/*
-		 --------------------------------------------------------------------- */
+		 * ---------------------------------------------------------------------
+		 */
 
 		mavenGroup = new Group(parent, SWT.NONE);
 		mavenGroup.setVisible(isMavenProject);
@@ -215,20 +215,23 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		mavenGroup.setFont(font);
 
 		/*
-		 --------------------------------------------------------------------- */
+		 * ---------------------------------------------------------------------
+		 */
 
-		fEnableMavenDisableTestClassesBox = createCheckButton(mavenGroup, "Disable test-classes for maven");
+		fEnableMavenDisableTestClassesBox = createCheckButton(mavenGroup,
+				"Disable test-classes for maven");
 		{
 			GridData gd = new GridData();
 			gd.horizontalAlignment = SWT.LEFT;
 			fEnableMavenDisableTestClassesBox.setLayoutData(gd);
 		}
-		//update configuration directly when user select it.
-		fEnableMavenDisableTestClassesBox.addSelectionListener(new ButtonListener() {
-			public void widgetSelected(SelectionEvent e) {
-				updateLaunchConfigurationDialog();
-			}
-		});
+		// update configuration directly when user select it.
+		fEnableMavenDisableTestClassesBox
+				.addSelectionListener(new ButtonListener() {
+					public void widgetSelected(SelectionEvent e) {
+						updateLaunchConfigurationDialog();
+					}
+				});
 
 	}
 
@@ -238,12 +241,13 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		gd.grabExcessHorizontalSpace = true;
 		return gd;
 	}
-	private GridData createHFillGridData(int span,int position){
-		//gd.horizontalAlignment = SWT.FILL
+
+	private GridData createHFillGridData(int span, int position) {
+		// gd.horizontalAlignment = SWT.FILL
 		GridData gd = createHFillGridData();
-		if(position!=-1)
+		if (position != -1)
 			gd.horizontalAlignment = position;
-		if(span !=-1 )
+		if (span != -1)
 			gd.horizontalSpan = span;
 
 		return gd;
@@ -275,12 +279,14 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		// HTTP and HTTPS ports
 
 		/*
-		 --------------------------------------------------------------------- */
+		 * ---------------------------------------------------------------------
+		 */
 
 		new Label(group, SWT.LEFT).setText("HTTP");
 
 		/*
-		 --------------------------------------------------------------------- */
+		 * ---------------------------------------------------------------------
+		 */
 
 		fPortText = new Text(group, SWT.SINGLE | SWT.BORDER);
 		fPortText.addModifyListener(_updatedListener);
@@ -290,7 +296,8 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		setWidthForSampleText(fPortText, " 65535 ");
 
 		/*
-		 --------------------------------------------------------------------- */
+		 * ---------------------------------------------------------------------
+		 */
 
 		fEnableSSLbox = createCheckButton(group, "HTTPS");
 		fEnableSSLbox.addSelectionListener(new ButtonListener() {
@@ -308,7 +315,8 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		}
 
 		/*
-		 --------------------------------------------------------------------- */
+		 * ---------------------------------------------------------------------
+		 */
 
 		fSSLPortText = new Text(group, SWT.SINGLE | SWT.BORDER);
 		fSSLPortText.addModifyListener(new ModifyListener() {
@@ -321,12 +329,12 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		fSSLPortText.setLayoutData(createHFillGridData());
 		fSSLPortText.setFont(font);
 
-
 		/*
-		 *SslSocketConnector
+		 * SslSocketConnector
 		 */
 		/*
-		 --------------------------------------------------------------------- */
+		 * ---------------------------------------------------------------------
+		 */
 
 		fEnableNeedClientAuth = createCheckButton(group, "NeedClientAuth");
 		fEnableNeedClientAuth.addSelectionListener(new ButtonListener() {
@@ -336,20 +344,23 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		});
 
 		/*
-		 --------------------------------------------------------------------- */
+		 * ---------------------------------------------------------------------
+		 */
 		// keystore
 		new Label(group, SWT.LEFT).setText("Keystore");
 		/*
-		 --------------------------------------------------------------------- */
+		 * ---------------------------------------------------------------------
+		 */
 
 		fKeystoreText = new Text(group, SWT.SINGLE | SWT.BORDER);
 		fKeystoreText.addModifyListener(_updatedListener);
-		fKeystoreText.setLayoutData(createHFillGridData(3,-1));
+		fKeystoreText.setLayoutData(createHFillGridData(3, -1));
 		fKeystoreText.setFont(font);
 		fKeystoreText.setEnabled(false);
 
 		/*
-		 --------------------------------------------------------------------- */
+		 * ---------------------------------------------------------------------
+		 */
 
 		fKeystoreButton = createPushButton(group, "&Browse...", null);
 		fKeystoreButton.addSelectionListener(new ButtonListener() {
@@ -359,15 +370,17 @@ public class RunJettyRunTab extends JavaLaunchTab {
 			}
 		});
 		fKeystoreButton.setEnabled(false);
-		fKeystoreButton.setLayoutData( new GridData());
+		fKeystoreButton.setLayoutData(new GridData());
 		/*
-		 --------------------------------------------------------------------- */
+		 * ---------------------------------------------------------------------
+		 */
 
 		// Password and Key Password (not sure exactly how used by keystore)
 
 		new Label(group, SWT.LEFT).setText("Password");
 		/*
-		 --------------------------------------------------------------------- */
+		 * ---------------------------------------------------------------------
+		 */
 
 		fPasswordText = new Text(group, SWT.SINGLE | SWT.BORDER);
 		fPasswordText.addModifyListener(_updatedListener);
@@ -376,18 +389,21 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		fPasswordText.setEnabled(false);
 
 		/*
-		 --------------------------------------------------------------------- */
+		 * ---------------------------------------------------------------------
+		 */
 		new Label(group, SWT.LEFT).setText("Key Password");
 
 		/*
-		 --------------------------------------------------------------------- */
+		 * ---------------------------------------------------------------------
+		 */
 		fKeyPasswordText = new Text(group, SWT.SINGLE | SWT.BORDER);
 		fKeyPasswordText.addModifyListener(_updatedListener);
 		fKeyPasswordText.setLayoutData(createHFillGridData());
 		fKeyPasswordText.setFont(font);
 		fKeyPasswordText.setEnabled(false);
 		/*
-		 --------------------------------------------------------------------- */
+		 * ---------------------------------------------------------------------
+		 */
 		return;
 	}
 
@@ -424,33 +440,36 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		group.setFont(font);
 
 		/*
-		 --------------------------------------------------------------------- */
+		 * ---------------------------------------------------------------------
+		 */
 
 		// Row 1: "Context", Text field (2 columns)
 		new Label(group, SWT.LEFT).setText("Context");
 
 		fContextText = new Text(group, SWT.SINGLE | SWT.BORDER);
 		fContextText.addModifyListener(_updatedListener);
-		fContextText.setLayoutData(createHFillGridData(5,-1));
+		fContextText.setLayoutData(createHFillGridData(5, -1));
 		fContextText.setFont(font);
 
 		/*
-		 --------------------------------------------------------------------- */
+		 * ---------------------------------------------------------------------
+		 */
 
 		// Row 2: "WebApp dir", Text field, "Browse..." Button
 		new Label(group, SWT.LEFT).setText("WebApp dir");
 
-
 		/*
-		 --------------------------------------------------------------------- */
+		 * ---------------------------------------------------------------------
+		 */
 
 		fWebAppDirText = new Text(group, SWT.SINGLE | SWT.BORDER);
 		fWebAppDirText.addModifyListener(_updatedListener);
-		fWebAppDirText.setLayoutData(createHFillGridData(3,-1));
+		fWebAppDirText.setLayoutData(createHFillGridData(3, -1));
 		fWebAppDirText.setFont(font);
 
 		/*
-		 --------------------------------------------------------------------- */
+		 * ---------------------------------------------------------------------
+		 */
 
 		fWebappDirButton = createPushButton(group, "&Browse...", null);
 		fWebappDirButton.addSelectionListener(new ButtonListener() {
@@ -460,10 +479,11 @@ public class RunJettyRunTab extends JavaLaunchTab {
 			}
 		});
 		fWebappDirButton.setEnabled(false);
-		fWebappDirButton.setLayoutData( new GridData());
+		fWebappDirButton.setLayoutData(new GridData());
 
 		/*
-		 --------------------------------------------------------------------- */
+		 * ---------------------------------------------------------------------
+		 */
 		fWebappScanButton = createPushButton(group, "&Scan...", null);
 		fWebappScanButton.addSelectionListener(new ButtonListener() {
 
@@ -472,24 +492,27 @@ public class RunJettyRunTab extends JavaLaunchTab {
 			}
 		});
 		fWebappScanButton.setEnabled(false);
-		fWebappScanButton.setLayoutData( new GridData());
+		fWebappScanButton.setLayoutData(new GridData());
 
 		/*
-		 --------------------------------------------------------------------- */
+		 * ---------------------------------------------------------------------
+		 */
 		// Row 3: Scan interval seconds
 		new Label(group, SWT.LEFT).setText("Scan Interval Seconds");
 
 		/*
-		 --------------------------------------------------------------------- */
+		 * ---------------------------------------------------------------------
+		 */
 		fScanText = new Text(group, SWT.SINGLE | SWT.BORDER);
 		fScanText.addModifyListener(_updatedListener);
 
-		fScanText.setLayoutData(createHFillGridData(3,-1));
+		fScanText.setLayoutData(createHFillGridData(3, -1));
 		fScanText.setFont(font);
 		fScanText.setTextLimit(5);
 
 		/*
-		 --------------------------------------------------------------------- */
+		 * ---------------------------------------------------------------------
+		 */
 
 		fEnablebox = createCheckButton(group, "Enable Scanner");
 		fEnablebox.addSelectionListener(new ButtonListener() {
@@ -506,17 +529,19 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		}
 
 		/*
-		 --------------------------------------------------------------------- */
+		 * ---------------------------------------------------------------------
+		 */
 
-		//Row4 Parent Loader Priority
-		fEnableParentLoadPriorityBox = createCheckButton(group, "ParentLoadPriority");
+		// Row4 Parent Loader Priority
+		fEnableParentLoadPriorityBox = createCheckButton(group,
+				"ParentLoadPriority");
 
 		{
 			GridData gd = new GridData();
 			gd.horizontalAlignment = SWT.LEFT;
 			fEnableParentLoadPriorityBox.setLayoutData(gd);
 		}
-		//update configuration directly when user select it.
+		// update configuration directly when user select it.
 		fEnableParentLoadPriorityBox.addSelectionListener(new ButtonListener() {
 			public void widgetSelected(SelectionEvent e) {
 				updateLaunchConfigurationDialog();
@@ -529,7 +554,7 @@ public class RunJettyRunTab extends JavaLaunchTab {
 			gd.horizontalAlignment = SWT.LEFT;
 			fEnableJNDI.setLayoutData(gd);
 		}
-		//update configuration directly when user select it.
+		// update configuration directly when user select it.
 		fEnableJNDI.addSelectionListener(new ButtonListener() {
 			public void widgetSelected(SelectionEvent e) {
 				updateLaunchConfigurationDialog();
@@ -537,22 +562,27 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		});
 
 		/*
-		 --------------------------------------------------------------------- */
+		 * ---------------------------------------------------------------------
+		 */
 
-		UIUtil.createLink(group, SWT.NONE ,"<a href=\"http://communitymapbuilder.org/display/JETTY/Classloading\">(?)</a>");
-
+		UIUtil.createLink(group, SWT.NONE,
+				"<a href=\"http://communitymapbuilder.org/display/JETTY/Classloading\">(?)</a>");
 
 		/*
-		 --------------------------------------------------------------------- */
+		 * ---------------------------------------------------------------------
+		 */
 
-		Link systemProperties = UIUtil.createLink(group, SWT.NONE ,"...You could set "+
-				"<a href=\"http://communitymapbuilder.org/display/JETTY/SystemProperties\">"+
-				"more control </a> in VM argument.(-Dket=value) ");
+		Link systemProperties = UIUtil
+				.createLink(
+						group,
+						SWT.NONE,
+						"...You could set "
+								+ "<a href=\"http://communitymapbuilder.org/display/JETTY/SystemProperties\">"
+								+ "more control </a> in VM argument.(-Dket=value) ");
 		systemProperties.setLayoutData(createHFillGridData(6, SWT.RIGHT));
 
 		return;
 	}
-
 
 	public Image getImage() {
 		return Plugin.getJettyIcon();
@@ -580,39 +610,54 @@ public class RunJettyRunTab extends JavaLaunchTab {
 	public void initializeFrom(ILaunchConfiguration configuration) {
 		super.initializeFrom(configuration);
 		try {
-			String projectname = configuration.getAttribute(ATTR_PROJECT_NAME, "");
+			String projectname = configuration.getAttribute(ATTR_PROJECT_NAME,
+					"");
 			fProjText.setText(projectname);
 
-			IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectname);
-			if(project != null ){
+			IProject project = ResourcesPlugin.getWorkspace().getRoot()
+					.getProject(projectname);
+			if (project != null) {
 				isMavenProject = ProjectUtil.isMavenProject(project);
-				if(mavenGroup!=null ) mavenGroup.setVisible(isMavenProject);
+				if (mavenGroup != null)
+					mavenGroup.setVisible(isMavenProject);
 			}
-
 
 			fPortText.setText(configuration.getAttribute(Plugin.ATTR_PORT, ""));
 
-			fEnableSSLbox.setSelection(configuration.getAttribute(Plugin.ATTR_ENABLE_SSL, false));
-			fEnableNeedClientAuth.setSelection(configuration.getAttribute(Plugin.ATTR_ENABLE_NEED_CLIENT_AUTH, false));
+			fEnableSSLbox.setSelection(configuration.getAttribute(
+					Plugin.ATTR_ENABLE_SSL, false));
+			fEnableNeedClientAuth.setSelection(configuration.getAttribute(
+					Plugin.ATTR_ENABLE_NEED_CLIENT_AUTH, false));
 
+			fSSLPortText.setText(configuration.getAttribute(
+					Plugin.ATTR_SSL_PORT, ""));
+			fKeystoreText.setText(configuration.getAttribute(
+					Plugin.ATTR_KEYSTORE, ""));
+			fPasswordText.setText(configuration.getAttribute(Plugin.ATTR_PWD,
+					""));
+			fKeyPasswordText.setText(configuration.getAttribute(
+					Plugin.ATTR_KEY_PWD, ""));
 
-			fSSLPortText.setText(configuration.getAttribute(Plugin.ATTR_SSL_PORT, ""));
-			fKeystoreText.setText(configuration.getAttribute(Plugin.ATTR_KEYSTORE, ""));
-			fPasswordText.setText(configuration.getAttribute(Plugin.ATTR_PWD, ""));
-			fKeyPasswordText.setText(configuration.getAttribute(Plugin.ATTR_KEY_PWD, ""));
+			fContextText.setText(configuration.getAttribute(
+					Plugin.ATTR_CONTEXT, ""));
 
-			fContextText.setText(configuration.getAttribute(Plugin.ATTR_CONTEXT, ""));
+			fWebAppDirText.setText(configuration.getAttribute(
+					Plugin.ATTR_WEBAPPDIR, ""));
 
-			fWebAppDirText.setText(configuration.getAttribute(Plugin.ATTR_WEBAPPDIR, ""));
-
-			fScanText.setText(configuration.getAttribute(Plugin.ATTR_SCANINTERVALSECONDS, ""));
-			fEnablebox.setSelection(configuration.getAttribute(Plugin.ATTR_ENABLE_SCANNER, true));
-			fEnableJNDI.setSelection(configuration.getAttribute(Plugin.ATTR_ENABLE_JNDI, false));
+			fScanText.setText(configuration.getAttribute(
+					Plugin.ATTR_SCANINTERVALSECONDS, ""));
+			fEnablebox.setSelection(configuration.getAttribute(
+					Plugin.ATTR_ENABLE_SCANNER, true));
+			fEnableJNDI.setSelection(configuration.getAttribute(
+					Plugin.ATTR_ENABLE_JNDI, false));
 			fScanText.setEnabled(fEnablebox.getSelection());
 
-			fEnableMavenDisableTestClassesBox.setSelection(configuration.getAttribute(Plugin.ATTR_ENABLE_MAVEN_TEST_CLASSES, true));
+			fEnableMavenDisableTestClassesBox.setSelection(configuration
+					.getAttribute(Plugin.ATTR_ENABLE_MAVEN_TEST_CLASSES, true));
 
-			fEnableParentLoadPriorityBox.setSelection(configuration.getAttribute(Plugin.ATTR_ENABLE_PARENT_LOADER_PRIORITY, true));
+			fEnableParentLoadPriorityBox.setSelection(configuration
+					.getAttribute(Plugin.ATTR_ENABLE_PARENT_LOADER_PRIORITY,
+							true));
 
 			setSSLSettingEnabled(fEnableSSLbox.getSelection());
 		} catch (CoreException e) {
@@ -620,34 +665,52 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		}
 	}
 
-	private static String[] DEFAULT_WEBAPP_DIR_SET = new String[] { "WebContent", "src/main/webapp" };
+	private static String[] DEFAULT_WEBAPP_DIR_SET = new String[] {
+			"WebContent", "src/main/webapp" };
 
-	private String detectDefaultWebappdir(String projectName) {
-		IProject project = getProject(projectName);
+	/**
+	 * TODO review this later , do we should check this in RunJettyRunTab ?
+	 * @param proj
+	 * @return
+	 */
+	public static boolean isWebappProject(IProject proj){
+		return !"".equals(detectDefaultWebappdir(proj));
+	}
+
+	public static String detectDefaultWebappdir(String projectName) {
+		return detectDefaultWebappdir(getProject(projectName));
+	}
+
+	public static String detectDefaultWebappdir(IProject project) {
 		if (project != null) {
 			for (String path : DEFAULT_WEBAPP_DIR_SET) {
-				IFile file = project.getFile(new Path(path + "/WEB-INF/web.xml"));
+				IFile file = project
+						.getFile(new Path(path + "/WEB-INF/web.xml"));
 				if (file.exists()) {
 					return path;
 				}
 			}
+			return scanWebAppDir(project.getName());
 		}
-		return scanWebAppDir(projectName);
+
+		return "";
 	}
 
-	private String scanWebAppDir(String projectName) {
+	private static String scanWebAppDir(String projectName) {
 		IProject project = getProject(projectName);
 		if (project != null) {
 
-			IFolder pwebinf= project.getFolder(new Path("WEB-INF"));
-			if(pwebinf.exists() && pwebinf.getFile("web.xml").exists()){
+			IFolder pwebinf = project.getFolder(new Path("WEB-INF"));
+			if (pwebinf.exists() && pwebinf.getFile("web.xml").exists()) {
 				return "/";
 			}
 
 			try {
 				IContainer webInf = scanWEBINF(project);
-				if (webInf != null && webInf.exists() && webInf.getFile(new Path("web.xml")).exists()) {
-					return ((IFolder) webInf).getParent().getProjectRelativePath().toString();
+				if (webInf != null && webInf.exists()
+						&& webInf.getFile(new Path("web.xml")).exists()) {
+					return ((IFolder) webInf).getParent()
+							.getProjectRelativePath().toString();
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -656,16 +719,17 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		return "";
 	}
 
-	private IContainer scanWEBINF(IContainer container) throws CoreException {
+	private static IContainer scanWEBINF(IContainer container) throws CoreException {
 		IResource[] resuorces = container.members();
 
-		//TODO use accept instead and detect folder instead , and check scanWebappDir can merge.
+		// TODO use accept instead and detect folder instead , and check
+		// scanWebappDir can merge.
 		IContainer result = null;
 		for (IResource ir : resuorces) {
 			if (ir.getType() == IResource.FOLDER) {
 
 				if ("WEB-INF".equals(ir.getName())) {
-					if ( ((IFolder)ir).getFile("web.xml").exists())
+					if (((IFolder) ir).getFile("web.xml").exists())
 						return (IFolder) ir;
 				} else {
 					result = scanWEBINF((IFolder) ir);
@@ -677,12 +741,13 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		return null;
 	}
 
-	private IProject getProject(String projectName) {
+	private static IProject getProject(String projectName) {
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		IProject project = null;
 		IStatus status = workspace.validateName(projectName, IResource.PROJECT);
 		if (status.isOK()) {
-			project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+			project = ResourcesPlugin.getWorkspace().getRoot()
+					.getProject(projectName);
 			if (!project.exists()) {
 				return null;
 			}
@@ -703,23 +768,28 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		IProject project = null;
 		if (projectName.length() > 0) {
 			IWorkspace workspace = ResourcesPlugin.getWorkspace();
-			IStatus status = workspace.validateName(projectName, IResource.PROJECT);
+			IStatus status = workspace.validateName(projectName,
+					IResource.PROJECT);
 			if (status.isOK()) {
-				project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+				project = ResourcesPlugin.getWorkspace().getRoot()
+						.getProject(projectName);
 				if (!project.exists()) {
-					setErrorMessage(MessageFormat.format("Project {0} does not exist", projectName));
+					setErrorMessage(MessageFormat.format(
+							"Project {0} does not exist", projectName));
 					fWebappDirButton.setEnabled(false);
 					fWebappScanButton.setEnabled(false);
 					return false;
 				}
 				if (!project.isOpen()) {
-					setErrorMessage(MessageFormat.format("Project {0} is closed", projectName));
+					setErrorMessage(MessageFormat.format(
+							"Project {0} is closed", projectName));
 					fWebappDirButton.setEnabled(false);
 					fWebappScanButton.setEnabled(false);
 					return false;
 				}
 			} else {
-				setErrorMessage(MessageFormat.format("Illegal project name: {0}", status.getMessage()));
+				setErrorMessage(MessageFormat.format(
+						"Illegal project name: {0}", status.getMessage()));
 				fWebappDirButton.setEnabled(false);
 				fWebappScanButton.setEnabled(false);
 				return false;
@@ -732,25 +802,26 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		}
 		String directory = fWebAppDirText.getText().trim();
 		if (!"".equals(directory.trim())) {
-			//means use project folder as webapp folder
+			// means use project folder as webapp folder
 
 			IContainer folder = null;
-			if("/".equals(directory))
+			if ("/".equals(directory))
 				folder = project;
 			else
 				folder = project.getFolder(directory);
 
 			if (!folder.exists()) {
-				setErrorMessage(MessageFormat.format("Folder {0} does not exist in project {1}", directory,
+				setErrorMessage(MessageFormat.format(
+						"Folder {0} does not exist in project {1}", directory,
 						project.getName()));
 				return false;
 			}
 
 			IFile file = folder.getFile(new Path("WEB-INF/web.xml"));
 			if (!file.exists()) {
-				setErrorMessage(MessageFormat.format(
-						"Directory {0} does not contain WEB-INF/web.xml; it is not a valid web application directory",
-						directory));
+				setErrorMessage(MessageFormat
+						.format("Directory {0} does not contain WEB-INF/web.xml; it is not a valid web application directory",
+								directory));
 				return false;
 			}
 		} else {
@@ -789,7 +860,8 @@ public class RunJettyRunTab extends JavaLaunchTab {
 				setErrorMessage("Keystore location is not set");
 				return false;
 			} else if (!new File(keystore).isFile()) {
-				setErrorMessage(MessageFormat.format("Keystore file {0} does not exist", keystore));
+				setErrorMessage(MessageFormat.format(
+						"Keystore file {0} does not exist", keystore));
 				return false;
 			}
 			if (keyPwd.length() == 0) {
@@ -808,14 +880,18 @@ public class RunJettyRunTab extends JavaLaunchTab {
 	private boolean isInvalidPort(String s) {
 
 		boolean res = RunJettyRunLaunchConfigurationUtil.isInvalidPort(s);
-		if(res) setErrorMessage(MessageFormat.format("Not a valid TCP port number: {0}", s));
+		if (res)
+			setErrorMessage(MessageFormat.format(
+					"Not a valid TCP port number: {0}", s));
 
 		return res;
 	}
 
 	private boolean isInvalidScan(String s) {
 		boolean res = RunJettyRunLaunchConfigurationUtil.isInvalidPort(s);
-		if(res) setErrorMessage(MessageFormat.format("Not a valid scan number: {0}", s));
+		if (res)
+			setErrorMessage(MessageFormat.format(
+					"Not a valid scan number: {0}", s));
 		return res;
 	}
 
@@ -824,92 +900,99 @@ public class RunJettyRunTab extends JavaLaunchTab {
 
 		configuration.setAttribute(Plugin.ATTR_PORT, fPortText.getText());
 
-		configuration.setAttribute(Plugin.ATTR_SSL_PORT, fSSLPortText.getText());
+		configuration
+				.setAttribute(Plugin.ATTR_SSL_PORT, fSSLPortText.getText());
 
-		configuration.setAttribute(Plugin.ATTR_ENABLE_SSL, fEnableSSLbox.getSelection());
-		configuration.setAttribute(Plugin.ATTR_ENABLE_NEED_CLIENT_AUTH, fEnableNeedClientAuth.getSelection());
+		configuration.setAttribute(Plugin.ATTR_ENABLE_SSL,
+				fEnableSSLbox.getSelection());
+		configuration.setAttribute(Plugin.ATTR_ENABLE_NEED_CLIENT_AUTH,
+				fEnableNeedClientAuth.getSelection());
 
-		configuration.setAttribute(Plugin.ATTR_ENABLE_JNDI,fEnableJNDI.getSelection());
+		configuration.setAttribute(Plugin.ATTR_ENABLE_JNDI,
+				fEnableJNDI.getSelection());
 
-		configuration.setAttribute(Plugin.ATTR_KEYSTORE, fKeystoreText.getText());
+		configuration.setAttribute(Plugin.ATTR_KEYSTORE,
+				fKeystoreText.getText());
 		configuration.setAttribute(Plugin.ATTR_PWD, fPasswordText.getText());
-		configuration.setAttribute(Plugin.ATTR_KEY_PWD, fKeyPasswordText.getText());
+		configuration.setAttribute(Plugin.ATTR_KEY_PWD,
+				fKeyPasswordText.getText());
 
 		configuration.setAttribute(Plugin.ATTR_CONTEXT, fContextText.getText());
-		configuration.setAttribute(Plugin.ATTR_WEBAPPDIR, fWebAppDirText.getText());
-		configuration.setAttribute(Plugin.ATTR_SCANINTERVALSECONDS, fScanText.getText());
+		configuration.setAttribute(Plugin.ATTR_WEBAPPDIR,
+				fWebAppDirText.getText());
+		configuration.setAttribute(Plugin.ATTR_SCANINTERVALSECONDS,
+				fScanText.getText());
 
-		configuration.setAttribute(Plugin.ATTR_ENABLE_SCANNER, fEnablebox.getSelection());
+		configuration.setAttribute(Plugin.ATTR_ENABLE_SCANNER,
+				fEnablebox.getSelection());
 
-		configuration.setAttribute(Plugin.ATTR_ENABLE_PARENT_LOADER_PRIORITY, fEnableParentLoadPriorityBox.getSelection());
+		configuration.setAttribute(Plugin.ATTR_ENABLE_PARENT_LOADER_PRIORITY,
+				fEnableParentLoadPriorityBox.getSelection());
 
-		configuration.setAttribute(Plugin.ATTR_ENABLE_MAVEN_TEST_CLASSES, fEnableMavenDisableTestClassesBox.getSelection());
+		configuration.setAttribute(Plugin.ATTR_ENABLE_MAVEN_TEST_CLASSES,
+				fEnableMavenDisableTestClassesBox.getSelection());
 
 	}
 
-	private void initProejctInformation(ILaunchConfigurationWorkingCopy configuration){
+	private void initProejctInformation(
+			ILaunchConfigurationWorkingCopy configuration) {
 
-		//TonyQ: 2011/1/3
-		//Here RJR Assume it will go through java element,
-		//but if we are editing a xml file , ex.ZK's zul file.
+		// TonyQ: 2011/1/3
+		// Here RJR Assume it will go through java element,
+		// but if we are editing a xml file , ex.ZK's zul file.
 
-		//It won't working for us , here we only want to got the project information ,
-		//so I add some handle for text selection and got the project information.
+		// It won't working for us , here we only want to got the project
+		// information ,
+		// so I add some handle for text selection and got the project
+		// information.
 
-		configuration.setAttribute(ATTR_PROJECT_NAME, "");
-
+		setConfigurationProejct(configuration, null );
 		IJavaElement javaElement = getContext();
 		if (javaElement != null)
 			initializeJavaProject(javaElement, configuration);
 
 		IWorkbenchPage page = JDIDebugUIPlugin.getActivePage();
-		if (page != null ) {
+		if (page != null) {
 
 			FileEditorInput editorinput = null;
-			try{
-				editorinput = (FileEditorInput ) page.getActiveEditor().getEditorInput().getAdapter(FileEditorInput.class);
-			}catch(NullPointerException npe){
-				//for a bug with ActiveEditor is null. (means user not editing any item)
-				//if it's a NPE , we just skip it directly...since it's a add-on.
-			}
-			if(editorinput != null ){
-				try{
-					configuration.setAttribute(ATTR_PROJECT_NAME, editorinput.getFile().getProject().getName());
-				}catch(Exception e){}
-			}
+			try {
+				editorinput = (FileEditorInput) page.getActiveEditor()
+						.getEditorInput().getAdapter(FileEditorInput.class);
+				if (editorinput != null) {
+					try {
+						setConfigurationProejct(configuration,editorinput.getFile().getProject());
+					} catch (Exception e) {
+					}
+				}
 
+			} catch (NullPointerException npe) {
+				// for a bug with ActiveEditor is null. (means user not editing
+				// any item)
+				// if it's a NPE , we just skip it directly...since it's a
+				// add-on.
+			}
 		}
 
 	}
 
-	public void setDefaults(ILaunchConfigurationWorkingCopy configuration) {
-		initProejctInformation(configuration);
+	public static void initDefaultConfiguration(
+			ILaunchConfigurationWorkingCopy configuration,IProject proj,String launchConfigName) {
+		setConfigurationProejct(configuration,proj);
 
-		configuration.setAttribute(IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, Plugin.BOOTSTRAP_CLASS_NAME);
+		configuration.setAttribute(
+				IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME,
+				Plugin.BOOTSTRAP_CLASS_NAME);
 
 		// set the class path provider so that Jetty and the bootstrap jar are
 		// added to the run time class path. Value has to be the same as the one
 		// defined for the extension point
-		configuration.setAttribute(IJavaLaunchConfigurationConstants.ATTR_CLASSPATH_PROVIDER,
+		configuration.setAttribute(
+				IJavaLaunchConfigurationConstants.ATTR_CLASSPATH_PROVIDER,
 				"RunJettyRunWebAppClassPathProvider");
 
 		// get the name for this launch configuration
-		String launchConfigName = "";
-		String projectName = "";
-		try {
-			// try to base the launch config name on the current project
-			launchConfigName = configuration.getAttribute(IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME, "");
+		String projectName = proj.getName();
 
-			projectName = launchConfigName;
-		} catch (CoreException e) {
-			// ignore
-		}
-		if (launchConfigName == null || launchConfigName.length() == 0) {
-			// if no project name was found, base on a default name
-			launchConfigName = "Jetty Webapp";
-		}
-		// generate an unique name (e.g. myproject(2))
-		launchConfigName = getLaunchConfigurationDialog().generateName(launchConfigName);
 		configuration.rename(launchConfigName); // and rename the config
 
 		configuration.setAttribute(Plugin.ATTR_PORT, "8080");
@@ -925,28 +1008,96 @@ public class RunJettyRunTab extends JavaLaunchTab {
 
 		configuration.setAttribute(Plugin.ATTR_CONTEXT, "/" + projectName);
 
-		configuration.setAttribute(Plugin.ATTR_WEBAPPDIR, detectDefaultWebappdir(projectName));
-		configuration.setAttribute(Plugin.ATTR_ENABLE_SSL,false);
+		configuration.setAttribute(Plugin.ATTR_WEBAPPDIR,
+				detectDefaultWebappdir(projectName));
+		configuration.setAttribute(Plugin.ATTR_ENABLE_SSL, false);
 
-		configuration.setAttribute(Plugin.ATTR_ENABLE_NEED_CLIENT_AUTH,false);
-
+		configuration.setAttribute(Plugin.ATTR_ENABLE_NEED_CLIENT_AUTH, false);
 
 		configuration.setAttribute(Plugin.ATTR_SCANINTERVALSECONDS, "5");
-		configuration.setAttribute(Plugin.ATTR_ENABLE_SCANNER,true);
+		configuration.setAttribute(Plugin.ATTR_ENABLE_SCANNER, true);
 
-		configuration.setAttribute(Plugin.ATTR_ENABLE_MAVEN_TEST_CLASSES,true);
-		configuration.setAttribute(Plugin.ATTR_ENABLE_PARENT_LOADER_PRIORITY,true);
+		configuration.setAttribute(Plugin.ATTR_ENABLE_MAVEN_TEST_CLASSES, true);
+		configuration.setAttribute(Plugin.ATTR_ENABLE_PARENT_LOADER_PRIORITY,
+				true);
+
+		return;
+	}
+
+	public void setDefaults(ILaunchConfigurationWorkingCopy configuration) {
+		initProejctInformation(configuration);
+
+		configuration.setAttribute(
+				IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME,
+				Plugin.BOOTSTRAP_CLASS_NAME);
+
+		// set the class path provider so that Jetty and the bootstrap jar are
+		// added to the run time class path. Value has to be the same as the one
+		// defined for the extension point
+		configuration.setAttribute(
+				IJavaLaunchConfigurationConstants.ATTR_CLASSPATH_PROVIDER,
+				"RunJettyRunWebAppClassPathProvider");
+
+		// get the name for this launch configuration
+		String launchConfigName = "";
+		String projectName = "";
+		try {
+			// try to base the launch config name on the current project
+			launchConfigName = configuration.getAttribute(
+					IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME, "");
+
+			projectName = launchConfigName;
+		} catch (CoreException e) {
+			// ignore
+		}
+		if (launchConfigName == null || launchConfigName.length() == 0) {
+			// if no project name was found, base on a default name
+			launchConfigName = "Jetty Webapp";
+		}
+		// generate an unique name (e.g. myproject(2))
+		launchConfigName = getLaunchConfigurationDialog().generateName(
+				launchConfigName);
+		configuration.rename(launchConfigName); // and rename the config
+
+		configuration.setAttribute(Plugin.ATTR_PORT, "8080");
+		configuration.setAttribute(Plugin.ATTR_SSL_PORT, "8443");
+
+		File userHomeDir = new File(System.getProperty("user.home"));
+		File keystoreFile = new File(userHomeDir, ".keystore");
+		String keystore = keystoreFile.getAbsolutePath();
+
+		configuration.setAttribute(Plugin.ATTR_KEYSTORE, keystore);
+		configuration.setAttribute(Plugin.ATTR_PWD, "changeit");
+		configuration.setAttribute(Plugin.ATTR_KEY_PWD, "changeit");
+
+		configuration.setAttribute(Plugin.ATTR_CONTEXT, "/" + projectName);
+
+		configuration.setAttribute(Plugin.ATTR_WEBAPPDIR,
+				detectDefaultWebappdir(projectName));
+		configuration.setAttribute(Plugin.ATTR_ENABLE_SSL, false);
+
+		configuration.setAttribute(Plugin.ATTR_ENABLE_NEED_CLIENT_AUTH, false);
+
+		configuration.setAttribute(Plugin.ATTR_SCANINTERVALSECONDS, "5");
+		configuration.setAttribute(Plugin.ATTR_ENABLE_SCANNER, true);
+
+		configuration.setAttribute(Plugin.ATTR_ENABLE_MAVEN_TEST_CLASSES, true);
+		configuration.setAttribute(Plugin.ATTR_ENABLE_PARENT_LOADER_PRIORITY,
+				true);
 
 		return;
 	}
 
 	private IJavaProject chooseJavaProject() {
-		ILabelProvider labelProvider = new JavaElementLabelProvider(JavaElementLabelProvider.SHOW_DEFAULT);
-		ElementListSelectionDialog dialog = new ElementListSelectionDialog(getShell(), labelProvider);
+		ILabelProvider labelProvider = new JavaElementLabelProvider(
+				JavaElementLabelProvider.SHOW_DEFAULT);
+		ElementListSelectionDialog dialog = new ElementListSelectionDialog(
+				getShell(), labelProvider);
 		dialog.setTitle("Project Selection");
 		dialog.setMessage("Select a project to constrain your search.");
 		try {
-			dialog.setElements(JavaCore.create(ResourcesPlugin.getWorkspace().getRoot()).getJavaProjects());
+			dialog.setElements(JavaCore.create(
+					ResourcesPlugin.getWorkspace().getRoot()).getJavaProjects());
 		} catch (JavaModelException jme) {
 			Plugin.logError(jme);
 		}
@@ -954,7 +1105,8 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		IJavaProject javaProject = null;
 		String projectName = fProjText.getText().trim();
 		if (projectName.length() > 0) {
-			javaProject = JavaCore.create(getWorkspaceRoot()).getJavaProject(projectName);
+			javaProject = JavaCore.create(getWorkspaceRoot()).getJavaProject(
+					projectName);
 		}
 		if (javaProject != null) {
 			dialog.setInitialSelections(new Object[] { javaProject });
@@ -966,9 +1118,10 @@ public class RunJettyRunTab extends JavaLaunchTab {
 	}
 
 	private void chooseWebappDir() {
-		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(fProjText.getText());
-		ContainerSelectionDialog dialog = new ContainerSelectionDialog(getShell(), project, false,
-				"Select Web Application Directory");
+		IProject project = ResourcesPlugin.getWorkspace().getRoot()
+				.getProject(fProjText.getText());
+		ContainerSelectionDialog dialog = new ContainerSelectionDialog(
+				getShell(), project, false, "Select Web Application Directory");
 		dialog.setTitle("Folder Selection");
 		if (project != null) {
 			IPath path = project.getFullPath();
@@ -977,7 +1130,8 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		dialog.showClosedProjects(false);
 		dialog.open();
 		Object[] results = dialog.getResult();
-		if ((results != null) && (results.length > 0) && (results[0] instanceof IPath)) {
+		if ((results != null) && (results.length > 0)
+				&& (results[0] instanceof IPath)) {
 			IPath path = (IPath) results[0];
 			path = path.removeFirstSegments(1);
 			String containerName = path.makeRelative().toString();
@@ -992,10 +1146,12 @@ public class RunJettyRunTab extends JavaLaunchTab {
 	private void handleProjectButtonSelected() {
 		IJavaProject project = chooseJavaProject();
 
-		if (project == null) return;
+		if (project == null)
+			return;
 
 		isMavenProject = ProjectUtil.isMavenProject(project.getProject());
-		if(mavenGroup!=null ) mavenGroup.setVisible(isMavenProject);
+		if (mavenGroup != null)
+			mavenGroup.setVisible(isMavenProject);
 
 		String projectName = project.getElementName();
 		fProjText.setText(projectName);
@@ -1017,17 +1173,28 @@ public class RunJettyRunTab extends JavaLaunchTab {
 			fKeystoreText.setText(res);
 	}
 
+	private static void setConfigurationProejct(ILaunchConfigurationWorkingCopy configuration,
+			IProject proj) {
+		if (proj == null)
+			configuration.setAttribute(ATTR_PROJECT_NAME, "");
+		else
+			configuration.setAttribute(ATTR_PROJECT_NAME, proj.getName());
+	}
+
+
 	private static abstract class ButtonListener implements SelectionListener {
 
 		public void widgetDefaultSelected(SelectionEvent e) {
 		}
 	}
+
 	/**
 	 * If it's modified , just update the configuration directly.
+	 *
 	 * @author TonyQ
 	 *
 	 */
-	private class UpdateModfiyListener implements ModifyListener{
+	private class UpdateModfiyListener implements ModifyListener {
 		public void modifyText(ModifyEvent e) {
 			updateLaunchConfigurationDialog();
 		}
