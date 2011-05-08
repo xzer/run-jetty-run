@@ -80,4 +80,52 @@
              sequence="Alt+Z">
        </key>
     </extension>
+    <extension
+          point="org.eclipse.debug.ui.launchShortcuts">
+       <shortcut
+             class="runjettyrun.launchshortcut.RunJettyRunLaunchShortcut"
+             icon="icons/jetty.gif"
+             id="run-jetty-run.runJettyShortcut"
+             label="Run Jetty "
+             modes="run, debug">
+	 <contextualLaunch>
+   		<enablement>
+   		</enablement>
+              <!--
+           TODO: this is java shortcut implementation,
+           need to check this and change the rule to detect WEB-INF/web.xml exist or not.
+             <with variable="selection">
+               <count value="1"/>
+                <iterate>
+                 <and>
+                  <adapt type="org.eclipse.jdt.core.IJavaElement">
+                  	<test property="org.eclipse.jdt.core.isInJavaProject"/>
+                  </adapt>
+               	  <or>
+               	  http://help.eclipse.org/helios/index.jsp?topic=/org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/expressions/PropertyTester.html
+               	  http://www.blogjava.net/mlzry0612/articles/221505.html
+               	    <test property="org.eclipse.jdt.launching.hasMain"/>
+               	    <test property="org.eclipse.jdt.launching.isContainer"/>
+               	    <test property="org.eclipse.jdt.launching.isPackageFragment"/>
+               	    <test property="org.eclipse.jdt.launching.isPackageFragmentRoot"/>
+               	  </or>
+                 </and>
+                </iterate>
+               </with>
+           </enablement>
+           -->
+  		 </contextualLaunch>
+         <configurationType
+               id="RunJettyRunWebApp">
+         </configurationType>
+         <description
+               description="Run Jetty Web App"
+               mode="run">
+         </description>
+         <description
+               description="Debug Jetty Web App"
+               mode="debug">
+         </description>
+       </shortcut>
+    </extension>
 </plugin>
