@@ -30,6 +30,9 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -133,9 +136,54 @@ public class JettyLaunchConfigurationType extends
 
 		//Here the classpath is really for web app.
 		runtimeVmArgs.add("-Drjrclasspath=" +  webappClasspath);
+
+		runtimeVmArgs.add("-DrjrResourceMapping=" +  getLinkedResourceMapping(configuration));
+
+
 		runtimeVmArgs.addAll(Arrays.asList(oringinalVMArguments));
 
 		return runtimeVmArgs.toArray(new String[runtimeVmArgs.size()]);
+	}
+
+
+	private String getLinkedResourceInResource(IContainer root,IContainer folder){
+		StringBuffer sb = new StringBuffer();
+		try {
+			for(IResource ir:folder.members()){
+				if(ir instanceof IFolder ){
+					if(ir.isLinked()){
+						sb.append(
+							ir.getProjectRelativePath().
+								makeRelativeTo(root.getProjectRelativePath())
+								+"="+ir.getRawLocation()+";");
+					}
+					sb.append(getLinkedResourceInResource(root,(IFolder)ir));
+				}
+			}
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
+
+		return sb.toString();
+	}
+	private String getLinkedResourceMapping(ILaunchConfiguration conf){
+		try {
+			IJavaProject proj = getJavaProject(conf);
+			String webappPath = conf.getAttribute(Plugin.ATTR_WEBAPPDIR, "");
+			if( proj == null || "".equals(webappPath))
+				return null;
+
+			IContainer webappDir = null;
+			if("/".equals(webappPath)) webappDir = proj.getProject();
+			else webappDir = proj.getProject().getFolder(webappPath);
+
+			if(webappDir.exists())
+				return getLinkedResourceInResource(webappDir,webappDir);
+
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	/**
@@ -280,8 +328,7 @@ public class JettyLaunchConfigurationType extends
 
 		addOptionalAttr(configuration, runtimeVmArgs, Plugin.ATTR_CONTEXT,
 				"context");
-		addOptionalAttr(configuration, runtimeVmArgs, Plugin.ATTR_WEBAPPDIR,
-				"webapp");
+		addWebappAttr(configuration, runtimeVmArgs, Plugin.ATTR_WEBAPPDIR);
 
 		addOptionalAttr(configuration, runtimeVmArgs, Plugin.ATTR_PORT, "port");
 
@@ -313,14 +360,34 @@ public class JettyLaunchConfigurationType extends
 		return runtimeVmArgs;
 	}
 
+
+	private void addWebappAttr(ILaunchConfiguration configuration,
+			List<String> runtimeVmArgs, String cfgAttr)
+		throws CoreException {
+		IJavaProject proj =this.getJavaProject(configuration);
+		if(proj == null)
+			return;
+
+		String value = configuration.getAttribute(cfgAttr, "");
+
+		if("/".equals(value)){
+			value = proj.getResource().getRawLocation().toOSString();
+		}else{
+			value = proj.getProject().getFolder(value).getRawLocation().toOSString();
+		}
+
+
+		if (value.length() == 0)
+			return;
+		String arg = "-Drjr" + "webapp" + "=\"" + value+"\"";
+		runtimeVmArgs.add(arg);
+		return;
+	}
 	private void addOptionalAttr(ILaunchConfiguration configuration,
 			List<String> runtimeVmArgs, String cfgAttr, String argName)
 			throws CoreException {
 		String value = configuration.getAttribute(cfgAttr, "");
 
-		if("webapp".equals(argName)&& "/".equals(value)){
-			value="./";
-		}
 		if (value.length() == 0)
 			return;
 		String arg = "-Drjr" + argName + "=" + value;
