@@ -18,7 +18,7 @@ public class VirtualResource extends Resource {
 	 */
 	private static final long serialVersionUID = 8748988779292501912L;
 
-	private Resource reosurce = null;
+	private Resource resource = null;
 	private URL url = null;
 	private String resourcePath;
 	private String resourcebase = null;
@@ -37,29 +37,29 @@ public class VirtualResource extends Resource {
 //		System.out.println("registing ["+contextPath+"] to ["+ path+"]");
 		this.resourcePath = path;
 		url = new File(path).toURI().toURL();
-		reosurce = new FileResource(url);
+		resource = new FileResource(url);
 		resourcebase = contextPath;
 	}
 
 
 
 	public void release() {
-		reosurce.release();
+		resource.release();
 	}
 
 
 	public boolean exists() {
-		return reosurce.exists();
+		return resource.exists();
 	}
 
 
 	public boolean isDirectory() {
-		return reosurce.isDirectory();
+		return resource.isDirectory();
 	}
 
 
 	public long lastModified() {
-		return reosurce.lastModified();
+		return resource.lastModified();
 	}
 
 	/**
@@ -152,17 +152,17 @@ public class VirtualResource extends Resource {
 
 			if(this.resourcebase.equals(path)){
 //				System.out.println("got virtual resource , forward  =>"+resourcePath);
-				return reosurce;
+				return resource;
 			}else{
 //				System.out.println("got virtual resource , forward =>"+
 //						resourcePath+"/"+path.substring(this.resourcebase.length()+1));
-				return reosurce.addPath(path.substring(this.resourcebase.length()+1));
+				return resource.addPath(path.substring(this.resourcebase.length()+1));
 
 			}
 		}
 
 
-		return reosurce.addPath(path);
+		return resource.addPath(path);
 	}
 
 	/* test code */
