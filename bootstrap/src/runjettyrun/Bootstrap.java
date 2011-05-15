@@ -25,10 +25,13 @@ import java.io.InputStreamReader;
 import java.lang.management.ManagementFactory;
 import java.net.DatagramSocket;
 import java.net.ServerSocket;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.management.MBeanServer;
 
@@ -37,6 +40,9 @@ import org.mortbay.jetty.nio.SelectChannelConnector;
 import org.mortbay.jetty.security.SslSocketConnector;
 import org.mortbay.jetty.webapp.WebAppContext;
 import org.mortbay.management.MBeanContainer;
+import org.mortbay.resource.FileResource;
+import org.mortbay.resource.Resource;
+import org.mortbay.resource.ResourceCollection;
 import org.mortbay.util.Scanner;
 
 /**
@@ -57,101 +63,67 @@ public class Bootstrap {
 	 */
 	public static void main(String[] args) throws Exception {
 
-		boolean loggerparam = false;
-		if (loggerparam) {
-			String[] propkeys = new String[] { "rjrcontext", "rjrwebapp",
-					"rjrport", "rjrsslport", "rjrkeystore", "rjrpassword",
-					"rjrclasspath", "rjrkeypassword", "rjrscanintervalseconds",
-					"rjrenablescanner", "rjrenablessl", "rjrenbaleJNDI" };
-			for (String key : propkeys) {
-				System.err.println("-D" + key + "=" + System.getProperty(key));
-			}
-		}
-		String context = System.getProperty("rjrcontext");
-		String webAppDir = System.getProperty("rjrwebapp");
-		Integer port = Integer.getInteger("rjrport");
-		Integer sslport = Integer.getInteger("rjrsslport");
-		String keystore = System.getProperty("rjrkeystore");
-		String password = System.getProperty("rjrpassword");
-		final String webAppClassPath = resovleWebappClasspath();
-		String keyPassword = System.getProperty("rjrkeypassword");
-		Integer scanIntervalSeconds = Integer
-				.getInteger("rjrscanintervalseconds");
-		Boolean enablescanner = Boolean.getBoolean("rjrenablescanner");
-		Boolean parentLoaderPriority = getBoolean("rjrparentloaderpriority",
-				true);
+		logArgus(false);
+		Bootstrap.Configs configs = new Bootstrap.Configs();
 
-		Boolean enablessl = Boolean.getBoolean("rjrenablessl");
-		Boolean needClientAuth = Boolean.getBoolean("rjrneedclientauth");
-		Boolean enableJNDI = Boolean.getBoolean("rjrenbaleJNDI");
 
-		ArrayList<String> configuration = new ArrayList<String>();
-		if (enableJNDI) {
-			initJNDIConfiguration(configuration);
-		}
-		String rjrConfiguration = System.getProperty("rjrconfigurationclasses",
-				"");
-		if (!"".equals(rjrConfiguration)) {
-			String[] configs = rjrConfiguration.split(";");
-			for (String conf : configs) {
-				configuration.add(conf);
-			}
-		}
-
-		if (context == null) {
-			throw new IllegalStateException(
-					"you need to provide argument -Drjrcontext");
-		}
-		if (webAppDir == null) {
-			throw new IllegalStateException(
-					"you need to provide argument -Drjrwebapp");
-		}
-		if (port == null && sslport == null) {
-			throw new IllegalStateException(
-					"you need to provide argument -Drjrport and/or -Drjrsslport");
-		}
+		configs.validation();
 
 		server = new Server();
 
-		if (port != null) {
-			if (!available(port)) {
-				throw new IllegalStateException("port :" + port
-						+ " already in use!");
-			}
-			SelectChannelConnector connector = new SelectChannelConnector();
-			connector.setPort(port);
+		initConnnector(server, configs);
 
-			if (enablessl && sslport != null) {
-				connector.setConfidentialPort(sslport);
-			}
+		initWebappContext(server,configs);
 
-			server.addConnector(connector);
+		initMBeanServer(server);
+
+		// configureScanner
+		if (configs.getEnablescanner())
+			initScanner(web, configs.getWebAppClassPath(),
+					configs.getScanIntervalSeconds());
+
+		try {
+			server.start();
+			server.join();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(100);
 		}
+		return;
+	}
 
-		if (enablessl && sslport != null) {
-			initSSL(server, sslport, keystore, password, keyPassword, needClientAuth);
-		}
-
+	private static void initWebappContext(Server server,Configs configs)
+		throws IOException, URISyntaxException {
 		web = new WebAppContext();
 
-		if (parentLoaderPriority) {
-			web.setParentLoaderPriority(true);
+		if (configs.getParentLoaderPriority()) {
 			System.err.println("ParentLoaderPriority enabled");
+			web.setParentLoaderPriority(true);
 		}
 
-		web.setContextPath(context);
-		web.setWar(webAppDir);
+		web.setContextPath(configs.getContext());
+		web.setWar(configs.getWebAppDir());
+
+
+		//TODO add multiple root selection support
+		//		 ResourceCollection webAppDirResources = new ResourceCollection();
+		//
+		//	     webAppDirResources.setResourcesAsCSV(webAppDir);
+		//	     web.setBaseResource(webAppDirResources);
 
 		/**
 		 * open a way to set the configuration classes
 		 */
-		if (configuration.size() != 0) {
-			web.setConfigurationClasses(configuration.toArray(new String[0]));
+		List<String> configurationClasses = configs.getConfigurationClassesList();
+		if (configurationClasses.size() != 0) {
+			web.setConfigurationClasses(configurationClasses.toArray(new String[0]));
 
-			for (String conf : configuration) {
+			for (String conf : configurationClasses)
 				System.err.println("Enable config class:" + conf);
-			}
+
 		}
+
+
 		// Fix issue 7, File locking on windows/Disable Jetty's locking of
 		// static files
 		// http://code.google.com/p/run-jetty-run/issues/detail?id=7
@@ -170,41 +142,82 @@ public class Bootstrap {
 				"org.mortbay.jetty.servlet.Default.useFileMappedBuffer",
 				"false"));
 
-		if (webAppClassPath != null) {
+		if (configs.getWebAppClassPath() != null) {
 			ProjectClassLoader loader = new ProjectClassLoader(web,
-					webAppClassPath);
+					configs.getWebAppClassPath());
 			web.setClassLoader(loader);
 		}
 
+
+		List<Resource> resources = new ArrayList<Resource>();
+
+		URL urlWebapp = new File(configs.getWebAppDir()).toURI().toURL();
+		resources.add(new FileResource(urlWebapp));
+
+		Map<String,String> map = configs.getResourceMap();
+		for(String key : map.keySet()){
+/*
+ * 			URL url = new File(map.get(key)).toURI().toURL();
+			Resource resource;
+			try {
+				resource = new FileResource(url);
+				final ResourceHandler handler = new ResourceHandler();
+				handler.setBaseResource(resource);
+				handler.setServer(server);
+				handler.setContextPath(key);
+				web.addHandler(handler);
+			} catch (URISyntaxException e) {
+				e.printStackTrace();
+			}
+
+ */
+			resources.add(new VirtualResource("/"+key,map.get(key)));
+//			final WebAppContext js = new WebAppContext();
+//			js.setContextPath(key);
+//			js.setResourceBase(map.get(key)); // or whatever the correct path is in your case
+//			js.setParentLoaderPriority(true);
+//			server.addHandler(js);
+		}
+
+		ResourceCollection webAppDirResources = new ResourceCollection();
+		webAppDirResources.setResources(resources.toArray(new Resource[0]));
+        web.setBaseResource(webAppDirResources);
+
 		server.addHandler(web);
-
-		initMBeanServer(server);
-
-		// configureScanner
-		if (enablescanner) {
-			initScanner(web,webAppClassPath,scanIntervalSeconds);
-		}
-
-		try {
-			server.start();
-			server.join();
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.exit(100);
-		}
-		return;
 	}
 
-	private static void initJNDIConfiguration(List configuration){
-		configuration.add("org.mortbay.jetty.webapp.WebInfConfiguration");
-		configuration.add("org.mortbay.jetty.plus.webapp.EnvConfiguration");
-		configuration.add("org.mortbay.jetty.plus.webapp.Configuration");
-		configuration
-				.add("org.mortbay.jetty.webapp.JettyWebXmlConfiguration");
-		configuration.add("org.mortbay.jetty.webapp.TagLibConfiguration");
+	private static void initConnnector(Server server, Configs configObj) {
+		SelectChannelConnector connector = new SelectChannelConnector();
+		connector.setPort(configObj.getPort());
+
+		if (configObj.getEnablessl() && configObj.getSslport() != null)
+			connector.setConfidentialPort(configObj.getSslport());
+
+		server.addConnector(connector);
+
+		if (configObj.getEnablessl() && configObj.getSslport() != null)
+			initSSL(server, configObj.getSslport(), configObj.getKeystore(),
+					configObj.getPassword(), configObj.getKeyPassword(),
+					configObj.getNeedClientAuth());
+
 	}
 
-	private static void initSSL(Server server,int sslport,String keystore,String password,String keyPassword,boolean needClientAuth){
+	private static void logArgus(boolean loggerparam) {
+
+		if (loggerparam) {
+			String[] propkeys = new String[] { "rjrcontext", "rjrwebapp",
+					"rjrport", "rjrsslport", "rjrkeystore", "rjrpassword",
+					"rjrclasspath", "rjrkeypassword", "rjrscanintervalseconds",
+					"rjrenablescanner", "rjrenablessl", "rjrenbaleJNDI" };
+			for (String key : propkeys) {
+				System.err.println("-D" + key + "=" + System.getProperty(key));
+			}
+		}
+	}
+
+
+	private static void initSSL(Server server, int sslport, String keystore,
+			String password, String keyPassword, boolean needClientAuth) {
 		if (!available(sslport)) {
 			throw new IllegalStateException("SSL port :" + sslport
 					+ " already in use!");
@@ -236,15 +249,23 @@ public class Bootstrap {
 
 		server.addConnector(sslConnector);
 	}
-	private static void initMBeanServer(Server server){
+
+	private static void initMBeanServer(Server server) {
 		MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
 		MBeanContainer mBeanContainer = new MBeanContainer(mBeanServer);
 		server.getContainer().addEventListener(mBeanContainer);
 		mBeanContainer.start();
 	}
 
-	private static void initScanner(final WebAppContext web,final
-			String webAppClassPath,int scanIntervalSeconds){
+	/**
+	 * add source scanner to restart server when source change
+	 * @param web
+	 * @param webAppClassPath
+	 * @param scanIntervalSeconds
+	 */
+	private static void initScanner(final WebAppContext web,
+			final String webAppClassPath, int scanIntervalSeconds) {
+
 		final ArrayList<File> scanList = new ArrayList<File>();
 		if (webAppClassPath != null) {
 			for (URL url : ((ProjectClassLoader) web.getClassLoader())
@@ -272,8 +293,8 @@ public class Bootstrap {
 					web.stop();
 
 					if (webAppClassPath != null) {
-						ProjectClassLoader loader = new ProjectClassLoader(
-								web, webAppClassPath, false);
+						ProjectClassLoader loader = new ProjectClassLoader(web,
+								webAppClassPath, false);
 						web.setClassLoader(loader);
 					}
 					System.err.println("Restarting webapp ...");
@@ -307,6 +328,15 @@ public class Bootstrap {
 
 	}
 
+	/**
+	 * To get the full list for classpath list,
+	 * Note:sometimes the classpath will be very longer,
+	 * 		especially when you are working on a Maven project.
+	 *
+	 * 		Since if classpath too long will cause command line too long issue,
+	 * 		we use file to handle it in this case.
+	 * @return
+	 */
 	private static String resovleWebappClasspath() {
 		String classpath = System.getProperty("rjrclasspath");
 
@@ -362,5 +392,168 @@ public class Bootstrap {
 		}
 
 		return false;
+	}
+
+	/**
+	 * A configuration object to handle the complicated parse job ,
+	 * and make thing easier.
+	 */
+	public static class Configs {
+		private String context;
+		private String webAppDir;
+		private Integer port;
+		private Integer sslport;
+		private String keystore;
+		private String password;
+		private String webAppClassPath;
+		private String keyPassword;
+		private Integer scanIntervalSeconds;
+		private Boolean enablescanner;
+		private Boolean parentLoaderPriority;
+
+		private Boolean enablessl;
+		private Boolean needClientAuth;
+		private Boolean enableJNDI;
+		private String configurationClasses;
+		private String resourceMapping;
+
+		public Configs() {
+			context = System.getProperty("rjrcontext");
+			webAppDir = System.getProperty("rjrwebapp");
+			port = Integer.getInteger("rjrport");
+			sslport = Integer.getInteger("rjrsslport");
+			keystore = System.getProperty("rjrkeystore");
+			password = System.getProperty("rjrpassword");
+			webAppClassPath = resovleWebappClasspath();
+			keyPassword = System.getProperty("rjrkeypassword");
+			scanIntervalSeconds = Integer.getInteger("rjrscanintervalseconds");
+			enablescanner = Boolean.getBoolean("rjrenablescanner");
+			parentLoaderPriority = getBoolean("rjrparentloaderpriority", true);
+
+			enablessl = Boolean.getBoolean("rjrenablessl");
+			needClientAuth = Boolean.getBoolean("rjrneedclientauth");
+			enableJNDI = Boolean.getBoolean("rjrenbaleJNDI");
+			configurationClasses = System
+					.getProperty("rjrconfigurationclasses", "");
+
+			resourceMapping = System
+			.getProperty("rjrResourceMapping", "");
+		}
+
+
+		public String getContext() {
+			return context;
+		}
+
+		public String getWebAppDir() {
+			return webAppDir;
+		}
+
+		public Integer getPort() {
+			return port;
+		}
+
+		public Integer getSslport() {
+			return sslport;
+		}
+
+		public String getKeystore() {
+			return keystore;
+		}
+
+		public String getPassword() {
+			return password;
+		}
+
+		public String getWebAppClassPath() {
+			return webAppClassPath;
+		}
+
+		public String getKeyPassword() {
+			return keyPassword;
+		}
+
+		public Integer getScanIntervalSeconds() {
+			return scanIntervalSeconds;
+		}
+
+		public Boolean getEnablescanner() {
+			return enablescanner;
+		}
+
+		public Boolean getParentLoaderPriority() {
+			return parentLoaderPriority;
+		}
+
+		public Boolean getEnablessl() {
+			return enablessl;
+		}
+
+		public Boolean getNeedClientAuth() {
+			return needClientAuth;
+		}
+
+		public Boolean getEnableJNDI() {
+			return enableJNDI;
+		}
+
+		public String getConfigurationClasses() {
+			return configurationClasses;
+		}
+
+		public List<String> getConfigurationClassesList(){
+			ArrayList<String> configuration = new ArrayList<String>();
+			if (getEnableJNDI()) {
+				configuration.add("org.mortbay.jetty.webapp.WebInfConfiguration");
+				configuration.add("org.mortbay.jetty.plus.webapp.EnvConfiguration");
+				configuration.add("org.mortbay.jetty.plus.webapp.Configuration");
+				configuration.add("org.mortbay.jetty.webapp.JettyWebXmlConfiguration");
+				configuration.add("org.mortbay.jetty.webapp.TagLibConfiguration");
+			}
+			if (!"".equals(getConfigurationClasses())) {
+				String[] configs = getConfigurationClasses().split(";");
+				for (String conf : configs) {
+					configuration.add(conf);
+				}
+			}
+			return configuration;
+		}
+
+		public void validation() {
+			if (getContext() == null) {
+				throw new IllegalStateException(
+						"you need to provide argument -Drjrcontext");
+			}
+			if (getWebAppDir() == null) {
+				throw new IllegalStateException(
+						"you need to provide argument -Drjrwebapp");
+			}
+			if (getPort() == null && getSslport() == null) {
+				throw new IllegalStateException(
+						"you need to provide argument -Drjrport and/or -Drjrsslport");
+			}
+			if (!available(port)) {
+				throw new IllegalStateException("port :" + port
+						+ " already in use!");
+			}
+		}
+
+		public String getResourceMapping() {
+			return resourceMapping;
+		}
+
+		public Map<String,String> getResourceMap(){
+
+			String[] resources = resourceMapping.split(";");
+
+			HashMap<String,String> map = new HashMap<String,String>();
+
+			for(String resource:resources){
+				if( resource == null || "".equals(resource.trim())) continue;
+				String[] tokens = resource.split("=");
+				map.put(tokens[0],tokens[1]);
+			}
+			return map;
+		}
 	}
 }
