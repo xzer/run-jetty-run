@@ -162,16 +162,15 @@ public class VirtualResource extends Resource {
 		}
 
 
-		return resource.addPath(path);
+		return null;
 	}
 
 	/* test code */
-//	public static void main(String[] args) throws MalformedURLException, IOException, URISyntaxException {
-//
-//		VirtualResource vr = new VirtualResource("/mytest", "C:/workspace/mytest2");
-//		Resource r = vr.addPath("/mytest/mytestindex2.zul");
-//		System.out.println(r.exists());
-//		r.delete();
-//
-//	}
+	public static void main(String[] args) throws MalformedURLException, IOException, URISyntaxException {
+
+		VirtualResource vr = new VirtualResource("/mytest", "C:/test/");
+		Resource r = vr.addPath("/mytest/test.txt");
+		System.out.println(r.exists());
+
+	}
 }
