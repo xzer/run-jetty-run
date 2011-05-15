@@ -34,7 +34,7 @@ public class VirtualResource extends Resource {
 	public VirtualResource(String contextPath,
 			String path) throws MalformedURLException, IOException, URISyntaxException {
 
-		System.out.println("registing ["+contextPath+"] to ["+ path+"]");
+//		System.out.println("registing ["+contextPath+"] to ["+ path+"]");
 		this.resourcePath = path;
 		url = new File(path).toURI().toURL();
 		reosurce = new FileResource(url);
