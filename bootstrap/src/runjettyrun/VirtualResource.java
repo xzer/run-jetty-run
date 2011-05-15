@@ -11,6 +11,30 @@ import java.net.URL;
 import org.mortbay.resource.FileResource;
 import org.mortbay.resource.Resource;
 
+/**
+ * 2011/5/15 Tony:
+ *
+ * Why we have such much unsupported method here?
+ *
+ * Because this one is not a delegator to real resource,
+ * since it's a resource related to webapp root .
+ *
+ * So if system try to access this resource , it means "/" ,
+ * not "/<context path>/" , so it could be some troubles.
+ *
+ * We wrote this just for making sure when user try to access
+ * "/<context path>" with the root ResourceCollecction,
+ * the Virtual Resource will bring him to real resource,
+ * and it could help them to do the real operators they need. ;)
+ *
+ * I am not sure if that's a good implementation ,
+ *
+ * but it's better to be honest , we didn't support them so far
+ * and don't know when user will need them at this time.
+ *
+ * If you found a better approach or issues related to this,
+ * you could discuss it with me , tonylovejava[at]gmail.com .
+ */
 public class VirtualResource extends Resource {
 
 	/**
@@ -63,77 +87,61 @@ public class VirtualResource extends Resource {
 	}
 
 	/**
-	 * 2011/5/15 Tony:
-	 *
-	 * Why we have such much unsupported method here?
-	 * Because this one is not a delegator to real resource,
-	 * since it's a resource related to webapp root .
-	 *
-	 * So if system try to access this resource , it means "/" ,
-	 * not "/<context path>/" , so it could be some troubles.
-	 *
-	 * We wrote this just for making sure when user try to access
-	 * "/<context path>" with the root ResourceCollecction,
-	 * the Virtual Resource will bring him to real resource,
-	 * and it could help them to do the real operators they need. ;)
-	 *
-	 * I am not sure if that's a good implementation ,
-	 *
-	 * but it's better to be honest , we didn't support them so far
-	 * and don't know when user will need them at this time.
-	 *
-	 * If you found a better approach or issues related to this,
-	 * you could discuss it with me , tonylovejava[at]gmail.com .
+	 * @throws UnsupportedOperationException
 	 */
-
 	public long length() {
 		throw new UnsupportedOperationException("Unsupported");
 	}
 
-
+	/**
+	 * @throws UnsupportedOperationException
+	 */
 	public URL getURL() {
 		throw new UnsupportedOperationException("Unsupported");
 	}
-
+	/**
+	 * @throws UnsupportedOperationException
+	 */
 	public File getFile() throws IOException {
 		throw new UnsupportedOperationException("Unsupported");
 	}
 
-
+	/**
+	 * @throws UnsupportedOperationException
+	 */
 	public String getName() {
 		throw new UnsupportedOperationException("Unsupported");
 	}
 
-
+	/**
+	 * @throws UnsupportedOperationException
+	 */
 	public InputStream getInputStream() throws IOException {
 		throw new UnsupportedOperationException("Unsupported");
 	}
 
-
+	/**
+	 * @throws UnsupportedOperationException
+	 */
 	public OutputStream getOutputStream() throws IOException, SecurityException {
 		throw new UnsupportedOperationException("Unsupported");
 	}
 
-
 	/**
-	 * we don't expect Linked Resource will be deleted in this case ,
-	 * so just make unsupported in this case.
+	 * @throws UnsupportedOperationException
 	 */
 	public boolean delete() throws SecurityException {
 		throw new UnsupportedOperationException("Unsupported");
 	}
 
 	/**
-	 * we don't expect Linked Resource be renamed in this case ,
-	 * so just make unsupported in this case.
+	 * @throws UnsupportedOperationException
 	 */
 	public boolean renameTo(Resource dest) throws SecurityException {
 		throw new UnsupportedOperationException("Unsupported");
 	}
-
 	/**
-	 * we don't expect Linked Resource be listed in this case ,
-	 * so just make unsupported in this case.
+	 * @throws UnsupportedOperationException
 	 */
 	public String[] list() {
 		throw new UnsupportedOperationException("Unsupported");
