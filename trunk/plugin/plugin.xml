@@ -18,6 +18,16 @@
   -->
 <?eclipse version="3.2"?>
 <plugin>
+	<extension point="org.eclipse.core.expressions.propertyTesters">
+	    <propertyTester
+	      id="runjettyrun.propertyTesters"
+	      type="org.eclipse.core.resources.IResource"
+	      namespace="runjettyrun"
+	      properties="webapp"
+	      class="runjettyrun.launchshortcut.properties.RunJettyRunPropertiesTester">
+	    </propertyTester>
+	</extension>
+
    <extension
          point="org.eclipse.debug.core.launchConfigurationTypes">
       <launchConfigurationType
@@ -85,36 +95,28 @@
        <shortcut
              class="runjettyrun.launchshortcut.RunJettyRunLaunchShortcut"
              icon="icons/jetty.gif"
-             id="run-jetty-run.runJettyShortcut"
+             id="runjettyrun.runJettyShortcut"
              label="Run Jetty "
              modes="run, debug">
-	 <contextualLaunch>
-   		<enablement>
-   		</enablement>
-              <!--
-           TODO: this is java shortcut implementation,
-           need to check this and change the rule to detect WEB-INF/web.xml exist or not.
-             <with variable="selection">
-               <count value="1"/>
-                <iterate>
-                 <and>
-                  <adapt type="org.eclipse.jdt.core.IJavaElement">
-                  	<test property="org.eclipse.jdt.core.isInJavaProject"/>
-                  </adapt>
-               	  <or>
-               	  http://help.eclipse.org/helios/index.jsp?topic=/org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/expressions/PropertyTester.html
-               	  http://www.blogjava.net/mlzry0612/articles/221505.html
-               	    <test property="org.eclipse.jdt.launching.hasMain"/>
-               	    <test property="org.eclipse.jdt.launching.isContainer"/>
-               	    <test property="org.eclipse.jdt.launching.isPackageFragment"/>
-               	    <test property="org.eclipse.jdt.launching.isPackageFragmentRoot"/>
-               	  </or>
-                 </and>
-                </iterate>
-               </with>
-           </enablement>
-           -->
-  		 </contextualLaunch>
+
+			<contextualLaunch>
+		   		<enablement>
+		   			<with variable="selection">
+		   			 	<count value="1"/>
+	                	<iterate>
+	                	 	<and>
+	                	 	 	<adapt type="org.eclipse.core.resources.IResource">
+	                	 	 	<!-- After tracing code and find document,
+	                	 	 		http://help.eclipse.org/help33/index.jsp?topic=/org.eclipse.wst.doc.isv/html/facets/enabling-based-on-facets.html
+                	 	 			By default it's lazy loaded (will return true at that case) ,
+	                	 	 		have to force it or it won't work...what the hell... -->
+		   							<test property="runjettyrun.webapp"  forcePluginActivation="true" />
+		   						</adapt>
+		   					</and>
+		   				</iterate>
+		             </with>
+		   		</enablement>
+	   		</contextualLaunch>
          <configurationType
                id="RunJettyRunWebApp">
          </configurationType>
