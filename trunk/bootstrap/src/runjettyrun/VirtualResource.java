@@ -46,7 +46,7 @@ public class VirtualResource extends Resource {
 	private URL url = null;
 	private String resourcePath;
 	private String resourcebase = null;
-
+	private Resource webroot ;
 	/**
 	 *
 	 * @param contextPath must start with "/"
@@ -55,9 +55,10 @@ public class VirtualResource extends Resource {
 	 * @throws IOException
 	 * @throws URISyntaxException
 	 */
-	public VirtualResource(String contextPath,
+	public VirtualResource(Resource webroot , String contextPath,
 			String path) throws MalformedURLException, IOException, URISyntaxException {
 
+		this.webroot = webroot;
 //		System.out.println("registing ["+contextPath+"] to ["+ path+"]");
 		this.resourcePath = path;
 		url = new File(path).toURI().toURL();
@@ -169,14 +170,16 @@ public class VirtualResource extends Resource {
 			}
 		}
 
-
-		return null;
+		//we have delegate back to webroot.
+		return webroot.addPath(path);
 	}
 
 	/* test code */
 	public static void main(String[] args) throws MalformedURLException, IOException, URISyntaxException {
 
-		VirtualResource vr = new VirtualResource("/mytest", "C:/test/");
+		VirtualResource vr = new VirtualResource(
+				Resource.newResource("C:/test2/"),
+				"/mytest", "C:/test/");
 		Resource r = vr.addPath("/mytest/test.txt");
 		System.out.println(r.exists());
 
