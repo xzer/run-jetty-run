@@ -152,7 +152,8 @@ public class Bootstrap {
 		List<Resource> resources = new ArrayList<Resource>();
 
 		URL urlWebapp = new File(configs.getWebAppDir()).toURI().toURL();
-		resources.add(new FileResource(urlWebapp));
+		Resource webapp = new FileResource(urlWebapp);
+		resources.add(webapp);
 
 		Map<String,String> map = configs.getResourceMap();
 		for(String key : map.keySet()){
@@ -171,7 +172,7 @@ public class Bootstrap {
 			}
 
  */
-			resources.add(new VirtualResource("/"+key,map.get(key)));
+			resources.add(new VirtualResource(webapp,"/"+key,map.get(key)));
 //			final WebAppContext js = new WebAppContext();
 //			js.setContextPath(key);
 //			js.setResourceBase(map.get(key)); // or whatever the correct path is in your case
