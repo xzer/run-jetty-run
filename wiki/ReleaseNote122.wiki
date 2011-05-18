@@ -1,5 +1,5 @@
 #summary RunJettyRun 1.2.2 Release Note 2011/05/19
-#labels 1.2.1.1,Featured
+#labels 1.2.1.1,Featured,releaseNote
 
 = Publish Date =
 
