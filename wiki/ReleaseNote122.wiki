@@ -31,7 +31,7 @@ Enhancement
  
   * Issue #11 [PATCH] Support for Jetty-Plus
   * Issue #57 running the plugin directly from the run as debug as menu   
-  * Issue #59 Write enablement for ShortCut  
+  * Issue #59 Write enablement for Short cut  
   * Issue #60 support eclipse linked resource in web app folder 
 
 = Notice =
