@@ -19,7 +19,7 @@
 <feature
       id="runjettyrun_feature"
       label="Run Jetty Run Feature"
-      version="1.2.2"
+      version="1.2.2.1"
       provider-name="http://code.google.com/p/run-jetty-run/">
 
    <description url="http://code.google.com/p/run-jetty-run/">
