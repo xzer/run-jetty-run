@@ -421,6 +421,11 @@ public class Bootstrap {
 		public Configs() {
 			context = System.getProperty("rjrcontext");
 			webAppDir = System.getProperty("rjrwebapp");
+			if(webAppDir != null){
+				if(webAppDir.matches("^\".*?\"$")){
+					webAppDir = webAppDir.substring(1,webAppDir.length()-1);
+				}
+			}
 			port = Integer.getInteger("rjrport");
 			sslport = Integer.getInteger("rjrsslport");
 			keystore = System.getProperty("rjrkeystore");
