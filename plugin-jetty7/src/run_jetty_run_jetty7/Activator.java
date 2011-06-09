@@ -3,8 +3,6 @@ package run_jetty_run_jetty7;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
-import runjettyrun.Plugin;
-
 /**
  * The activator class controls the plug-in life cycle
  */
