@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty7/lib/jetty-ajp-7.4.2.v20110526.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty7/lib/jetty-annotations-7.4.2.v20110526.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty7/lib/jetty-client-7.4.2.v20110526.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty7/lib/jetty-continuation-7.4.2.v20110526.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty7/lib/jetty-deploy-7.4.2.v20110526.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty7/lib/jetty-http-7.4.2.v20110526.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty7/lib/jetty-io-7.4.2.v20110526.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty7/lib/jetty-jmx-7.4.2.v20110526.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty7/lib/jetty-jndi-7.4.2.v20110526.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty7/lib/jetty-overlay-deployer-7.4.2.v20110526.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty7/lib/jetty-plus-7.4.2.v20110526.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty7/lib/jetty-policy-7.4.2.v20110526.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty7/lib/jetty-rewrite-7.4.2.v20110526.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty7/lib/jetty-security-7.4.2.v20110526.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty7/lib/jetty-server-7.4.2.v20110526.jar" sourcepath="C:/Users/tony/.m2/repository/org/eclipse/jetty/jetty-server/7.4.2.v20110526/jetty-server-7.4.2.v20110526-sources.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty7/lib/jetty-servlet-7.4.2.v20110526.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty7/lib/jetty-servlets-7.4.2.v20110526.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty7/lib/jetty-util-7.4.2.v20110526.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty7/lib/jetty-webapp-7.4.2.v20110526.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty7/lib/jetty-websocket-7.4.2.v20110526.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty7/lib/jetty-xml-7.4.2.v20110526.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty7/lib/servlet-api-2.5.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
