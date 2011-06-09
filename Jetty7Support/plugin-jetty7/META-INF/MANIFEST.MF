@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Run-jetty-run-jetty7-support
+Bundle-SymbolicName: runjettyrun.jetty7;singleton:=true
+Bundle-Version: 1.2.2.20110609
+Bundle-Activator: run_jetty_run_jetty7.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ runjettyrun;bundle-version="1.2.2",
+ org.eclipse.jdt.launching
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy
