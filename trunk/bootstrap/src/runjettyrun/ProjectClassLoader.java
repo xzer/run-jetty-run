@@ -71,7 +71,8 @@ public class ProjectClassLoader extends WebAppClassLoader {
    * see Issue #53 for more detail
    * http://code.google.com/p/run-jetty-run/issues/detail?id=53
    */
-  public Class loadClass(String name) throws ClassNotFoundException
+  @SuppressWarnings("rawtypes")
+public Class loadClass(String name) throws ClassNotFoundException
   {
 	  try{
 		  return loadClass(name, false);

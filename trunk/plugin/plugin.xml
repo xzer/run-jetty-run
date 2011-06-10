@@ -18,6 +18,7 @@
   -->
 <?eclipse version="3.2"?>
 <plugin>
+   <extension-point id="runjettyrun.jetty.providers" name="runjettyrun.jetty.providers" schema="schema/runjettyrun.jetty.providers.exsd"/>
 	<extension point="org.eclipse.core.expressions.propertyTesters">
 	    <propertyTester
 	      id="runjettyrun.propertyTesters"

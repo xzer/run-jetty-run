@@ -23,9 +23,13 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
@@ -33,6 +37,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
+import runjettyrun.container.Jetty6PackageProvider;
 import runjettyrun.container.RunJettyRunContainerResolver;
 import runjettyrun.extensions.IJettyPackageProvider;
 
@@ -106,15 +111,19 @@ public class Plugin extends AbstractUIPlugin {
 	public static final String ATTR_ENABLE_MAVEN_TEST_CLASSES = Plugin.PLUGIN_ID
 			+ ".ENABLE_MAVEN_TEST_CLASSES_ATTR";
 
+	public static final String ATTR_SELECTED_JETTY_VERSION = Plugin.PLUGIN_ID
+	+ ".SELECTED_JETTY_VERSION_ATTR";
+
 	public static final String ATTR_ENABLE_PARENT_LOADER_PRIORITY = Plugin.PLUGIN_ID
 			+ ".ENABLE_PARENT_LOADER_PRIORITY_ATTR";
 
-	public static final String CONTAINER_RJR_BOOTSTRAP = "RJRBootstrap";
-	public static final String CONTAINER_RJR_JETTY6 = "RJRJetty6";
-	public static final String CONTAINER_RJR_JETTY6_JNDI = "RJRJetty6JNDI";
+	public static final String CONTAINER_RJR_JETTY = "RJRJetty";
+	public static final String CONTAINER_RJR_JETTY_JNDI = "RJRJetty6JNDI";
 
 	public static final String ATTR_ENABLE_JNDI = Plugin.PLUGIN_ID
 			+ ".ENABLE_JNDI_ATTR";
+
+	public static final String IPROVIDER_ID ="runjettyrun.jetty.providers";
 
 	// The shared instance
 	private static Plugin plugin;
@@ -123,19 +132,37 @@ public class Plugin extends AbstractUIPlugin {
 
 	public Plugin() {
 		JavaRuntime.addContainerResolver(new RunJettyRunContainerResolver(),
-				CONTAINER_RJR_BOOTSTRAP);
+				CONTAINER_RJR_JETTY);
 		JavaRuntime.addContainerResolver(new RunJettyRunContainerResolver(),
-				CONTAINER_RJR_JETTY6);
-		JavaRuntime.addContainerResolver(new RunJettyRunContainerResolver(),
-				CONTAINER_RJR_JETTY6_JNDI);
+				CONTAINER_RJR_JETTY_JNDI);
 		// containerIdentifier
 	}
 
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		extensions = new ArrayList<IJettyPackageProvider>();
+		extensions.add(new Jetty6PackageProvider());
+		initProviders();
 		plugin = this;
+	}
 
+	private void initProviders(){
+		IConfigurationElement[] config = Platform.getExtensionRegistry()
+		.getConfigurationElementsFor(IPROVIDER_ID);
+		for (IConfigurationElement e : config) {
+			try {
+
+					final Object o = e.createExecutableExtension("class");
+					if (o instanceof IJettyPackageProvider) {
+						extensions.add(((IJettyPackageProvider) o));
+					}
+
+			} catch (CoreException ex) {
+				System.err.println(ex.getMessage());
+			} catch (Exception ex){
+				System.err.println(ex.getMessage());
+			}
+		}
 	}
 
 	public void stop(BundleContext context) throws Exception {
@@ -170,6 +197,31 @@ public class Plugin extends AbstractUIPlugin {
 
 	public IJettyPackageProvider[] getProviders(){
 		return extensions.toArray(new IJettyPackageProvider[0]);
+	}
+
+	public boolean supportJetty(String version,int type){
+		for (IJettyPackageProvider jpp : extensions) {
+			if(jpp.accpet(version) && jpp.acceptType(type)){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public IRuntimeClasspathEntry[] getDefaultPackages(int type){
+			//we assume here's the 0 be jetty 6
+		IJettyPackageProvider pro = this.extensions.get(0);
+		return pro.getPackage(pro.getJettyVersion(), type);
+	}
+
+
+	public IRuntimeClasspathEntry[] getPackages(String version,int type){
+		for (IJettyPackageProvider jpp : extensions) {
+			if(jpp.accpet(version) && jpp.acceptType(type)){
+				return jpp.getPackage(version, type);
+			}
+		}
+		return new IRuntimeClasspathEntry[0];
 	}
 
 	public static Plugin getDefault() {

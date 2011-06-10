@@ -58,6 +58,7 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
@@ -83,8 +84,6 @@ import runjettyrun.utils.UIUtil;
 public class RunJettyRunTab extends JavaLaunchTab {
 
 	private UpdateModfiyListener _updatedListener = new UpdateModfiyListener();
-
-	private String currentJettyVersion = IJettyPackageProvider.JETTY_6_1_26;
 
 	private Text fProjText;
 
@@ -120,6 +119,10 @@ public class RunJettyRunTab extends JavaLaunchTab {
 
 	private Button fEnableMavenDisableTestClassesBox;
 
+	private Combo fJettyVersion;
+
+	private Label jettyVersionNote;
+
 	private Button fEnableParentLoadPriorityBox;
 
 	private Group mavenGroup = null;
@@ -146,6 +149,8 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		layout.verticalSpacing = 0;
 		comp.setLayout(layout);
 
+		createJettyVersionSelector(comp);
+		createVerticalSpacer(comp, 1);
 		createProjectEditor(comp);
 		createVerticalSpacer(comp, 1);
 		createPortEditor(comp);
@@ -153,6 +158,7 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		createJettyOptionsEditor(comp);
 		createVerticalSpacer(comp, 1);
 		createMavenEditor(comp);
+		createVerticalSpacer(comp, 1);
 		createVerticalSpacer(comp, 1);
 		setControl(comp);
 		// PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(),
@@ -191,6 +197,83 @@ public class RunJettyRunTab extends JavaLaunchTab {
 	}
 
 	/**
+	 *
+	 * @param parent
+	 */
+	private void createJettyVersionSelector(Composite parent) {
+
+		IJettyPackageProvider[] providers = Plugin.getDefault().getProviders();
+
+		if (providers.length == 1) {
+			return;
+		}
+
+		Font font = parent.getFont();
+
+		/*
+		 * ---------------------------------------------------------------------
+		 */
+
+		Group jettyGroup = new Group(parent, SWT.NONE);
+		jettyGroup.setText("RunJettyRun Version Support");
+		jettyGroup.setLayoutData(createHFillGridData());
+		{
+			GridLayout layout = new GridLayout();
+			layout.numColumns = 2;
+			jettyGroup.setLayout(layout);
+		}
+		jettyGroup.setFont(font);
+
+		/*
+		 * ---------------------------------------------------------------------
+		 */
+
+		new Label(jettyGroup, SWT.LEFT).setText("Select a Jetty Version:");
+
+		fJettyVersion = new Combo(jettyGroup, SWT.DROP_DOWN | SWT.READ_ONLY| SWT.BORDER);
+		{
+			GridData gd = new GridData();
+			gd.horizontalAlignment = SWT.LEFT;
+			fJettyVersion.setLayoutData(gd);
+		}
+
+		for (IJettyPackageProvider provider : providers) {
+			fJettyVersion.add(provider.getJettyVersion());
+		}
+
+		jettyVersionNote = new Label(jettyGroup, SWT.LEFT);
+		jettyVersionNote.setText("Note: If you are running jsp page with Jetty8 Bundle , "+
+				" your project classpath's JRE need to be configurated as a JDK .");
+		{
+			GridData gd = new GridData();
+			gd.horizontalAlignment = SWT.LEFT;
+			gd.horizontalSpan = 2;
+			jettyVersionNote.setLayoutData(gd);
+		}
+		jettyVersionNote.setVisible(false);
+
+		fJettyVersion.addSelectionListener(new SelectionListener() {
+
+			public void widgetSelected(SelectionEvent e) {
+				if(fJettyVersion.getText().indexOf("8.0.0")!=-1){
+					jettyVersionNote.setVisible(true);
+				}else{
+					jettyVersionNote.setVisible(false);
+				}
+			}
+
+			public void widgetDefaultSelected(SelectionEvent e) {
+				if(fJettyVersion.getText().indexOf("8.0.0")!=-1){
+					jettyVersionNote.setVisible(true);
+				}else{
+					jettyVersionNote.setVisible(false);
+				}
+			}
+		});
+
+	}
+
+	/**
 	 * create a group for M2E config.
 	 *
 	 * @param parent
@@ -219,7 +302,7 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		 */
 
 		fEnableMavenDisableTestClassesBox = createCheckButton(mavenGroup,
-				"Disable test-classes for maven");
+				"Exclude test-classes for maven");
 		{
 			GridData gd = new GridData();
 			gd.horizontalAlignment = SWT.LEFT;
@@ -429,6 +512,7 @@ public class RunJettyRunTab extends JavaLaunchTab {
 	 */
 	private void createJettyOptionsEditor(Composite parent) {
 		Font font = parent.getFont();
+
 		Group group = new Group(parent, SWT.NONE);
 		group.setText("Web Application");
 		group.setLayoutData(createHFillGridData());
@@ -438,6 +522,7 @@ public class RunJettyRunTab extends JavaLaunchTab {
 			group.setLayout(layout);
 		}
 		group.setFont(font);
+
 
 		/*
 		 * ---------------------------------------------------------------------
@@ -548,6 +633,18 @@ public class RunJettyRunTab extends JavaLaunchTab {
 			}
 		});
 
+
+		/*
+		 * ---------------------------------------------------------------------
+		 */
+
+		UIUtil.createLink(group, SWT.NONE,
+				"<a href=\"http://communitymapbuilder.org/display/JETTY/Classloading\">(?)</a>");
+
+		/*
+		 * ---------------------------------------------------------------------
+		 */
+
 		fEnableJNDI = createCheckButton(group, "JNDI Support");
 		{
 			GridData gd = new GridData();
@@ -560,13 +657,6 @@ public class RunJettyRunTab extends JavaLaunchTab {
 				updateLaunchConfigurationDialog();
 			}
 		});
-
-		/*
-		 * ---------------------------------------------------------------------
-		 */
-
-		UIUtil.createLink(group, SWT.NONE,
-				"<a href=\"http://communitymapbuilder.org/display/JETTY/Classloading\">(?)</a>");
 
 		/*
 		 * ---------------------------------------------------------------------
@@ -659,6 +749,34 @@ public class RunJettyRunTab extends JavaLaunchTab {
 					.getAttribute(Plugin.ATTR_ENABLE_PARENT_LOADER_PRIORITY,
 							true));
 
+			String ver = configuration.getAttribute(
+					Plugin.ATTR_SELECTED_JETTY_VERSION, "");
+
+
+			/*
+			 * If provider's length = 1 , the fJettyVersion controll will not be created.
+			 */
+			if (fJettyVersion != null) {
+				fJettyVersion.select(0);
+				IJettyPackageProvider[] providers = Plugin.getDefault().getProviders();
+				if (!"".equals(ver)) {
+					int i = 0;
+					for (IJettyPackageProvider provider : providers) {
+
+						String proVer = provider.getJettyVersion();
+						if (proVer != null && proVer.equals(ver)) {
+							fJettyVersion.select(i);
+							if(ver.indexOf("8.0.0")!=-1){
+								jettyVersionNote.setVisible(true);
+							}else{
+								jettyVersionNote.setVisible(false);
+							}
+						}
+						++i;
+					}
+				}
+			}
+
 			setSSLSettingEnabled(fEnableSSLbox.getSelection());
 		} catch (CoreException e) {
 			Plugin.logError(e);
@@ -670,10 +788,11 @@ public class RunJettyRunTab extends JavaLaunchTab {
 
 	/**
 	 * TODO review this later , do we should check this in RunJettyRunTab ?
+	 *
 	 * @param proj
 	 * @return
 	 */
-	public static boolean isWebappProject(IProject proj){
+	public static boolean isWebappProject(IProject proj) {
 		return !"".equals(detectDefaultWebappdir(proj));
 	}
 
@@ -719,7 +838,8 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		return "";
 	}
 
-	private static IContainer scanWEBINF(IContainer container) throws CoreException {
+	private static IContainer scanWEBINF(IContainer container)
+			throws CoreException {
 		IResource[] resuorces = container.members();
 
 		// TODO use accept instead and detect folder instead , and check
@@ -929,8 +1049,14 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		configuration.setAttribute(Plugin.ATTR_ENABLE_PARENT_LOADER_PRIORITY,
 				fEnableParentLoadPriorityBox.getSelection());
 
-		configuration.setAttribute(Plugin.ATTR_ENABLE_MAVEN_TEST_CLASSES,
-				fEnableMavenDisableTestClassesBox.getSelection());
+
+		/*
+		 * when provider only one , it's not event inited for fJettyVersion.
+		 */
+		if(fJettyVersion != null){
+			configuration.setAttribute(Plugin.ATTR_SELECTED_JETTY_VERSION,
+				fJettyVersion.getText());
+		}
 
 	}
 
@@ -946,7 +1072,7 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		// so I add some handle for text selection and got the project
 		// information.
 
-		setConfigurationProejct(configuration, null );
+		setConfigurationProejct(configuration, null);
 		IJavaElement javaElement = getContext();
 		if (javaElement != null)
 			initializeJavaProject(javaElement, configuration);
@@ -960,7 +1086,8 @@ public class RunJettyRunTab extends JavaLaunchTab {
 						.getEditorInput().getAdapter(FileEditorInput.class);
 				if (editorinput != null) {
 					try {
-						setConfigurationProejct(configuration,editorinput.getFile().getProject());
+						setConfigurationProejct(configuration, editorinput
+								.getFile().getProject());
 					} catch (Exception e) {
 					}
 				}
@@ -976,8 +1103,9 @@ public class RunJettyRunTab extends JavaLaunchTab {
 	}
 
 	public static void initDefaultConfiguration(
-			ILaunchConfigurationWorkingCopy configuration,IProject proj,String launchConfigName) {
-		setConfigurationProejct(configuration,proj);
+			ILaunchConfigurationWorkingCopy configuration, IProject proj,
+			String launchConfigName) {
+		setConfigurationProejct(configuration, proj);
 
 		configuration.setAttribute(
 				IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME,
@@ -1173,14 +1301,13 @@ public class RunJettyRunTab extends JavaLaunchTab {
 			fKeystoreText.setText(res);
 	}
 
-	private static void setConfigurationProejct(ILaunchConfigurationWorkingCopy configuration,
-			IProject proj) {
+	private static void setConfigurationProejct(
+			ILaunchConfigurationWorkingCopy configuration, IProject proj) {
 		if (proj == null)
 			configuration.setAttribute(ATTR_PROJECT_NAME, "");
 		else
 			configuration.setAttribute(ATTR_PROJECT_NAME, proj.getName());
 	}
-
 
 	private static abstract class ButtonListener implements SelectionListener {
 

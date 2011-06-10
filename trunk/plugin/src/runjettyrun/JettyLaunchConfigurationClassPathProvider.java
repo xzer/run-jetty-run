@@ -49,7 +49,7 @@ public class JettyLaunchConfigurationClassPathProvider extends
         IJavaLaunchConfigurationConstants.ATTR_DEFAULT_CLASSPATH, true);
     if (useDefault) {
       classpath = RunJettyRunClasspathUtil.filterWebInfLibs(classpath, configuration);
-      classpath = addJettyAndBootstrap(classpath, configuration);
+      classpath = addJetty(classpath, configuration);
 
     } else {
       // recover persisted classpath
@@ -60,7 +60,7 @@ public class JettyLaunchConfigurationClassPathProvider extends
 		if(configuration.getAttribute(Plugin.ATTR_ENABLE_JNDI,false)){
 		    List<IRuntimeClasspathEntry> entries = new ArrayList<IRuntimeClasspathEntry>();
 		    entries.addAll(Arrays.asList(classpath));
-			entries.add(new RunJettyRunContainerClasspathEntry(Plugin.CONTAINER_RJR_JETTY6_JNDI,IRuntimeClasspathEntry.USER_CLASSES));
+			entries.add(new RunJettyRunContainerClasspathEntry(Plugin.CONTAINER_RJR_JETTY_JNDI,IRuntimeClasspathEntry.USER_CLASSES));
 			return entries.toArray(new IRuntimeClasspathEntry[0]);
 		}
 	} catch (CoreException e) {
@@ -69,14 +69,13 @@ public class JettyLaunchConfigurationClassPathProvider extends
     return classpath;
   }
 
-  private IRuntimeClasspathEntry[] addJettyAndBootstrap(
+  private IRuntimeClasspathEntry[] addJetty(
       IRuntimeClasspathEntry[] existing, ILaunchConfiguration config) {
 
 
     List<IRuntimeClasspathEntry> entries = new ArrayList<IRuntimeClasspathEntry>();
     entries.addAll(Arrays.asList(existing));
-    entries.add(new RunJettyRunContainerClasspathEntry(Plugin.CONTAINER_RJR_BOOTSTRAP,IRuntimeClasspathEntry.USER_CLASSES));
-    entries.add(new RunJettyRunContainerClasspathEntry(Plugin.CONTAINER_RJR_JETTY6,IRuntimeClasspathEntry.USER_CLASSES));
+    entries.add(new RunJettyRunContainerClasspathEntry(Plugin.CONTAINER_RJR_JETTY,IRuntimeClasspathEntry.USER_CLASSES));
 
     return entries.toArray(new IRuntimeClasspathEntry[0]);
 

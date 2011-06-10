@@ -19,6 +19,7 @@ import org.eclipse.jdt.launching.JavaRuntime;
 import org.osgi.framework.Bundle;
 
 import runjettyrun.Plugin;
+import runjettyrun.extensions.IJettyPackageProvider;
 
 public class RunJettyRunContainerResolver implements
 		IRuntimeClasspathEntryResolver2 {
@@ -31,45 +32,51 @@ public class RunJettyRunContainerResolver implements
 	public IRuntimeClasspathEntry[] resolveRuntimeClasspathEntry(
 			IRuntimeClasspathEntry entry, IJavaProject project)
 			throws CoreException {
-		return resolvedEntry(entry);
+
+		//Not a expected call , we need configuration to fingure out how user use it.
+		throw new UnsupportedOperationException("...");
 
 	}
 
 	public IRuntimeClasspathEntry[] resolveRuntimeClasspathEntry(
 			IRuntimeClasspathEntry entry, ILaunchConfiguration configuration)
 			throws CoreException {
-		return resolvedEntry(entry);
+		return resolvedEntry(entry , configuration);
+	}
+	private  IRuntimeClasspathEntry[] resolvedEntry(IRuntimeClasspathEntry entry,
+			ILaunchConfiguration configuration){
+
+		String ver = "";
+		try {
+			ver = configuration.getAttribute(Plugin.ATTR_SELECTED_JETTY_VERSION, "");
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
+		Plugin plg = Plugin.getDefault();
+		if(Plugin.CONTAINER_RJR_JETTY.equals(entry.getVariableName())){
+
+			if(plg.supportJetty(ver, IJettyPackageProvider.TYPE_JETTY_BUNDLE)){
+				return plg.getPackages(ver, IJettyPackageProvider.TYPE_JETTY_BUNDLE);
+			}else{
+				return plg.getDefaultPackages( IJettyPackageProvider.TYPE_JETTY_BUNDLE);
+			}
+		}
+
+		if(Plugin.CONTAINER_RJR_JETTY_JNDI.equals(entry.getVariableName())){
+			if(plg.supportJetty(ver, IJettyPackageProvider.TYPE_UTIL)){
+				return plg.getPackages(ver, IJettyPackageProvider.TYPE_UTIL);
+			}else{
+				return plg.getDefaultPackages( IJettyPackageProvider.TYPE_UTIL);
+			}
+		}
+
+		return new IRuntimeClasspathEntry[0];
 	}
 
 	public boolean isVMInstallReference(IClasspathEntry entry) {
 		return false;
 	}
 
-	private  IRuntimeClasspathEntry[] resolvedEntry(IRuntimeClasspathEntry entry){
-		if(Plugin.CONTAINER_RJR_BOOTSTRAP.equals(entry.getVariableName()))
-			return getBootstrap();
-
-		if(Plugin.CONTAINER_RJR_JETTY6.equals(entry.getVariableName()))
-			return getJetty6();
-
-		if(Plugin.CONTAINER_RJR_JETTY6_JNDI.equals(entry.getVariableName()))
-			return getJetty6JNDI();
-
-		return new IRuntimeClasspathEntry[0];
-	}
-
-	private IRuntimeClasspathEntry[] getJetty6JNDI() {
-		List<IRuntimeClasspathEntry> entries = new ArrayList<IRuntimeClasspathEntry>();
-		Bundle bundle = Plugin.getDefault().getBundle();
-		URL installUrl = bundle.getEntry("/");
-		addRelativeArchiveEntry(entries, installUrl, "jetty-naming-"
-				+ Plugin.JETTY_VERSION);
-		addRelativeArchiveEntry(entries, installUrl, "jetty-plus-"
-				+ Plugin.JETTY_VERSION);
-		addRelativeArchiveEntry(entries, installUrl, "activation-1.1.1");
-		addRelativeArchiveEntry(entries, installUrl, "mail-1.4");
-		return entries.toArray(new IRuntimeClasspathEntry[0]);
-	}
 
 	private IRuntimeClasspathEntry[] getBootstrap() {
 
@@ -79,25 +86,7 @@ public class RunJettyRunContainerResolver implements
 		addRelativeArchiveEntry(entries, installUrl, "run-jetty-run-bootstrap");
 		return entries.toArray(new IRuntimeClasspathEntry[entries.size()]);
 	}
-	private IRuntimeClasspathEntry[] getJetty6() {
 
-		List<IRuntimeClasspathEntry> entries = new ArrayList<IRuntimeClasspathEntry>();
-		Bundle bundle = Plugin.getDefault().getBundle();
-		URL installUrl = bundle.getEntry("/");
-
-		addRelativeArchiveEntry(entries, installUrl, "jetty-"
-				+ Plugin.JETTY_VERSION);
-		addRelativeArchiveEntry(entries, installUrl, "jetty-util-"
-				+ Plugin.JETTY_VERSION);
-		addRelativeArchiveEntry(entries, installUrl, "jetty-management-"
-				+ Plugin.JETTY_VERSION);
-		addRelativeArchiveEntry(entries, installUrl, "servlet-api-2.5-20081211");
-		addRelativeArchiveEntry(entries, installUrl, "jsp-api-2.1");
-		addRelativeArchiveEntry(entries, installUrl, "jsp-2.1");
-		addRelativeArchiveEntry(entries, installUrl, "core-3.1.1");
-
-		return entries.toArray(new IRuntimeClasspathEntry[0]);
-	}
 
 	private void addRelativeArchiveEntry(List<IRuntimeClasspathEntry> entries,
 			URL installUrl, String libJarName) {
