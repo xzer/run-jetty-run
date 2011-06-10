@@ -668,7 +668,7 @@ public class RunJettyRunTab extends JavaLaunchTab {
 						SWT.NONE,
 						"...You could set "
 								+ "<a href=\"http://communitymapbuilder.org/display/JETTY/SystemProperties\">"
-								+ "more control </a> in VM argument.(-Dket=value) ");
+								+ "more control </a> in VM argument.(-Dkey=value) ");
 		systemProperties.setLayoutData(createHFillGridData(6, SWT.RIGHT));
 
 		return;
