@@ -128,11 +128,22 @@ public class Configs {
 	public List<String> getConfigurationClassesList(){
 		ArrayList<String> configuration = new ArrayList<String>();
 		if (getEnableJNDI()) {
-			configuration.add("org.mortbay.jetty.webapp.WebInfConfiguration");
-			configuration.add("org.mortbay.jetty.plus.webapp.EnvConfiguration");
-			configuration.add("org.mortbay.jetty.plus.webapp.Configuration");
-			configuration.add("org.mortbay.jetty.webapp.JettyWebXmlConfiguration");
-			configuration.add("org.mortbay.jetty.webapp.TagLibConfiguration");
+
+			//http://wiki.eclipse.org/Jetty/Feature/JNDI#Applying_JNDI_to_a_Single_Web_App
+			/* A way to verify the class correct or not
+			org.eclipse.jetty.webapp.WebInfConfiguration d;
+			org.eclipse.jetty.plus.webapp.EnvConfiguration d2;
+			org.eclipse.jetty.plus.webapp.PlusConfiguration d3;
+			org.eclipse.jetty.webapp.JettyWebXmlConfiguration d4;
+			org.eclipse.jetty.webapp.TagLibConfiguration d5;
+			*/
+
+			configuration.add("org.eclipse.jetty.webapp.WebInfConfiguration");
+			configuration.add("org.eclipse.jetty.plus.webapp.EnvConfiguration");
+			configuration.add("org.eclipse.jetty.plus.webapp.PlusConfiguration");
+			configuration.add("org.eclipse.jetty.webapp.JettyWebXmlConfiguration");
+			configuration.add("org.eclipse.jetty.webapp.TagLibConfiguration");
+
 		}
 		if (!"".equals(getConfigurationClasses())) {
 			String[] configs = getConfigurationClasses().split(";");
