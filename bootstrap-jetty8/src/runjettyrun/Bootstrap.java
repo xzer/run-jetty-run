@@ -76,7 +76,6 @@ public class Bootstrap {
 		}
 
 		web.setContextPath(configs.getContext());
-		web.setWar(configs.getWebAppDir());
 
 		/**
 		 * open a way to set the configuration classes
@@ -105,7 +104,7 @@ public class Bootstrap {
 		// degradation of this change. My only concern is that there might be a
 		// need to
 		// test this feature that I'm disabling.
-		web.setInitParameter("org.mortbay.jetty.servlet.Default.useFileMappedBuffer",
+		web.setInitParameter("org.eclipse.jetty.servlet.Default.useFileMappedBuffer",
 				"false");
 
 		if (configs.getWebAppClassPath() != null) {
@@ -123,27 +122,7 @@ public class Bootstrap {
 
 		Map<String,String> map = configs.getResourceMap();
 		for(String key : map.keySet()){
-/*
- * 			URL url = new File(map.get(key)).toURI().toURL();
-			Resource resource;
-			try {
-				resource = new FileResource(url);
-				final ResourceHandler handler = new ResourceHandler();
-				handler.setBaseResource(resource);
-				handler.setServer(server);
-				handler.setContextPath(key);
-				web.addHandler(handler);
-			} catch (URISyntaxException e) {
-				e.printStackTrace();
-			}
-
- */
 			resources.add(new VirtualResource(webapp,"/"+key,map.get(key)));
-//			final WebAppContext js = new WebAppContext();
-//			js.setContextPath(key);
-//			js.setResourceBase(map.get(key)); // or whatever the correct path is in your case
-//			js.setParentLoaderPriority(true);
-//			server.addHandler(js);
 		}
 
 		ResourceCollection webAppDirResources =
