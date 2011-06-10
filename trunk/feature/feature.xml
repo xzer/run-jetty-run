@@ -18,7 +18,7 @@
   -->
 <feature
       id="runjettyrun_feature"
-      label="Run Jetty Run Feature"
+      label="Run Jetty Run Feature (Require)"
       version="1.2.2.20110609"
       provider-name="http://code.google.com/p/run-jetty-run/">
 
