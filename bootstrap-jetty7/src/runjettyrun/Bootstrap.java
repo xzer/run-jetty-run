@@ -133,6 +133,7 @@ public class Bootstrap {
 
 	private static void initConnnector(Server server, Configs configObj) {
 		SelectChannelConnector connector = new SelectChannelConnector();
+		connector.setHost("127.0.0.1");
 		connector.setPort(configObj.getPort());
 
 		if (configObj.getEnablessl() && configObj.getSslport() != null)
