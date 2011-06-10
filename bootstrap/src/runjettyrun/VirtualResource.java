@@ -44,6 +44,7 @@ public class VirtualResource extends Resource {
 
 	private Resource resource = null;
 	private URL url = null;
+	@SuppressWarnings("unused")
 	private String resourcePath;
 	private String resourcebase = null;
 	private Resource webroot ;

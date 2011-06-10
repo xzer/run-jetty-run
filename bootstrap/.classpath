@@ -5,7 +5,7 @@
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="lib" path="/run-jetty-run/lib/jsp-2.1.jar"/>
 	<classpathentry kind="lib" path="/run-jetty-run/lib/jsp-api-2.1.jar"/>
-	<classpathentry kind="lib" path="/run-jetty-run/lib/jetty-6.1.26.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run/lib/jetty-6.1.26.jar" sourcepath="C:/Users/tony/.m2/repository/org/mortbay/jetty/jetty/6.1.26/jetty-6.1.26-sources.jar"/>
 	<classpathentry kind="lib" path="/run-jetty-run/lib/jetty-management-6.1.26.jar"/>
 	<classpathentry kind="lib" path="/run-jetty-run/lib/jetty-util-6.1.26.jar"/>
 	<classpathentry kind="output" path="bin"/>
