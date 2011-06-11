@@ -255,14 +255,17 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		fJettyVersion.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
+				updateLaunchConfigurationDialog();
 				if(fJettyVersion.getText().indexOf("8.0.0")!=-1){
 					jettyVersionNote.setVisible(true);
 				}else{
 					jettyVersionNote.setVisible(false);
 				}
+
 			}
 
 			public void widgetDefaultSelected(SelectionEvent e) {
+				updateLaunchConfigurationDialog();
 				if(fJettyVersion.getText().indexOf("8.0.0")!=-1){
 					jettyVersionNote.setVisible(true);
 				}else{
