@@ -1,8 +1,26 @@
 package runjettyrun;
-
+/*
+ * $Id$
+ * $HeadURL$
+ *
+ * ==============================================================================
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 
 import java.io.File;
 import java.io.IOException;
+import java.net.DatagramSocket;
+import java.net.ServerSocket;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -40,7 +58,6 @@ public class Bootstrap {
 
 		logArgus(false);
 		Configs configs = new Configs();
-
 
 		configs.validation();
 
@@ -155,11 +172,18 @@ public class Bootstrap {
 
 	private static void initConnnector(Server server, Configs configObj) {
 		SelectChannelConnector connector = new SelectChannelConnector();
-		connector.setHost("127.0.0.1");
+
+		//Don't set any host , or the port detection will failed. -_-#
+		//connector.setHost("127.0.0.1");
 		connector.setPort(configObj.getPort());
 
-		if (configObj.getEnablessl() && configObj.getSslport() != null)
+		if (configObj.getEnablessl() && configObj.getSslport() != null){
+			if (!available(configObj.getSslport())) {
+				throw new IllegalStateException("SSL port :" + configObj.getSslport()
+						+ " already in use!");
+			}
 			connector.setConfidentialPort(configObj.getSslport());
+		}
 
 		server.addConnector(connector);
 
@@ -169,6 +193,39 @@ public class Bootstrap {
 					configObj.getNeedClientAuth());
 
 	}
+
+
+	private static boolean available(int port) {
+		if (port <= 0) {
+			throw new IllegalArgumentException("Invalid start port: " + port);
+		}
+
+		ServerSocket ss = null;
+		DatagramSocket ds = null;
+		try {
+			ss = new ServerSocket(port);
+			ss.setReuseAddress(true);
+			ds = new DatagramSocket(port);
+			ds.setReuseAddress(true);
+			return true;
+		} catch (IOException e) {
+		} finally {
+			if (ds != null) {
+				ds.close();
+			}
+
+			if (ss != null) {
+				try {
+					ss.close();
+				} catch (IOException e) {
+					/* should not be thrown */
+				}
+			}
+		}
+
+		return false;
+	}
+
 
 	private static void logArgus(boolean loggerparam) {
 
