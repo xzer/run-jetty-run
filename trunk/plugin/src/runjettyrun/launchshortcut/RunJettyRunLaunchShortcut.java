@@ -1,7 +1,5 @@
 package runjettyrun.launchshortcut;
 
-import java.util.HashSet;
-
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -12,8 +10,6 @@ import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.debug.ui.ILaunchShortcut2;
-import org.eclipse.jdt.internal.debug.ui.JDIDebugUIPlugin;
-import org.eclipse.jdt.internal.debug.ui.launcher.LauncherMessages;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
@@ -26,6 +22,8 @@ import runjettyrun.RunJettyRunTab;
 import runjettyrun.utils.ProjectUtil;
 
 public class RunJettyRunLaunchShortcut implements ILaunchShortcut2 {
+
+	private final static String ConfigurationType = "RunJettyRunWebApp";
 
 	public void launch(ISelection selection, String mode) {
 		IResource ir = getLaunchableResource(selection);
@@ -51,7 +49,6 @@ public class RunJettyRunLaunchShortcut implements ILaunchShortcut2 {
 						return config;
 			}
 		} catch (CoreException e) {
-			JDIDebugUIPlugin.log(e);
 		}
 		return null;
 	}
@@ -61,8 +58,7 @@ public class RunJettyRunLaunchShortcut implements ILaunchShortcut2 {
 	}
 
 	public ILaunchConfigurationType getConfigurationType(){
-		//TODO change the magic string to variable
-		return getLaunchManager().getLaunchConfigurationType("RunJettyRunWebApp");
+		return getLaunchManager().getLaunchConfigurationType(ConfigurationType);
 	}
 	public ILaunchConfiguration createConfiguration(IResource type){
 		if( type == null ) return null;
