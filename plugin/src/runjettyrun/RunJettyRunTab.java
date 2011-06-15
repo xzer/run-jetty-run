@@ -923,6 +923,20 @@ public class RunJettyRunTab extends JavaLaunchTab {
 			setErrorMessage("No project selected");
 			return false;
 		}
+
+
+		String text = fContextText.getText();
+		if(text.length() == 0){
+			setErrorMessage("Context path can't be empty.");
+			return false;
+		}else if(!text.startsWith("/")){
+			setErrorMessage("Context path have to start with /.");
+			return false;
+		}else if(text.length() != 1 && text.endsWith("/")){
+			setErrorMessage("Context path can't end with / unless it's root.");
+			return false;
+		}
+
 		String directory = fWebAppDirText.getText().trim();
 		if (!"".equals(directory.trim())) {
 			// means use project folder as webapp folder
