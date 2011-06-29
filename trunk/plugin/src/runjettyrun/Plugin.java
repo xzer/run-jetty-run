@@ -125,6 +125,9 @@ public class Plugin extends AbstractUIPlugin {
 
 	public static final String IPROVIDER_ID ="runjettyrun.jetty.providers";
 
+	public static final String ATTR_SHOW_ADVANCE = Plugin.PLUGIN_ID
+			+ ".SHOW_ADVANCE_ATTR";
+
 	// The shared instance
 	private static Plugin plugin;
 
