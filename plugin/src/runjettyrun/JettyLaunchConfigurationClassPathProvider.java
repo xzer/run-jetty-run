@@ -33,7 +33,9 @@ import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.jdt.launching.StandardClasspathProvider;
 
 import runjettyrun.container.RunJettyRunContainerClasspathEntry;
+import runjettyrun.extensions.IJettyPackageProvider;
 import runjettyrun.utils.RunJettyRunClasspathUtil;
+import runjettyrun.utils.RunJettyRunLaunchConfigurationUtil;
 
 public class JettyLaunchConfigurationClassPathProvider extends
     StandardClasspathProvider {
@@ -95,27 +97,31 @@ public class JettyLaunchConfigurationClassPathProvider extends
    * org.eclipse.debug.core.ILaunchConfiguration)
    */
   public IRuntimeClasspathEntry[] resolveClasspath(
-      IRuntimeClasspathEntry[] entries, ILaunchConfiguration configuration)
-      throws CoreException {
+		  IRuntimeClasspathEntry[] entries, ILaunchConfiguration configuration)
+  throws CoreException {
 
-    Set<IRuntimeClasspathEntry> all = new LinkedHashSet<IRuntimeClasspathEntry>(
-        entries.length);
-    for (int i = 0; i < entries.length; i++) {
-      IRuntimeClasspathEntry entry = entries[i];
-      IResource resource = entry.getResource();
-      if (resource instanceof IProject) {
-        continue;
-      }
+	  Set<IRuntimeClasspathEntry> all = new LinkedHashSet<IRuntimeClasspathEntry>(
+			  entries.length);
+	  for (int i = 0; i < entries.length; i++) {
+		  IRuntimeClasspathEntry entry = entries[i];
+		  IResource resource = entry.getResource();
+		  if (resource instanceof IProject) {
+			  continue;
+		  }
 
-      IRuntimeClasspathEntry[] resolved = JavaRuntime
-          .resolveRuntimeClasspathEntry(entry, configuration);
-      all.addAll(Arrays.asList(resolved));
+		  if(Plugin.CONTAINER_RJR_JETTY.equals(entry.getVariableName())){
+			  all.addAll(Arrays.asList(RunJettyRunLaunchConfigurationUtil.loadPackage(configuration, IJettyPackageProvider.TYPE_JETTY_BUNDLE)));
+		  }else if(Plugin.CONTAINER_RJR_JETTY_JNDI.equals(entry.getVariableName())){
+			  all.addAll(Arrays.asList(RunJettyRunLaunchConfigurationUtil.loadPackage(configuration, IJettyPackageProvider.TYPE_UTIL)));
+		  }else{
+			  //resloved by default
+			  //here's as same as StandardClasspathProvider
+			  all.addAll(Arrays.asList(JavaRuntime.resolveRuntimeClasspathEntry(entry, configuration)));
+		  }
 
-    }
+	  }
 
-    IRuntimeClasspathEntry[] resolvedClasspath = all
-        .toArray(new IRuntimeClasspathEntry[0]);
-
-    return resolvedClasspath;
+	  return all.toArray(new IRuntimeClasspathEntry[0]);
   }
+
 }

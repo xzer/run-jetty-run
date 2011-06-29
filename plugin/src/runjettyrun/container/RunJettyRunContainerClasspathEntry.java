@@ -25,10 +25,12 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import runjettyrun.Plugin;
+import runjettyrun.extensions.IJettyPackageProvider;
+import runjettyrun.utils.RunJettyRunLaunchConfigurationUtil;
 
 public class RunJettyRunContainerClasspathEntry implements IClasspathEntry,
 		IRuntimeClasspathEntry,IRuntimeClasspathEntry2 {
-	
+
 	int property;
 	/*
 	 * Default access rules
@@ -39,7 +41,7 @@ public class RunJettyRunContainerClasspathEntry implements IClasspathEntry,
 	private IClasspathAttribute[] attribute;
 
 	public RunJettyRunContainerClasspathEntry(String containerName,int properties) {
-		
+
 		this(containerName, new IClasspathAttribute[0],properties);
 	}
 
@@ -220,13 +222,13 @@ public class RunJettyRunContainerClasspathEntry implements IClasspathEntry,
 			}
 			if (res == null) {
 				return path.toOSString();
-			} 
+			}
 			IPath location = res.getLocation();
 			if (location != null) {
 				return location.toOSString();
 			}
 		}
-		return null;		
+		return null;
 	}
 	protected IResource getResource(IPath path) {
 		if (path != null) {
@@ -243,8 +245,8 @@ public class RunJettyRunContainerClasspathEntry implements IClasspathEntry,
 			if (path.getDevice() == null) {
 				// search relative to the workspace if no device present
 				return root.findMember(path);
-			} 
-		}		
+			}
+		}
 		return null;
 	}
 	public String getSourceAttachmentLocation() {
@@ -276,14 +278,19 @@ public class RunJettyRunContainerClasspathEntry implements IClasspathEntry,
 	public boolean isComposite() {
 		return true;
 	}
-	
+
 	public String getTypeId() {
 		return "runjettyrun.cotnainer." + getVariableName();
 	}
 
 	public IRuntimeClasspathEntry[] getRuntimeClasspathEntries(
 			ILaunchConfiguration configuration) throws CoreException {
-		return JavaRuntime.resolveRuntimeClasspathEntry(this, configuration);
+		  if(Plugin.CONTAINER_RJR_JETTY.equals(getVariableName())){
+			  return RunJettyRunLaunchConfigurationUtil.loadPackage(configuration, IJettyPackageProvider.TYPE_JETTY_BUNDLE);
+		  }else if(Plugin.CONTAINER_RJR_JETTY_JNDI.equals(getVariableName())){
+			  return RunJettyRunLaunchConfigurationUtil.loadPackage(configuration, IJettyPackageProvider.TYPE_UTIL);
+		  }else
+			  return JavaRuntime.resolveRuntimeClasspathEntry(this, configuration);
 	}
 
 	public String getName() {
