@@ -15,11 +15,11 @@ import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
+import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
 
 import runjettyrun.Plugin;
 
 public class RunJettyRunLaunchConfigurationUtil {
-
 
 	public static ILaunchConfiguration findLaunchConfiguration(
 			String projectName) {
@@ -41,12 +41,13 @@ public class RunJettyRunLaunchConfigurationUtil {
 			String projectname) throws CoreException {
 		String currentProjectName = launch.getAttribute(
 				IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME, "");
-		if (!currentProjectName.equals(projectname)) return false;
-
-		if("".equals(launch.getAttribute(Plugin.ATTR_CONTEXT,"")))
+		if (!currentProjectName.equals(projectname))
 			return false;
 
-		if("".equals(launch.getAttribute(Plugin.ATTR_WEBAPPDIR,"")))
+		if ("".equals(launch.getAttribute(Plugin.ATTR_CONTEXT, "")))
+			return false;
+
+		if ("".equals(launch.getAttribute(Plugin.ATTR_WEBAPPDIR, "")))
 			return false;
 
 		return true;
@@ -159,5 +160,23 @@ public class RunJettyRunLaunchConfigurationUtil {
 		} catch (NumberFormatException e) {
 		}
 		return true;
+	}
+
+	public static IRuntimeClasspathEntry[] loadPackage(
+			ILaunchConfiguration configuration, int type) {
+		String ver = "";
+		try {
+			ver = configuration.getAttribute(
+					Plugin.ATTR_SELECTED_JETTY_VERSION, "");
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
+		Plugin plg = Plugin.getDefault();
+		if (plg.supportJetty(ver, type)) {
+			return (plg.getPackages(ver, type));
+		} else {
+			return (plg.getDefaultPackages(type));
+		}
+
 	}
 }

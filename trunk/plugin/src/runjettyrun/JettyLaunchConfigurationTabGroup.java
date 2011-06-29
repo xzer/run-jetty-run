@@ -17,6 +17,7 @@
  */
 package runjettyrun;
 
+import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTabGroup;
 import org.eclipse.debug.ui.CommonTab;
 import org.eclipse.debug.ui.EnvironmentTab;
@@ -34,9 +35,16 @@ public class JettyLaunchConfigurationTabGroup extends
 	}
 
 	public void createTabs(ILaunchConfigurationDialog dialog, String mode) {
+		JavaClasspathTab jct = new JavaClasspathTab(){
+			public void initializeFrom(ILaunchConfiguration configuration) {
+				super.initializeFrom(configuration);
+				fClasspathViewer.expandToLevel(3);
+			}
+		};
+
 		ILaunchConfigurationTab[] tabs = new ILaunchConfigurationTab[] {
 				new RunJettyRunTab(), new JavaArgumentsTab(), new JavaJRETab(),
-				new JavaClasspathTab(), new SourceLookupTab(),
+				jct, new SourceLookupTab(),
 				new EnvironmentTab(), new CommonTab() };
 		setTabs(tabs);
 	}

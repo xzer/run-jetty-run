@@ -1,6 +1,5 @@
 package runjettyrun.container;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 
@@ -28,8 +27,6 @@ public class Jetty6PackageProvider implements IJettyPackageProvider {
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (URISyntaxException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
 			e.printStackTrace();
 		}
 

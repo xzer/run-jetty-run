@@ -30,7 +30,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
-import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.graphics.Image;
@@ -38,7 +37,6 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 import runjettyrun.container.Jetty6PackageProvider;
-import runjettyrun.container.RunJettyRunContainerResolver;
 import runjettyrun.extensions.IJettyPackageProvider;
 
 /**
@@ -134,10 +132,6 @@ public class Plugin extends AbstractUIPlugin {
 	private List<IJettyPackageProvider> extensions;
 
 	public Plugin() {
-		JavaRuntime.addContainerResolver(new RunJettyRunContainerResolver(),
-				CONTAINER_RJR_JETTY);
-		JavaRuntime.addContainerResolver(new RunJettyRunContainerResolver(),
-				CONTAINER_RJR_JETTY_JNDI);
 		// containerIdentifier
 	}
 
