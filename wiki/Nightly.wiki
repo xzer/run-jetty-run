@@ -1,0 +1,24 @@
+#Nightly current version and feature/issues
+
+= Introduction =
+
+We create a nightly build for those still testing feature , 
+for example , Jetty7 or Jetty8 support is a big milestone and need more testing.
+
+It's very welcome to report the bug from nightly build.
+
+
+= Details =
+
+
+ * Latest Nightly Version 20110629
+   * features 
+     * Jetty7 support
+     * Jetty8 support
+
+   * Fixed bugs 
+      * Issue 75 [nightly]source scanner not working in Jetty7
+
+
+ 
+  
