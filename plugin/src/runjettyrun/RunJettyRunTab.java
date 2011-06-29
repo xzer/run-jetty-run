@@ -51,6 +51,7 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
@@ -117,6 +118,8 @@ public class RunJettyRunTab extends JavaLaunchTab {
 
 	private Button fEnablebox;
 
+	private Button fShowAdvancebox;
+
 	private Button fEnableMavenDisableTestClassesBox;
 
 	private Combo fJettyVersion;
@@ -126,6 +129,8 @@ public class RunJettyRunTab extends JavaLaunchTab {
 	private Button fEnableParentLoadPriorityBox;
 
 	private Group mavenGroup = null;
+
+	private Group advanceGroup = null;
 
 	private boolean isMavenProject = false;
 
@@ -153,11 +158,11 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		createVerticalSpacer(comp, 1);
 		createProjectEditor(comp);
 		createVerticalSpacer(comp, 1);
-		createPortEditor(comp);
-		createVerticalSpacer(comp, 1);
 		createJettyOptionsEditor(comp);
 		createVerticalSpacer(comp, 1);
 		createMavenEditor(comp);
+		createVerticalSpacer(comp, 1);
+		createAdvanceGroup(comp);
 		createVerticalSpacer(comp, 1);
 		createVerticalSpacer(comp, 1);
 		setControl(comp);
@@ -275,6 +280,270 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		});
 
 	}
+	private void createAdvanceGroup(Composite parent){
+		Font font = parent.getFont();
+
+		/*
+		 * ---------------------------------------------------------------------
+		 */
+
+
+		fShowAdvancebox = createCheckButton(parent, "Show Advance Options");
+		fShowAdvancebox.addSelectionListener(new ButtonListener() {
+			public void widgetSelected(SelectionEvent e) {
+				advanceGroup.setVisible(fShowAdvancebox.getSelection());
+				updateLaunchConfigurationDialog();
+			}
+		});
+
+		advanceGroup = new Group(parent, SWT.NONE);
+		//TODO show group only when checkbox enable
+//		advanceGroup.setVisible(isMavenProject);
+		advanceGroup.setText("RunJettyRun Advance Configuration");
+		advanceGroup.setLayoutData(createHFillGridData());
+		{
+			GridLayout layout = new GridLayout();
+			layout.numColumns = 5;
+			advanceGroup.setLayout(layout);
+		}
+		advanceGroup.setFont(font);
+
+		/*
+		 * ---------------------------------------------------------------------
+		 */
+
+		/*
+		 * ---------------------------------------------------------------------
+		 */
+
+		fEnableSSLbox = createCheckButton(advanceGroup, "SSL");
+		fEnableSSLbox.addSelectionListener(new ButtonListener() {
+
+			public void widgetSelected(SelectionEvent e) {
+				setSSLSettingEnabled(fEnableSSLbox.getSelection());
+				updateLaunchConfigurationDialog();
+			}
+		});
+
+
+		/*
+		 * ---------------------------------------------------------------------
+		 */
+
+		new Label(advanceGroup, SWT.LEFT).setText("Port");
+
+		/*
+		 * ---------------------------------------------------------------------
+		 */
+		fSSLPortText = new Text(advanceGroup, SWT.SINGLE | SWT.BORDER);
+		fSSLPortText.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent e) {
+				boolean isNotEmpty = fSSLPortText.getText().trim().length() != 0;
+				setSSLSettingEnabled(isNotEmpty);
+				updateLaunchConfigurationDialog();
+			}
+		});
+		fSSLPortText.setLayoutData(createHFillGridData());
+		fSSLPortText.setFont(font);
+
+		/*
+		 * SslSocketConnector
+		 */
+		/*
+		 * ---------------------------------------------------------------------
+		 */
+
+		fEnableNeedClientAuth = createCheckButton(advanceGroup, "NeedClientAuth");
+		fEnableNeedClientAuth.addSelectionListener(new ButtonListener() {
+			public void widgetSelected(SelectionEvent e) {
+				updateLaunchConfigurationDialog();
+			}
+		});
+		{
+			GridData gd = new GridData();
+			gd.horizontalAlignment = SWT.LEFT;
+			gd.horizontalSpan = 2;
+			fEnableNeedClientAuth.setLayoutData(gd);
+		}
+
+		/*
+		 * ---------------------------------------------------------------------
+		 */
+
+		new Label(advanceGroup, SWT.LEFT).setText("");
+
+		/*
+		 * ---------------------------------------------------------------------
+		 */
+		// `
+		new Label(advanceGroup, SWT.LEFT).setText("Keystore");
+		/*
+		 * ---------------------------------------------------------------------
+		 */
+
+		fKeystoreText = new Text(advanceGroup, SWT.SINGLE | SWT.BORDER);
+		fKeystoreText.addModifyListener(_updatedListener);
+		fKeystoreText.setLayoutData(createHFillGridData());
+		fKeystoreText.setFont(font);
+		fKeystoreText.setEnabled(false);
+
+		/*
+		 * ---------------------------------------------------------------------
+		 */
+
+		fKeystoreButton = createPushButton(advanceGroup, "&Browse...", null);
+		fKeystoreButton.addSelectionListener(new ButtonListener() {
+
+			public void widgetSelected(SelectionEvent e) {
+				handleBrowseFileSystem();
+			}
+		});
+		fKeystoreButton.setEnabled(false);
+		fKeystoreButton.setLayoutData(new GridData());
+
+		/*
+		 * ---------------------------------------------------------------------
+		 */
+		new Label(advanceGroup, SWT.LEFT).setText("");
+
+		/*
+		 * ---------------------------------------------------------------------
+		 */
+
+		new Label(advanceGroup, SWT.LEFT).setText("");
+
+		/*
+		 * ---------------------------------------------------------------------
+		 */
+
+		// Password and Key Password (not sure exactly how used by keystore)
+
+		new Label(advanceGroup, SWT.LEFT).setText("Password");
+		/*
+		 * ---------------------------------------------------------------------
+		 */
+
+		fPasswordText = new Text(advanceGroup, SWT.SINGLE | SWT.BORDER);
+		fPasswordText.addModifyListener(_updatedListener);
+		fPasswordText.setLayoutData(createHFillGridData());
+		fPasswordText.setFont(font);
+		fPasswordText.setEnabled(false);
+
+		/*
+		 * ---------------------------------------------------------------------
+		 */
+		new Label(advanceGroup, SWT.LEFT).setText("Key Password");
+
+		/*
+		 * ---------------------------------------------------------------------
+		 */
+		fKeyPasswordText = new Text(advanceGroup, SWT.SINGLE | SWT.BORDER);
+		fKeyPasswordText.addModifyListener(_updatedListener);
+		fKeyPasswordText.setLayoutData(createHFillGridData());
+		fKeyPasswordText.setFont(font);
+		fKeyPasswordText.setEnabled(false);
+		/*
+		 * ---------------------------------------------------------------------
+		 */
+
+		fEnablebox = createCheckButton(advanceGroup, "Enable Scanner");
+		fEnablebox.addSelectionListener(new ButtonListener() {
+
+			public void widgetSelected(SelectionEvent e) {
+				fScanText.setEnabled(fEnablebox.getSelection());
+				updateLaunchConfigurationDialog();
+			}
+		});
+
+		/*
+		 * ---------------------------------------------------------------------
+		 */
+		new Label(advanceGroup, SWT.LEFT).setText("Scan Interval");
+
+		/*
+		 * ---------------------------------------------------------------------
+		 */
+		fScanText = new Text(advanceGroup, SWT.SINGLE | SWT.BORDER);
+		fScanText.addModifyListener(_updatedListener);
+
+		fScanText.setLayoutData(createHFillGridData(1, -1));
+		fScanText.setFont(font);
+		fScanText.setTextLimit(5);
+
+		/*
+		 * ---------------------------------------------------------------------
+		 */
+		new Label(advanceGroup, SWT.LEFT).setText(" seconds");
+
+		/*
+		 * ---------------------------------------------------------------------
+		 */
+		new Label(advanceGroup, SWT.LEFT).setText("");
+
+		/*
+		 * ---------------------------------------------------------------------
+		 */
+		new Label(advanceGroup, SWT.LEFT).setText("Other configs");
+
+		/*
+		 * ---------------------------------------------------------------------
+		 */
+
+		// Row4 Parent Loader Priority
+		fEnableParentLoadPriorityBox = createCheckButton(advanceGroup,
+				"ParentLoadPriority");
+
+		{
+			GridData gd = new GridData();
+			gd.horizontalAlignment = SWT.LEFT;
+			fEnableParentLoadPriorityBox.setLayoutData(gd);
+		}
+		// update configuration directly when user select it.
+		fEnableParentLoadPriorityBox.addSelectionListener(new ButtonListener() {
+			public void widgetSelected(SelectionEvent e) {
+				updateLaunchConfigurationDialog();
+			}
+		});
+
+
+		/*
+		 * ---------------------------------------------------------------------
+		 */
+
+//		UIUtil.createLink(advanceGroup, SWT.NONE,
+	//			"<a href=\"http://communitymapbuilder.org/display/JETTY/Classloading\">(?)</a>");
+
+		/*
+		 * ---------------------------------------------------------------------
+		 */
+
+		fEnableJNDI = createCheckButton(advanceGroup, "JNDI Support");
+		{
+			GridData gd = new GridData();
+			gd.horizontalAlignment = SWT.LEFT;
+			fEnableJNDI.setLayoutData(gd);
+		}
+		// update configuration directly when user select it.
+		fEnableJNDI.addSelectionListener(new ButtonListener() {
+			public void widgetSelected(SelectionEvent e) {
+				updateLaunchConfigurationDialog();
+			}
+		});
+
+		/*
+		 * ---------------------------------------------------------------------
+		 */
+
+		Link systemProperties = UIUtil
+				.createLink(
+						advanceGroup,
+						SWT.NONE,
+						"...You could set "
+								+ "<a href=\"http://communitymapbuilder.org/display/JETTY/SystemProperties\">"
+								+ "more control </a> in VM argument.(-Dkey=value) ");
+		systemProperties.setLayoutData(createHFillGridData(3, SWT.RIGHT));
+
+	}
 
 	/**
 	 * create a group for M2E config.
@@ -339,160 +608,6 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		return gd;
 	}
 
-	/**
-	 * Creates the widgets for specifying the ports:
-	 *
-	 * HTTP Port: Text....... HTTPS Port: Text....... Keystore:
-	 * Text.................. Browse Button Store Password: Text.. Key Password:
-	 * Text.....
-	 *
-	 * @param parent
-	 *            the parent composite
-	 */
-	private void createPortEditor(Composite parent) {
-		// Create group, container for widgets
-		Font font = parent.getFont();
-		Group group = new Group(parent, SWT.NONE);
-		group.setText("Ports");
-		group.setLayoutData(createHFillGridData());
-		{
-			GridLayout layout = new GridLayout();
-			layout.numColumns = 5;
-			group.setLayout(layout);
-		}
-		group.setFont(font);
-
-		// HTTP and HTTPS ports
-
-		/*
-		 * ---------------------------------------------------------------------
-		 */
-
-		new Label(group, SWT.LEFT).setText("HTTP");
-
-		/*
-		 * ---------------------------------------------------------------------
-		 */
-
-		fPortText = new Text(group, SWT.SINGLE | SWT.BORDER);
-		fPortText.addModifyListener(_updatedListener);
-		fPortText.setLayoutData(createHFillGridData());
-		fPortText.setFont(font);
-		fPortText.setTextLimit(5);
-		setWidthForSampleText(fPortText, " 65535 ");
-
-		/*
-		 * ---------------------------------------------------------------------
-		 */
-
-		fEnableSSLbox = createCheckButton(group, "HTTPS");
-		fEnableSSLbox.addSelectionListener(new ButtonListener() {
-
-			public void widgetSelected(SelectionEvent e) {
-				setSSLSettingEnabled(fEnableSSLbox.getSelection());
-				updateLaunchConfigurationDialog();
-			}
-		});
-
-		{
-			GridData gd = new GridData();
-			gd.horizontalAlignment = SWT.RIGHT;
-			fEnableSSLbox.setLayoutData(gd);
-		}
-
-		/*
-		 * ---------------------------------------------------------------------
-		 */
-
-		fSSLPortText = new Text(group, SWT.SINGLE | SWT.BORDER);
-		fSSLPortText.addModifyListener(new ModifyListener() {
-			public void modifyText(ModifyEvent e) {
-				boolean isNotEmpty = fSSLPortText.getText().trim().length() != 0;
-				setSSLSettingEnabled(isNotEmpty);
-				updateLaunchConfigurationDialog();
-			}
-		});
-		fSSLPortText.setLayoutData(createHFillGridData());
-		fSSLPortText.setFont(font);
-
-		/*
-		 * SslSocketConnector
-		 */
-		/*
-		 * ---------------------------------------------------------------------
-		 */
-
-		fEnableNeedClientAuth = createCheckButton(group, "NeedClientAuth");
-		fEnableNeedClientAuth.addSelectionListener(new ButtonListener() {
-			public void widgetSelected(SelectionEvent e) {
-				updateLaunchConfigurationDialog();
-			}
-		});
-
-		/*
-		 * ---------------------------------------------------------------------
-		 */
-		// keystore
-		new Label(group, SWT.LEFT).setText("Keystore");
-		/*
-		 * ---------------------------------------------------------------------
-		 */
-
-		fKeystoreText = new Text(group, SWT.SINGLE | SWT.BORDER);
-		fKeystoreText.addModifyListener(_updatedListener);
-		fKeystoreText.setLayoutData(createHFillGridData(3, -1));
-		fKeystoreText.setFont(font);
-		fKeystoreText.setEnabled(false);
-
-		/*
-		 * ---------------------------------------------------------------------
-		 */
-
-		fKeystoreButton = createPushButton(group, "&Browse...", null);
-		fKeystoreButton.addSelectionListener(new ButtonListener() {
-
-			public void widgetSelected(SelectionEvent e) {
-				handleBrowseFileSystem();
-			}
-		});
-		fKeystoreButton.setEnabled(false);
-		fKeystoreButton.setLayoutData(new GridData());
-		/*
-		 * ---------------------------------------------------------------------
-		 */
-
-		// Password and Key Password (not sure exactly how used by keystore)
-
-		new Label(group, SWT.LEFT).setText("Password");
-		/*
-		 * ---------------------------------------------------------------------
-		 */
-
-		fPasswordText = new Text(group, SWT.SINGLE | SWT.BORDER);
-		fPasswordText.addModifyListener(_updatedListener);
-		fPasswordText.setLayoutData(createHFillGridData());
-		fPasswordText.setFont(font);
-		fPasswordText.setEnabled(false);
-
-		/*
-		 * ---------------------------------------------------------------------
-		 */
-		new Label(group, SWT.LEFT).setText("Key Password");
-
-		/*
-		 * ---------------------------------------------------------------------
-		 */
-		fKeyPasswordText = new Text(group, SWT.SINGLE | SWT.BORDER);
-		fKeyPasswordText.addModifyListener(_updatedListener);
-		fKeyPasswordText.setLayoutData(createHFillGridData());
-		fKeyPasswordText.setFont(font);
-		fKeyPasswordText.setEnabled(false);
-		/*
-		 * ---------------------------------------------------------------------
-		 */
-		return;
-	}
-
 	private void setWidthForSampleText(Text control, String sampleText) {
 		GC gc = new GC(control);
 		try {
@@ -530,6 +645,21 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		/*
 		 * ---------------------------------------------------------------------
 		 */
+
+		new Label(group, SWT.LEFT).setText("Port");
+
+		/*
+		 * ---------------------------------------------------------------------
+		 */
+
+		fPortText = new Text(group, SWT.SINGLE | SWT.BORDER);
+		fPortText.addModifyListener(_updatedListener);
+		fPortText.setLayoutData(createHFillGridData());
+		fPortText.setFont(font);
+		fPortText.setTextLimit(5);
+		fPortText.setLayoutData(createHFillGridData(5, -1));
+		setWidthForSampleText(fPortText, " 65535 ");
+
 
 		// Row 1: "Context", Text field (2 columns)
 		new Label(group, SWT.LEFT).setText("Context");
@@ -581,98 +711,6 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		});
 		fWebappScanButton.setEnabled(false);
 		fWebappScanButton.setLayoutData(new GridData());
-
-		/*
-		 * ---------------------------------------------------------------------
-		 */
-		// Row 3: Scan interval seconds
-		new Label(group, SWT.LEFT).setText("Scan Interval Seconds");
-
-		/*
-		 * ---------------------------------------------------------------------
-		 */
-		fScanText = new Text(group, SWT.SINGLE | SWT.BORDER);
-		fScanText.addModifyListener(_updatedListener);
-
-		fScanText.setLayoutData(createHFillGridData(3, -1));
-		fScanText.setFont(font);
-		fScanText.setTextLimit(5);
-
-		/*
-		 * ---------------------------------------------------------------------
-		 */
-
-		fEnablebox = createCheckButton(group, "Enable Scanner");
-		fEnablebox.addSelectionListener(new ButtonListener() {
-
-			public void widgetSelected(SelectionEvent e) {
-				fScanText.setEnabled(fEnablebox.getSelection());
-				updateLaunchConfigurationDialog();
-			}
-		});
-		{
-			GridData gd = new GridData();
-			gd.horizontalSpan = 2;
-			fEnablebox.setLayoutData(gd);
-		}
-
-		/*
-		 * ---------------------------------------------------------------------
-		 */
-
-		// Row4 Parent Loader Priority
-		fEnableParentLoadPriorityBox = createCheckButton(group,
-				"ParentLoadPriority");
-
-		{
-			GridData gd = new GridData();
-			gd.horizontalAlignment = SWT.LEFT;
-			fEnableParentLoadPriorityBox.setLayoutData(gd);
-		}
-		// update configuration directly when user select it.
-		fEnableParentLoadPriorityBox.addSelectionListener(new ButtonListener() {
-			public void widgetSelected(SelectionEvent e) {
-				updateLaunchConfigurationDialog();
-			}
-		});
-
-
-		/*
-		 * ---------------------------------------------------------------------
-		 */
-
-		UIUtil.createLink(group, SWT.NONE,
-				"<a href=\"http://communitymapbuilder.org/display/JETTY/Classloading\">(?)</a>");
-
-		/*
-		 * ---------------------------------------------------------------------
-		 */
-
-		fEnableJNDI = createCheckButton(group, "JNDI Support");
-		{
-			GridData gd = new GridData();
-			gd.horizontalAlignment = SWT.LEFT;
-			fEnableJNDI.setLayoutData(gd);
-		}
-		// update configuration directly when user select it.
-		fEnableJNDI.addSelectionListener(new ButtonListener() {
-			public void widgetSelected(SelectionEvent e) {
-				updateLaunchConfigurationDialog();
-			}
-		});
-
-		/*
-		 * ---------------------------------------------------------------------
-		 */
-
-		Link systemProperties = UIUtil
-				.createLink(
-						group,
-						SWT.NONE,
-						"...You could set "
-								+ "<a href=\"http://communitymapbuilder.org/display/JETTY/SystemProperties\">"
-								+ "more control </a> in VM argument.(-Dkey=value) ");
-		systemProperties.setLayoutData(createHFillGridData(6, SWT.RIGHT));
 
 		return;
 	}
@@ -739,6 +777,12 @@ public class RunJettyRunTab extends JavaLaunchTab {
 
 			fScanText.setText(configuration.getAttribute(
 					Plugin.ATTR_SCANINTERVALSECONDS, ""));
+
+			fShowAdvancebox.setSelection(configuration.getAttribute(
+					Plugin.ATTR_SHOW_ADVANCE, false));
+
+			advanceGroup.setVisible(fShowAdvancebox.getSelection());
+
 			fEnablebox.setSelection(configuration.getAttribute(
 					Plugin.ATTR_ENABLE_SCANNER, true));
 			fEnableJNDI.setSelection(configuration.getAttribute(
@@ -1062,6 +1106,9 @@ public class RunJettyRunTab extends JavaLaunchTab {
 
 		configuration.setAttribute(Plugin.ATTR_ENABLE_SCANNER,
 				fEnablebox.getSelection());
+
+		configuration.setAttribute(Plugin.ATTR_SHOW_ADVANCE,
+				fShowAdvancebox.getSelection());
 
 		configuration.setAttribute(Plugin.ATTR_ENABLE_PARENT_LOADER_PRIORITY,
 				fEnableParentLoadPriorityBox.getSelection());
