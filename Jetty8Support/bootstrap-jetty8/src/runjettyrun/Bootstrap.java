@@ -39,7 +39,6 @@ public class Bootstrap {
 	public static void main(String[] args) throws Exception {
 		System.err.println("Running Jetty 8.0.0.M3");
 
-		logArgus(false);
 		Configs configs = new Configs();
 
 
@@ -151,20 +150,6 @@ public class Bootstrap {
 
 	}
 
-	private static void logArgus(boolean loggerparam) {
-
-		if (loggerparam) {
-			String[] propkeys = new String[] { "rjrcontext", "rjrwebapp",
-					"rjrport", "rjrsslport", "rjrkeystore", "rjrpassword",
-					"rjrclasspath", "rjrkeypassword", "rjrscanintervalseconds",
-					"rjrenablescanner", "rjrenablessl", "rjrenbaleJNDI" };
-			for (String key : propkeys) {
-				System.err.println("-D" + key + "=" + System.getProperty(key));
-			}
-		}
-	}
-
-
 	private static void initSSL(Server server, int sslport, String keystore,
 			String password, String keyPassword, boolean needClientAuth) {
 
@@ -225,6 +210,7 @@ public class Bootstrap {
 		scanner.setReportExistingFilesOnStartup(false);
 		scanner.setScanInterval(scanIntervalSeconds);
 		scanner.setScanDirs(scanList);
+		scanner.setRecursive(true);
 		scanner.addListener(new Scanner.BulkListener() {
 
 			public void filesChanged(@SuppressWarnings("rawtypes") List changes) {

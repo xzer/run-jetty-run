@@ -36,33 +36,70 @@ public class Configs {
 	private String configurationClasses;
 	private String resourceMapping;
 
+
+	private static boolean debug = false;
 	public Configs() {
-		context = System.getProperty("rjrcontext");
-		webAppDir = System.getProperty("rjrwebapp");
+		context = getProp("rjrcontext");
+		webAppDir = getProp("rjrwebapp");
 		if(webAppDir != null){
 			if(webAppDir.matches("^\".*?\"$")){
 				webAppDir = webAppDir.substring(1,webAppDir.length()-1);
 			}
 		}
-		port = Integer.getInteger("rjrport");
-		sslport = Integer.getInteger("rjrsslport");
-		keystore = System.getProperty("rjrkeystore");
-		password = System.getProperty("rjrpassword");
-		webAppClassPath = resovleWebappClasspath();
-		keyPassword = System.getProperty("rjrkeypassword");
-		scanIntervalSeconds = Integer.getInteger("rjrscanintervalseconds");
-		enablescanner = Boolean.getBoolean("rjrenablescanner");
-		parentLoaderPriority = getBoolean("rjrparentloaderpriority", true);
+		port = getIntProp("rjrport");
+		sslport = getIntProp("rjrsslport");
+		keystore = getProp("rjrkeystore");
+		password = getProp("rjrpassword");
 
-		enablessl = Boolean.getBoolean("rjrenablessl");
-		needClientAuth = Boolean.getBoolean("rjrneedclientauth");
-		enableJNDI = Boolean.getBoolean("rjrenbaleJNDI");
-		configurationClasses = System
-				.getProperty("rjrconfigurationclasses", "");
+		String classpath = getProp("rjrclasspath");
+		webAppClassPath = resovleWebappClasspath(classpath);
+		keyPassword = getProp("rjrkeypassword");
+		scanIntervalSeconds = getIntProp("rjrscanintervalseconds");
 
-		resourceMapping = System
-		.getProperty("rjrResourceMapping", "");
+		enablescanner = getBooleanProp("rjrenablescanner");
+
+		parentLoaderPriority = getBooleanProp("rjrparentloaderpriority", true);
+
+		enablessl = getBooleanProp("rjrenablessl");
+
+		needClientAuth = getBooleanProp("rjrneedclientauth");
+
+		enableJNDI = getBooleanProp("rjrenbaleJNDI");
+
+		configurationClasses = getProp("rjrconfigurationclasses", "");
+
+		resourceMapping = getProp("rjrResourceMapping", "");
+
 	}
+
+	private static String getProp(String key){
+		printSystemProperty(key);
+		return System.getProperty(key);
+	}
+
+	private static String getProp(String key,String def){
+		printSystemProperty(key);
+		return System.getProperty(key,def);
+	}
+
+	private static Integer getIntProp(String key){
+		printSystemProperty(key);
+		return Integer.getInteger(key);
+	}
+	private static Boolean getBooleanProp(String key){
+		printSystemProperty(key);
+		return Boolean.getBoolean(key);
+	}
+
+	//debug tool
+	public static void printSystemProperty(String key){
+		if(!debug) return ;
+		String result = System.getProperty(key);
+		if(result!= null){
+			System.out.println("-D"+key+"="+result+" ");
+		}
+	}
+
 
 
 	public String getContext() {
@@ -240,8 +277,7 @@ public class Configs {
 	 * 		we use file to handle it in this case.
 	 * @return
 	 */
-	private static String resovleWebappClasspath() {
-		String classpath = System.getProperty("rjrclasspath");
+	private static String resovleWebappClasspath(String classpath) {
 
 		if (classpath != null && classpath.startsWith("file://")) {
 			try {
@@ -267,7 +303,8 @@ public class Configs {
 	}
 
 
-	private static Boolean getBoolean(String propertiesKey, boolean def) {
+	private static Boolean getBooleanProp(String propertiesKey, boolean def) {
+		printSystemProperty(propertiesKey);
 		String val = System.getProperty(propertiesKey);
 
 		Boolean ret = def;
