@@ -1,7 +1,6 @@
 package runjettyrun.utils;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -24,8 +23,6 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.part.FileEditorInput;
 import org.osgi.framework.Bundle;
-
-import runjettyrun.Plugin;
 
 public class ProjectUtil {
 	public static String MAVEN_NATURE_ID = "org.maven.ide.eclipse.maven2Nature";
@@ -134,19 +131,11 @@ public class ProjectUtil {
 
 		try {
 			File flibs = new File(FileLocator.toFileURL(libs).toURI());
-
 			for (File f : flibs.listFiles()) {
 				if(f.getName().endsWith(".jar")){
-				try {
-					URL file = new URL(installUrl, libpath+"/"+f.getName());
-					URL fileUrl = FileLocator.toFileURL(file);
 					IRuntimeClasspathEntry rcpe = JavaRuntime
-							.newArchiveRuntimeClasspathEntry(new Path(fileUrl
-									.getFile()));
+							.newArchiveRuntimeClasspathEntry(new Path(f.getAbsolutePath()));
 					entries.add(rcpe);
-				} catch (IOException e) {
-					Plugin.logError(e);
-				}
 				}
 			}
 		} catch (Exception e) {
