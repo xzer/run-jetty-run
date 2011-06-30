@@ -744,8 +744,21 @@ public class RunJettyRunTab extends JavaLaunchTab {
 					"");
 			fProjText.setText(projectname);
 
-			IProject project = ResourcesPlugin.getWorkspace().getRoot()
+
+			IProject project = null;
+			try{
+				//According to Issue 78 , here's a issue for if user enter strange project name,
+				//it will fail here.
+				//but it's still a issue if user didn't use correct project name ,
+				//the java runtime will still meet error.
+				//it's user's responsibility to handle project name.
+				project = ResourcesPlugin.getWorkspace().getRoot()
 					.getProject(projectname);
+			}catch(IllegalArgumentException ex){
+				project = null;
+				setErrorMessage("project name is not valid");
+			}
+
 			if (project != null) {
 				isMavenProject = ProjectUtil.isMavenProject(project);
 				if (mavenGroup != null)
