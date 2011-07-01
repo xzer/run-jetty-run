@@ -39,15 +39,21 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.debug.ui.DebugUITools;
+import org.eclipse.debug.ui.IDebugUIConstants;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.launching.AbstractJavaLaunchConfigurationDelegate;
 import org.eclipse.jdt.launching.ExecutionArguments;
 import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.jdt.launching.VMRunnerConfiguration;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.swt.widgets.Shell;
 
 import runjettyrun.utils.RunJettyRunClasspathResolver;
 import runjettyrun.utils.RunJettyRunClasspathUtil;
+import runjettyrun.utils.RunJettyRunLaunchConfigurationUtil;
 
 /**
  * Launch configuration type for Jetty. Based on
@@ -191,6 +197,11 @@ public class JettyLaunchConfigurationType extends
 	 */
 	public void launch(ILaunchConfiguration configuration, String mode,
 			ILaunch launch, IProgressMonitor monitor) throws CoreException {
+
+		if (!RunJettyRunLaunchConfigurationUtil.validation(configuration)) {
+			throw new IllegalStateException(" Invalid run configuration , please check the configuration ");
+		}
+
 
 		if (monitor == null) {
 			monitor = new NullProgressMonitor();
