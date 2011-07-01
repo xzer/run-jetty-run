@@ -206,7 +206,7 @@ public class Plugin extends AbstractUIPlugin {
 	}
 
 	public IRuntimeClasspathEntry[] getDefaultPackages(int type){
-			//we assume here's the 0 be jetty 6
+			//we assume 0 be jetty 6
 		IJettyPackageProvider pro = this.extensions.get(0);
 		return pro.getPackage(pro.getJettyVersion(), type);
 	}
