@@ -17,9 +17,7 @@ import org.eclipse.jdt.internal.launching.DefaultProjectClasspathEntry;
 import org.eclipse.jdt.internal.launching.RuntimeClasspathEntry;
 import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
 import org.eclipse.jdt.launching.IRuntimeClasspathEntry2;
-import org.eclipse.jdt.launching.IRuntimeClasspathProvider;
 import org.eclipse.jdt.launching.JavaRuntime;
-import org.eclipse.jdt.launching.StandardClasspathProvider;
 
 import runjettyrun.Plugin;
 
@@ -34,6 +32,10 @@ public class RunJettyRunClasspathResolver {
 	 * reference to M2E project , 20101115 version.
 	 */
 	private static String MAVEN_CONTAINER_ID = "org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER";
+	private static String WEBAPP_CONTAINER_PATH = "org.eclipse.jst.j2ee.internal.web.container";
+
+	//path:org.eclipse.jst.server.core.container/org.eclipse.jst.server.jetty.runtimeTarget/Jetty v7.2
+	private static String SERVER_RUNTIME_PATH_PREFIX = "org.eclipse.jst.server.core.container";
 
 	public static IRuntimeClasspathEntry[] resolveClasspath(IRuntimeClasspathEntry[] entries,ILaunchConfiguration configuration ) throws CoreException {
 
@@ -44,18 +46,14 @@ public class RunJettyRunClasspathResolver {
 			return entries;
 		}
 
-		if(ProjectUtil.isMavenProject(proj.getProject())){
-			return resolvedMavenProjectClasspath(entries,configuration);
-		}else{
-			IRuntimeClasspathProvider provider = new StandardClasspathProvider();
-			return provider.resolveClasspath(entries, configuration);
-		}
+		return resolvedProjectClasspath(entries,configuration,ProjectUtil.isMavenProject(proj.getProject()));
 	}
 
-	private static IRuntimeClasspathEntry[] resolvedMavenProjectClasspath(IRuntimeClasspathEntry[] entries,ILaunchConfiguration configuration)throws CoreException{
+	private static IRuntimeClasspathEntry[] resolvedProjectClasspath(
+			IRuntimeClasspathEntry[] entries,ILaunchConfiguration configuration,boolean isMaven)throws CoreException{
 		Set<IRuntimeClasspathEntry> all = new LinkedHashSet<IRuntimeClasspathEntry>(entries.length);
 		for (int i = 0; i < entries.length; i++) {
-			IRuntimeClasspathEntry[] resolved = resolveRuntimeClasspathEntry(entries[i], configuration);
+			IRuntimeClasspathEntry[] resolved = resolveRuntimeClasspathEntry(entries[i], configuration, isMaven);
 			for (int j = 0; j < resolved.length; j++) {
 				all.add(resolved[j]);
 			}
@@ -70,11 +68,10 @@ public class RunJettyRunClasspathResolver {
 	 * @return
 	 * @throws CoreException
 	 */
-	private static IRuntimeClasspathEntry[] resolveRuntimeClasspathEntry(IRuntimeClasspathEntry entry,ILaunchConfiguration configuration)throws CoreException{
+	private static IRuntimeClasspathEntry[] resolveRuntimeClasspathEntry(
+			IRuntimeClasspathEntry entry,ILaunchConfiguration configuration,boolean isMaven)throws CoreException{
 
 		if(entry instanceof DefaultProjectClasspathEntry){
-//			resolver = getContributedResolver(((IRuntimeClasspathEntry2)entry).getTypeId());
-//			return resolver.resolveRuntimeClasspathEntry(entry, configuration);
 			IRuntimeClasspathEntry2 entry2 = (IRuntimeClasspathEntry2)entry;
 			IRuntimeClasspathEntry[] entries = entry2.getRuntimeClasspathEntries(configuration);
 			List<IRuntimeClasspathEntry> resolved = new ArrayList<IRuntimeClasspathEntry>();
@@ -83,11 +80,19 @@ public class RunJettyRunClasspathResolver {
 				/**
 				 * we need to handle a special case for MAVEN_CONTAINER with workspace project.
 				 */
-				if(entries[i].getType()== IRuntimeClasspathEntry.CONTAINER &&
-						MAVEN_CONTAINER_ID.equals(entries[i].getVariableName())
-				)
-					temp = computeMavenContainerEntries(entries[i],configuration);
-				else temp = JavaRuntime.resolveRuntimeClasspathEntry(entries[i], configuration);
+				IRuntimeClasspathEntry entryCur = entries[i];
+
+				//We skip server runtime directly since we didn't need server runtime ,
+				//and it will conflict with our Jetty bundle.
+				if(isServerRuntimeContainer(entryCur)){
+					continue;
+				}
+
+				if(isMaven && isProjectIncludedByM2E(entryCur)){
+					temp = computeMavenContainerEntries(entryCur,configuration);
+				}else {
+					temp = JavaRuntime.resolveRuntimeClasspathEntry(entryCur, configuration);
+				}
 
 
 				boolean skipTestClasses = configuration.getAttribute(Plugin.ATTR_ENABLE_MAVEN_TEST_CLASSES,true);
@@ -98,12 +103,30 @@ public class RunJettyRunClasspathResolver {
 					resolved.add(temp[j]);
 				}
 			}
+
 			return (IRuntimeClasspathEntry[]) resolved.toArray(new IRuntimeClasspathEntry[resolved.size()]);
 		}else{
 			return JavaRuntime.resolveRuntimeClasspathEntry(entry, configuration);
 
 		}
+	}
 
+	private static boolean isServerRuntimeContainer(IRuntimeClasspathEntry entryCur){
+		String entryPath = entryCur.getPath() == null ? "" : entryCur.getPath().toString();
+		return (entryPath.indexOf(SERVER_RUNTIME_PATH_PREFIX)!=-1);
+
+	}
+
+	/**
+	 * Sometimes for M2E , if you set package type as war , it will load some dependency to WEB App Container,
+	 * as 
+	 * @param entryCur
+	 * @return
+	 */
+	private static boolean isProjectIncludedByM2E(IRuntimeClasspathEntry entryCur){
+		String entryPath = entryCur.getPath() == null ? "" : entryCur.getPath().toString();
+		return entryCur.getType()== IRuntimeClasspathEntry.CONTAINER &&
+			( MAVEN_CONTAINER_ID.equals(entryCur.getVariableName()) || WEBAPP_CONTAINER_PATH.equals(entryPath));
 	}
 	/**
 	 * Performs default resolution for a container entry.
@@ -142,7 +165,7 @@ public class RunJettyRunClasspathResolver {
 				if (cpe.getEntryKind() == IClasspathEntry.CPE_PROJECT) {
 					/**
 					 * the core patch for project included by M2E , we only load the output location ,
-					 * instead of solving all the depenency for it.
+					 * instead of solving all the dependency for it.
 					 */
 					IProject p = ResourcesPlugin.getWorkspace().getRoot().getProject(cpe.getPath().segment(0));
 					IJavaProject jp = JavaCore.create(p);
