@@ -134,9 +134,12 @@ public class ProjectUtil {
 			// Resolve the URL
 			URL libs = FileLocator.resolve(installUrl);
 			File flibs = new File(libs.getFile());
-			for (File f : flibs.listFiles()) {
-				if(f.getName().endsWith(".jar")){
-					entries.add(JavaRuntime.newArchiveRuntimeClasspathEntry(new Path(f.getAbsolutePath())));
+
+			if(flibs.listFiles() != null){
+				for (File f : flibs.listFiles()) {
+					if(f.getName().endsWith(".jar")){
+						entries.add(JavaRuntime.newArchiveRuntimeClasspathEntry(new Path(f.getAbsolutePath())));
+					}
 				}
 			}
 			if(entries.size() == 0 ){
