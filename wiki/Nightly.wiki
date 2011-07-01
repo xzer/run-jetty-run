@@ -12,14 +12,16 @@ It's very welcome to report the bug from nightly build.
 = Details =
 
 
- * Latest Nightly Version 20110630-
+ * Latest Nightly Version 20110701
    * features 
      * Jetty7 support
      * Jetty8 support
-
+     * Issue 54 : show warning or ignore jars when user using server runtime lib.	 
+     * Issue 81 :M2E issue with web container classpath
+      
    * Fixed bugs 
       * Issue 75 [nightly]source scanner not working in Jetty7
-      
+      * Issue 78 RJR failing to include required jars in classpath      
 
 = Next Official build =
 
