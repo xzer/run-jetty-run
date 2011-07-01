@@ -1,6 +1,7 @@
 package runjettyrun.utils;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -23,6 +24,8 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.part.FileEditorInput;
 import org.osgi.framework.Bundle;
+
+import runjettyrun.Plugin;
 
 public class ProjectUtil {
 	public static String MAVEN_NATURE_ID = "org.maven.ide.eclipse.maven2Nature";
@@ -126,21 +129,27 @@ public class ProjectUtil {
 			throws MalformedURLException, URISyntaxException {
 
 		List<IRuntimeClasspathEntry> entries = new ArrayList<IRuntimeClasspathEntry>();
-		URL installUrl = bundle.getEntry("/");
-		URL libs = new URL(installUrl, libpath);
+		URL installUrl = bundle.getEntry("/"+libpath);
 
 		try {
-			File flibs = new File(FileLocator.toFileURL(libs).toURI());
+
+			// Resolve the URL
+			URL libs = FileLocator.resolve(installUrl);
+			File flibs = new File(libs.getFile());
 			for (File f : flibs.listFiles()) {
 				if(f.getName().endsWith(".jar")){
-					IRuntimeClasspathEntry rcpe = JavaRuntime
-							.newArchiveRuntimeClasspathEntry(new Path(f.getAbsolutePath()));
-					entries.add(rcpe);
+					entries.add(JavaRuntime.newArchiveRuntimeClasspathEntry(new Path(f.getAbsolutePath())));
 				}
 			}
-		} catch (Exception e) {
 
+			if(entries.size() != 0 ){
+				throw new IllegalStateException("Assuming we should find jars in ["+flibs.getAbsolutePath()+"] but not.");
+			}
+
+		} catch (IOException e) {
+			Plugin.logError(e);
 		}
+		Plugin.logError("hi");
 		return entries.toArray(new IRuntimeClasspathEntry[0]);
 	}
 }
