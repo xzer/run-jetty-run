@@ -130,9 +130,7 @@ public class ProjectUtil {
 
 		List<IRuntimeClasspathEntry> entries = new ArrayList<IRuntimeClasspathEntry>();
 		URL installUrl = bundle.getEntry("/"+libpath);
-
 		try {
-
 			// Resolve the URL
 			URL libs = FileLocator.resolve(installUrl);
 			File flibs = new File(libs.getFile());
@@ -141,15 +139,12 @@ public class ProjectUtil {
 					entries.add(JavaRuntime.newArchiveRuntimeClasspathEntry(new Path(f.getAbsolutePath())));
 				}
 			}
-
 			if(entries.size() != 0 ){
 				throw new IllegalStateException("Assuming we should find jars in ["+flibs.getAbsolutePath()+"] but not.");
 			}
-
 		} catch (IOException e) {
 			Plugin.logError(e);
 		}
-		Plugin.logError("hi");
 		return entries.toArray(new IRuntimeClasspathEntry[0]);
 	}
 }
