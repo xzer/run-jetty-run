@@ -139,7 +139,7 @@ public class ProjectUtil {
 					entries.add(JavaRuntime.newArchiveRuntimeClasspathEntry(new Path(f.getAbsolutePath())));
 				}
 			}
-			if(entries.size() != 0 ){
+			if(entries.size() == 0 ){
 				throw new IllegalStateException("Assuming we should find jars in ["+flibs.getAbsolutePath()+"] but not.");
 			}
 		} catch (IOException e) {
