@@ -36,6 +36,9 @@
    <feature url="features/runjettyrun_feature_1.2.2.20110630.jar" id="runjettyrun_feature" version="1.2.2.20110630">
       <category name="RunJettyRun"/>
    </feature>
+   <feature url="features/runjettyrun_feature_1.2.2.20110701.jar" id="runjettyrun_feature" version="1.2.2.20110701">
+      <category name="RunJettyRun"/>
+   </feature>
    <category-def name="RunJettyRun" label="RunJettyRun Core (Require)"/>
    <category-def name="RunJettyRun Jetty Support" label="RunJettyRun Util (Optional)"/>
 </site>
