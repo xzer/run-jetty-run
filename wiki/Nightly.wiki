@@ -24,7 +24,7 @@ It's very welcome to report the bug from nightly build.
       * Issue 78 RJR failing to include required jars in classpath      
 
 * Fixed but not in latest nightly issues yet
-
+   * Issue 63:	port detect not working when you launch multiple times very fast
    * Issue 67:  detect if webapp exist when launching  
    * Issue 70:	Run jety run can't launch if project name contains space
    * Issue 79:	shortcut bug
