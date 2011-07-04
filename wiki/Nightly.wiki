@@ -12,7 +12,7 @@ It's very welcome to report the bug from nightly build.
 = Details =
     * Issue list http://code.google.com/p/run-jetty-run/issues/list?can=1&q=label%3Afix-1.3
 
- * Latest Nightly Version 20110701
+ * Latest Nightly Version 20110704
    * features 
      * Jetty7 support
      * Jetty8 support
@@ -22,12 +22,13 @@ It's very welcome to report the bug from nightly build.
    * Fixed bugs 
       * Issue 75 [nightly]source scanner not working in Jetty7
       * Issue 78 RJR failing to include required jars in classpath      
+      * Issue 63 port detect not working when you launch multiple times very fast
+      * Issue 67 detect if webapp exist when launching  
+      * Issue 70 Run jety run can't launch if project name   contains space
+      * Issue 79 shortcut bug
 
 * Fixed but not in latest nightly issues yet
-   * Issue 63:	port detect not working when you launch multiple times very fast
-   * Issue 67:  detect if webapp exist when launching  
-   * Issue 70:	Run jety run can't launch if project name contains space
-   * Issue 79:	shortcut bug
+  * None
 
 = Next Official build =
 
