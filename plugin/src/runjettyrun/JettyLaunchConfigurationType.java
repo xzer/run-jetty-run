@@ -298,19 +298,22 @@ public class JettyLaunchConfigurationType extends
 	 * @throws CoreException
 	 */
 	private static void  terminateOldRJRLauncher(ILaunchConfiguration configuration, ILaunch launch) throws CoreException{
-		String port = configuration.getAttribute(Plugin.ATTR_PORT,"");
-		String sslPort = configuration.getAttribute(Plugin.ATTR_SSL_PORT,"");
-		boolean enableSSL = configuration.getAttribute(Plugin.ATTR_ENABLE_SSL,false);
 
-		if(!"".equals(port) && launcher.containsKey(port)){
-			if(!launcher.get(port).isTerminated()){
-				launcher.get(port).terminate();
-				launcher.remove(port);
+		synchronized(launcher){
+			String port = configuration.getAttribute(Plugin.ATTR_PORT,"");
+			String sslPort = configuration.getAttribute(Plugin.ATTR_SSL_PORT,"");
+			boolean enableSSL = configuration.getAttribute(Plugin.ATTR_ENABLE_SSL,false);
+
+			if(!"".equals(port) && launcher.containsKey(port)){
+				if(!launcher.get(port).isTerminated()){
+					launcher.get(port).terminate();
+					launcher.remove(port);
+				}
 			}
-		}
-		if(enableSSL && !"".equals(sslPort) && launcher.containsKey(sslPort)){
-			launcher.get(sslPort).terminate();
-			launcher.remove(sslPort);
+			if(enableSSL && !"".equals(sslPort) && launcher.containsKey(sslPort)){
+				launcher.get(sslPort).terminate();
+				launcher.remove(sslPort);
+			}
 		}
 	}
 	/**
@@ -320,14 +323,15 @@ public class JettyLaunchConfigurationType extends
 	 * @throws CoreException
 	 */
 	private static void registerRJRLauncher(ILaunchConfiguration configuration, ILaunch launch) throws CoreException{
-		String port = configuration.getAttribute(Plugin.ATTR_PORT,"");
-		String sslPort = configuration.getAttribute(Plugin.ATTR_SSL_PORT,"");
-		boolean enableSSL = configuration.getAttribute(Plugin.ATTR_ENABLE_SSL,false);
+		synchronized(launcher){
+			String port = configuration.getAttribute(Plugin.ATTR_PORT,"");
+			String sslPort = configuration.getAttribute(Plugin.ATTR_SSL_PORT,"");
+			boolean enableSSL = configuration.getAttribute(Plugin.ATTR_ENABLE_SSL,false);
 
-		if(!"".equals(port) ) launcher.put(port,launch);
-		if(enableSSL && !"".equals(sslPort))
-			launcher.put(sslPort,launch);
-
+			if(!"".equals(port) ) launcher.put(port,launch);
+			if(enableSSL && !"".equals(sslPort))
+				launcher.put(sslPort,launch);
+		}
 	}
 
 	private List<String> getJettyArgs(ILaunchConfiguration configuration)
