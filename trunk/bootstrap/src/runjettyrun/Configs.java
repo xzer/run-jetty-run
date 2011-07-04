@@ -39,6 +39,8 @@ public class Configs {
 
 	private static boolean debug = false;
 	public Configs() {
+		debug = getBooleanProp("rjrdebug",false);
+
 		context = getProp("rjrcontext");
 		webAppDir = getProp("rjrwebapp");
 		if(webAppDir != null){
@@ -68,7 +70,7 @@ public class Configs {
 
 		configurationClasses = getProp("rjrconfigurationclasses", "");
 
-		resourceMapping = getProp("rjrResourceMapping", "");
+		resourceMapping = trimQuote(getProp("rjrResourceMapping", ""));
 
 	}
 
@@ -222,8 +224,13 @@ public class Configs {
 		return resourceMapping;
 	}
 
+	public static String trimQuote(String str){
+		if(str!= null && str.startsWith("\"") && str.endsWith("\"")){
+			return str.substring(1,str.length()-1);
+		}
+		return str;
+	}
 	public Map<String,String> getResourceMap(){
-
 		String[] resources = resourceMapping.split(";");
 
 		HashMap<String,String> map = new HashMap<String,String>();
