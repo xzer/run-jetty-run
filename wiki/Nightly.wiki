@@ -20,7 +20,6 @@ It's very welcome to report the bug from nightly build.
      * Issue 81 :M2E issue with web container classpath
    * Fixed bugs 
       * Issue 75 [nightly]source scanner not working in Jetty7
-      * Issue 78 RJR failing to include required jars in classpath      
       * Issue 63 port detect not working when you launch multiple times very fast
       * Issue 67 detect if webapp exist when launching  
       * Issue 70 Run jety run can't launch if project name   contains space
