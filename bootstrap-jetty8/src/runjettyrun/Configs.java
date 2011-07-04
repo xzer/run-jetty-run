@@ -39,6 +39,7 @@ public class Configs {
 
 	private static boolean debug = false;
 	public Configs() {
+		debug = getBooleanProp("rjrdebug",false);
 		context = getProp("rjrcontext");
 		webAppDir = getProp("rjrwebapp");
 		if(webAppDir != null){
