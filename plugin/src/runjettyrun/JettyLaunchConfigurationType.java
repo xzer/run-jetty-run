@@ -388,7 +388,8 @@ public class JettyLaunchConfigurationType extends
 
 		if (value.length() == 0)
 			return;
-		String arg = "-Drjr" + "webapp" + "=\"" + value+"\"";
+
+		String arg = "-Drjr" + "webapp" + "=" + value+"";
 		runtimeVmArgs.add(arg);
 		return;
 	}
