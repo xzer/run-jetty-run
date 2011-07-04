@@ -44,13 +44,22 @@ public class RunJettyRunLaunchShortcut implements ILaunchShortcut2 {
 			String typeProjectName = proj.getName();
 			for (int i = 0; i < configs.length; i++) {
 				ILaunchConfiguration config = configs[i];
-				if(config.getAttribute(IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME, "")
-						.equals(typeProjectName))
+
+				if(isJettyRunConfiguration(config)){
+					String currentProejctName = config.getAttribute(IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME, "");
+					if(currentProejctName.equals(typeProjectName) ){
 						return config;
+					}
+				}
 			}
 		} catch (CoreException e) {
 		}
 		return null;
+	}
+
+	private boolean isJettyRunConfiguration(ILaunchConfiguration config) throws CoreException{
+		String mainType = config.getAttribute(IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME,"");
+		return	Plugin.BOOTSTRAP_CLASS_NAME.equals(mainType);
 	}
 
 	private ILaunchManager getLaunchManager() {
