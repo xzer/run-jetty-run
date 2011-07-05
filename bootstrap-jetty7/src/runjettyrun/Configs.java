@@ -36,10 +36,12 @@ public class Configs {
 	private String configurationClasses;
 	private String resourceMapping;
 
+	private int eclipseListener;
 
 	private static boolean debug = false;
 	public Configs() {
 		debug = getBooleanProp("rjrdebug",false);
+
 		context = getProp("rjrcontext");
 		webAppDir = getProp("rjrwebapp");
 		if(webAppDir != null){
@@ -47,6 +49,8 @@ public class Configs {
 				webAppDir = webAppDir.substring(1,webAppDir.length()-1);
 			}
 		}
+
+		eclipseListener = getIntProp("rjrEclipseListener", -1);
 		port = getIntProp("rjrport");
 		sslport = getIntProp("rjrsslport");
 		keystore = getProp("rjrkeystore");
@@ -69,7 +73,7 @@ public class Configs {
 
 		configurationClasses = getProp("rjrconfigurationclasses", "");
 
-		resourceMapping = getProp("rjrResourceMapping", "");
+		resourceMapping = trimQuote(getProp("rjrResourceMapping", ""));
 
 	}
 
@@ -87,6 +91,12 @@ public class Configs {
 		printSystemProperty(key);
 		return Integer.getInteger(key);
 	}
+
+	private static Integer getIntProp(String key,int def){
+		printSystemProperty(key);
+		return Integer.getInteger(key,def);
+	}
+
 	private static Boolean getBooleanProp(String key){
 		printSystemProperty(key);
 		return Boolean.getBoolean(key);
@@ -223,8 +233,13 @@ public class Configs {
 		return resourceMapping;
 	}
 
+	public static String trimQuote(String str){
+		if(str!= null && str.startsWith("\"") && str.endsWith("\"")){
+			return str.substring(1,str.length()-1);
+		}
+		return str;
+	}
 	public Map<String,String> getResourceMap(){
-
 		String[] resources = resourceMapping.split(";");
 
 		HashMap<String,String> map = new HashMap<String,String>();
@@ -320,4 +335,9 @@ public class Configs {
 		return ret;
 
 	}
+
+	public int getEclipseListenerPort() {
+		return eclipseListener;
+	}
+
 }
