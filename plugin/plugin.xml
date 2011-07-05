@@ -131,4 +131,18 @@
          </description>
        </shortcut>
     </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="runjettyrun.preferences.PreferencePage"
+            id="runjettyrun.preferences.Preference"
+            name="RunJettyRunPreference">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="runjettyrun.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
 </plugin>
