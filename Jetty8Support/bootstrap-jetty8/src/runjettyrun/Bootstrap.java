@@ -4,8 +4,10 @@ package runjettyrun;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.Socket;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -54,6 +56,9 @@ public class Bootstrap {
 		if (configs.getEnablescanner())
 			initScanner(web, configs.getWebAppClassPath(),
 					configs.getScanIntervalSeconds());
+
+		server.setStopAtShutdown(true);
+		initEclipseListener(configs);
 
 		try {
 			server.start();
@@ -147,6 +152,54 @@ public class Bootstrap {
 			initSSL(server, configObj.getSslport(), configObj.getKeystore(),
 					configObj.getPassword(), configObj.getKeyPassword(),
 					configObj.getNeedClientAuth());
+
+	}
+
+	private static void initEclipseListener(final Configs configs){
+		//init eclipse hook
+		if(configs.getEclipseListenerPort() != -1 ){
+			Thread eclipseListener = new Thread(){
+				public void run() {
+					try {
+						while(true){
+							Thread.sleep(10000L);
+							Socket sock = new Socket("127.0.0.1", configs.getEclipseListenerPort());
+							byte[] response = new byte[4];
+							sock.getInputStream().read(response);
+
+							//@see runjettyrun.Plugin#enableListenter
+							if(response[0] ==1 && response[1] ==2){
+								//it's ok!
+							}else{
+								//Eclipse crashs
+								shutdownServer();
+							}
+
+						}
+
+					} catch (UnknownHostException e) {
+						System.err.println("lost connection with Eclipse , shutting down.");
+						shutdownServer();
+					} catch (IOException e) {
+						System.err.println("lost connection with Eclipse , shutting down.");
+						shutdownServer();
+					} catch (InterruptedException e) {
+						System.err.println("lost connection with Eclipse , shutting down.");
+						shutdownServer();
+					}
+				};
+			};
+			eclipseListener.start();
+		}
+
+	}
+
+	private static void shutdownServer(){
+		try {
+			server.stop();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
 
 	}
 

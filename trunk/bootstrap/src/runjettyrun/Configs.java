@@ -36,6 +36,7 @@ public class Configs {
 	private String configurationClasses;
 	private String resourceMapping;
 
+	private int eclipseListener;
 
 	private static boolean debug = false;
 	public Configs() {
@@ -48,6 +49,8 @@ public class Configs {
 				webAppDir = webAppDir.substring(1,webAppDir.length()-1);
 			}
 		}
+
+		eclipseListener = getIntProp("rjrEclipseListener", -1);
 		port = getIntProp("rjrport");
 		sslport = getIntProp("rjrsslport");
 		keystore = getProp("rjrkeystore");
@@ -88,6 +91,12 @@ public class Configs {
 		printSystemProperty(key);
 		return Integer.getInteger(key);
 	}
+
+	private static Integer getIntProp(String key,int def){
+		printSystemProperty(key);
+		return Integer.getInteger(key,def);
+	}
+
 	private static Boolean getBooleanProp(String key){
 		printSystemProperty(key);
 		return Boolean.getBoolean(key);
@@ -168,21 +177,11 @@ public class Configs {
 		ArrayList<String> configuration = new ArrayList<String>();
 		if (getEnableJNDI()) {
 
-			//http://wiki.eclipse.org/Jetty/Feature/JNDI#Applying_JNDI_to_a_Single_Web_App
-			/* A way to verify the class correct or not
-			org.eclipse.jetty.webapp.WebInfConfiguration d;
-			org.eclipse.jetty.plus.webapp.EnvConfiguration d2;
-			org.eclipse.jetty.plus.webapp.PlusConfiguration d3;
-			org.eclipse.jetty.webapp.JettyWebXmlConfiguration d4;
-			org.eclipse.jetty.webapp.TagLibConfiguration d5;
-			*/
-
-			configuration.add("org.eclipse.jetty.webapp.WebInfConfiguration");
-			configuration.add("org.eclipse.jetty.plus.webapp.EnvConfiguration");
-			configuration.add("org.eclipse.jetty.plus.webapp.PlusConfiguration");
-			configuration.add("org.eclipse.jetty.webapp.JettyWebXmlConfiguration");
-			configuration.add("org.eclipse.jetty.webapp.TagLibConfiguration");
-
+			configuration.add("org.mortbay.jetty.webapp.WebInfConfiguration");
+			configuration.add("org.mortbay.jetty.plus.webapp.EnvConfiguration");
+			configuration.add("org.mortbay.jetty.plus.webapp.Configuration");
+			configuration.add("org.mortbay.jetty.webapp.JettyWebXmlConfiguration");
+			configuration.add("org.mortbay.jetty.webapp.TagLibConfiguration");
 		}
 		if (!"".equals(getConfigurationClasses())) {
 			String[] configs = getConfigurationClasses().split(";");
@@ -326,4 +325,9 @@ public class Configs {
 		return ret;
 
 	}
+
+	public int getEclipseListenerPort() {
+		return eclipseListener;
+	}
+
 }

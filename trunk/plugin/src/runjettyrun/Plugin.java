@@ -17,8 +17,11 @@
  */
 package runjettyrun;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +41,7 @@ import org.osgi.framework.BundleContext;
 
 import runjettyrun.container.Jetty6PackageProvider;
 import runjettyrun.extensions.IJettyPackageProvider;
+import runjettyrun.utils.PortUtil;
 
 /**
  * The activator class controls the plug-in life cycle.
@@ -129,10 +133,16 @@ public class Plugin extends AbstractUIPlugin {
 	// The shared instance
 	private static Plugin plugin;
 
+	private int controlPort = -1;
+	private boolean listenerEnabled = false;
+
 	private List<IJettyPackageProvider> extensions;
 
 	public Plugin() {
-		// containerIdentifier
+	}
+
+	public boolean isListenerEnable(){
+		return true;
 	}
 
 	public void start(BundleContext context) throws Exception {
@@ -141,6 +151,46 @@ public class Plugin extends AbstractUIPlugin {
 		extensions.add(new Jetty6PackageProvider());
 		initProviders();
 		plugin = this;
+
+		if(isListenerEnable()) enableListenter();
+	}
+
+	/**
+	 * We create a listener for RJR to handle Jetty instance leak issue.
+	 */
+	public void enableListenter(){
+		if(!listenerEnabled){
+			listenerEnabled = true;
+			controlPort = PortUtil.findAAvailablePort(50000,60000);
+
+			if(controlPort != -1 ){
+				Thread runnable= new Thread() {
+					public void run()  {
+
+						ServerSocket server;
+						try {
+							server = new ServerSocket(controlPort);
+
+							while(true) {
+								try{
+									Socket sock = server.accept();
+									sock.getOutputStream().write(new byte[]{1,2});
+									sock.getOutputStream().close();
+									Thread.sleep(5000L);
+								}catch(Exception er){
+									er.printStackTrace();
+								}
+							}
+
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+
+					}
+				};
+				runnable.start();
+			}
+		}
 	}
 
 	private void initProviders(){
@@ -225,6 +275,9 @@ public class Plugin extends AbstractUIPlugin {
 		return plugin;
 	}
 
+	public int getListenerPort() {
+		return controlPort;
+	}
 	@Override
 	protected void initializeImageRegistry(ImageRegistry reg) {
 

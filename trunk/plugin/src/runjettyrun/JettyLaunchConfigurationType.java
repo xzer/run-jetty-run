@@ -142,6 +142,9 @@ public class JettyLaunchConfigurationType extends
 
 		runtimeVmArgs.add("-DrjrResourceMapping=" +  getLinkedResourceMapping(configuration));
 
+		if(Plugin.getDefault().isListenerEnable()){
+			runtimeVmArgs.add("-DrjrEclipseListener=" + Plugin.getDefault().getListenerPort());
+		}
 
 		runtimeVmArgs.addAll(Arrays.asList(oringinalVMArguments));
 
