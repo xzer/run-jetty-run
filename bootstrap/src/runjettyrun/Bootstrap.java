@@ -21,8 +21,10 @@ import java.io.File;
 import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -56,7 +58,7 @@ public class Bootstrap {
 	public static void main(String[] args) throws Exception {
 		System.err.println("Running Jetty 6.1.26");
 
-		Configs configs = new Configs();
+		final Configs configs = new Configs();
 
 		configs.validation();
 
@@ -71,6 +73,10 @@ public class Bootstrap {
 			initScanner(web, configs.getWebAppClassPath(),
 					configs.getScanIntervalSeconds());
 
+		server.setStopAtShutdown(true);
+
+		initEclipseListener(configs);
+
 		try {
 			server.start();
 			server.join();
@@ -79,6 +85,54 @@ public class Bootstrap {
 			System.exit(100);
 		}
 		return;
+	}
+
+	private static void initEclipseListener(final Configs configs){
+		//init eclipse hook
+		if(configs.getEclipseListenerPort() != -1 ){
+			Thread eclipseListener = new Thread(){
+				public void run() {
+					try {
+						while(true){
+							Thread.sleep(10000L);
+							Socket sock = new Socket("127.0.0.1", configs.getEclipseListenerPort());
+							byte[] response = new byte[4];
+							sock.getInputStream().read(response);
+
+							//@see runjettyrun.Plugin#enableListenter
+							if(response[0] ==1 && response[1] ==2){
+								//it's ok!
+							}else{
+								//Eclipse crashs
+								shutdownServer();
+							}
+
+						}
+
+					} catch (UnknownHostException e) {
+						System.err.println("lost connection with Eclipse , shutting down.");
+						shutdownServer();
+					} catch (IOException e) {
+						System.err.println("lost connection with Eclipse , shutting down.");
+						shutdownServer();
+					} catch (InterruptedException e) {
+						System.err.println("lost connection with Eclipse , shutting down.");
+						shutdownServer();
+					}
+				};
+			};
+			eclipseListener.start();
+		}
+
+	}
+
+	private static void shutdownServer(){
+		try {
+			server.stop();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+
 	}
 
 	private static void initWebappContext(Server server,Configs configs)
@@ -91,6 +145,7 @@ public class Bootstrap {
 		}
 
 		web.setContextPath(configs.getContext());
+		System.err.println("Context path:"+configs.getContext());
 		web.setWar(configs.getWebAppDir());
 
 		/**
@@ -290,7 +345,6 @@ public class Bootstrap {
 					// boolean reconfigure = changes.contains(getProject()
 					// .getFile().getCanonicalPath());
 					System.err.println("Stopping webapp ...");
-
 					web.stop();
 
 					if (webAppClassPath != null) {
