@@ -17,7 +17,7 @@ It's very welcome to report the bug from nightly build.
      * Issue 55 : Jetty7/Jetty8 support
      * Issue 54 : show warning or ignore jars when user using server runtime lib.	 
      * Issue 81 :M2E issue with web container classpath
-     * Issue 76 :add scanner for those "system config"
+     * Issue 76 :add a option to let source scanner scan WEB-INF folder
      * Issue 72 :if eclipse crash, auto terminate RJR
      * Issue 68 :add a option to exclude classpath entry.
      * Issue 66 :write a preference to config default enable source scanner or not. 
