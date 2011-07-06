@@ -105,6 +105,9 @@ public class Plugin extends AbstractUIPlugin {
 	public static final String ATTR_ENABLE_SCANNER = Plugin.PLUGIN_ID
 			+ ".ENABLE_SCANNER_ATTR";
 
+	public static final String ATTR_SCANNER_SCAN_WEBINF = Plugin.PLUGIN_ID
+	+ ".ENABLE_SCANNER_SCAN_WEBINF_ATTR";
+
 	/** used to calculate the jars to include. */
 	public static final String JETTY_VERSION = "6.1.26";
 
