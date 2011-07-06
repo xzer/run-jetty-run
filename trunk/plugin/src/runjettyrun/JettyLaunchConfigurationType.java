@@ -39,8 +39,10 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.launching.AbstractJavaLaunchConfigurationDelegate;
 import org.eclipse.jdt.launching.ExecutionArguments;
@@ -197,7 +199,10 @@ public class JettyLaunchConfigurationType extends
 	 */
 	public void launch(ILaunchConfiguration configuration, String mode,
 			ILaunch launch, IProgressMonitor monitor) throws CoreException {
-
+		/*
+		 * for those terminate by our self .
+		 * @see #terminateOldRJRLauncher
+		 */
 		if (!RunJettyRunLaunchConfigurationUtil.validation(configuration)) {
 			throw new CoreException(new Status(IStatus.ERROR,Plugin.PLUGIN_ID,
 					01, " Invalid run configuration , please check the configuration ", null));
@@ -270,6 +275,7 @@ public class JettyLaunchConfigurationType extends
 		}
 
 	}
+
 	/**
 	 * A private helper to prepare a classpath file to workspace metadata,
 	 * we use this to prevent classpath too long which was caused the problem
@@ -308,14 +314,23 @@ public class JettyLaunchConfigurationType extends
 		boolean enableSSL = configuration.getAttribute(Plugin.ATTR_ENABLE_SSL,false);
 
 		if(!"".equals(port) && launcher.containsKey(port)){
-			if(!launcher.get(port).isTerminated()){
-				launcher.get(port).terminate();
-				launcher.remove(port);
-			}
+			terminateLaunch(launcher.get(port));
+			launcher.remove(port);
 		}
 		if(enableSSL && !"".equals(sslPort) && launcher.containsKey(sslPort)){
-			launcher.get(sslPort).terminate();
+			terminateLaunch(launcher.get(sslPort));
 			launcher.remove(sslPort);
+		}
+	}
+
+	private static void terminateLaunch(ILaunch launch) throws DebugException{
+		if(!launch.isTerminated()){
+			IProcess[] processes = launch.getProcesses();
+			if(processes != null){
+				for(IProcess proc : processes){
+					if(proc != null ) proc.terminate();
+				}
+			}
 		}
 	}
 	/**
