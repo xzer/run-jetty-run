@@ -82,7 +82,11 @@ public class RunJettyRunLaunchShortcut implements ILaunchShortcut2 {
 					generateLaunchConfigurationName(type.getProject().getName());
 
 				wc = configType.newInstance(null, launchConfigName);
-				RunJettyRunTab.initDefaultConfiguration(wc, type.getProject(), launchConfigName);
+
+				IProject proj =  type.getProject();
+				RunJettyRunTab.initDefaultConfiguration(wc,
+						proj == null ? null : proj.getName(), launchConfigName);
+
 				//set mapped resource , let next time we could execute this directly from menuitem.
 				wc.setMappedResources(new IResource[] {type});
 				config = wc.doSave();
