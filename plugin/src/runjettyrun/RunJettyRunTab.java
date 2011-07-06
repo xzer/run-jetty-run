@@ -100,6 +100,8 @@ public class RunJettyRunTab extends JavaLaunchTab {
 
 	private Text fWebAppDirText;
 
+	private Text fExcludedClasspathText;
+
 	private Button fProjButton;
 
 	private Button fEnableSSLbox;
@@ -295,8 +297,6 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		});
 
 		advanceGroup = new Group(parent, SWT.NONE);
-		//TODO show group only when checkbox enable
-//		advanceGroup.setVisible(isMavenProject);
 		advanceGroup.setText("RunJettyRun Advance Configuration");
 		advanceGroup.setLayoutData(createHFillGridData());
 		{
@@ -533,6 +533,29 @@ public class RunJettyRunTab extends JavaLaunchTab {
 				updateLaunchConfigurationDialog();
 			}
 		});
+		/*
+		 * ---------------------------------------------------------------------
+		 */
+		new Label(advanceGroup, SWT.LEFT).setText("");
+
+		/*
+		 * ---------------------------------------------------------------------
+		 */
+
+		new Label(advanceGroup, SWT.LEFT).setText("");
+		/*
+		 * ---------------------------------------------------------------------
+		 */
+		new Label(advanceGroup, SWT.LEFT).setText("Excluded classpath(Regex)");
+
+		/*
+		 * ---------------------------------------------------------------------
+		 */
+		fExcludedClasspathText = new Text(advanceGroup, SWT.SINGLE | SWT.BORDER);
+		fExcludedClasspathText.addModifyListener(_updatedListener);
+
+		fExcludedClasspathText.setLayoutData(createHFillGridData(4, -1));
+		fExcludedClasspathText.setFont(font);
 
 		/*
 		 * ---------------------------------------------------------------------
@@ -792,6 +815,9 @@ public class RunJettyRunTab extends JavaLaunchTab {
 			fWebAppDirText.setText(configuration.getAttribute(
 					Plugin.ATTR_WEBAPPDIR, ""));
 
+			fExcludedClasspathText.setText(configuration.getAttribute(
+					Plugin.ATTR_EXCLUDE_CLASSPATH,""));
+
 			fScanText.setText(configuration.getAttribute(
 					Plugin.ATTR_SCANINTERVALSECONDS, ""));
 
@@ -910,8 +936,6 @@ public class RunJettyRunTab extends JavaLaunchTab {
 			throws CoreException {
 		IResource[] resuorces = container.members();
 
-		// TODO use accept instead and detect folder instead , and check
-		// scanWebappDir can merge.
 		IContainer result = null;
 		for (IResource ir : resuorces) {
 			if (ir.getType() == IResource.FOLDER) {
@@ -1120,8 +1144,13 @@ public class RunJettyRunTab extends JavaLaunchTab {
 				fKeyPasswordText.getText());
 
 		configuration.setAttribute(Plugin.ATTR_CONTEXT, fContextText.getText());
+
 		configuration.setAttribute(Plugin.ATTR_WEBAPPDIR,
 				fWebAppDirText.getText());
+
+		configuration.setAttribute(Plugin.ATTR_EXCLUDE_CLASSPATH,
+				fExcludedClasspathText.getText());
+
 		configuration.setAttribute(Plugin.ATTR_SCANINTERVALSECONDS,
 				fScanText.getText());
 
@@ -1237,7 +1266,6 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		launchConfigName = getLaunchConfigurationDialog().
 			generateName(launchConfigName);
 
-		//TODO test this carefully , since it's a big change.
 		initDefaultConfiguration(configuration,projectName,launchConfigName);
 
 		return;
