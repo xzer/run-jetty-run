@@ -175,9 +175,8 @@ public class Plugin extends AbstractUIPlugin {
 				Thread runnable= new Thread() {
 					public void run()  {
 
-						ServerSocket server;
 						try {
-							server = new ServerSocket(controlPort);
+							ServerSocket server = new ServerSocket(controlPort);
 
 							while(true) {
 								try{
@@ -186,12 +185,10 @@ public class Plugin extends AbstractUIPlugin {
 									sock.getOutputStream().close();
 									Thread.sleep(5000L);
 								}catch(Exception er){
-									er.printStackTrace();
 								}
 							}
 
 						} catch (IOException e) {
-							e.printStackTrace();
 						}
 
 					}
