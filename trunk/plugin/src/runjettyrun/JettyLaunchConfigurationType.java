@@ -146,7 +146,7 @@ public class JettyLaunchConfigurationType extends
 		}
 
 		if(!maxperm){
-			runtimeVmArgs.add("-XX:MaxPermSize=64m");
+			runtimeVmArgs.add("-XX:MaxPermSize=128m");
 		}
 
 		//Here the classpath is really for web app.
