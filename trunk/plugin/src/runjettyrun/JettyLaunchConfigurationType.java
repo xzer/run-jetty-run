@@ -139,6 +139,16 @@ public class JettyLaunchConfigurationType extends
 	private String[] getRuntimeArguments(ILaunchConfiguration configuration,String[] oringinalVMArguments,String webappClasspath ) throws CoreException{
 		List<String> runtimeVmArgs = getJettyArgs(configuration);
 
+		boolean maxperm = false;
+		for(String str:oringinalVMArguments){
+			if(str != null && str.indexOf("-XX:MaxPermSize") != -1 )
+				maxperm = true;
+		}
+
+		if(!maxperm){
+			runtimeVmArgs.add("-XX:MaxPermSize=64m");
+		}
+
 		//Here the classpath is really for web app.
 		runtimeVmArgs.add("-Drjrclasspath=" +  webappClasspath);
 
