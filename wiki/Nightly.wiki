@@ -24,7 +24,6 @@ It's very welcome to report the bug from nightly build.
      * Issue 65 :provide a option to automatically find a unused port when creating a run configuration 
      * Issue 64 :shutdown issue    
      * Issue 62 :change default MexPermSize to 128m
-
    * Fixed bugs 
       * Issue 75 [nightly]source scanner not working in Jetty7
       * Issue 63 port detect not working when you launch multiple times very fast
