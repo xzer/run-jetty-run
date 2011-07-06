@@ -69,6 +69,10 @@ public class Plugin extends AbstractUIPlugin {
 	public static final String ATTR_WEBAPPDIR = Plugin.PLUGIN_ID
 			+ ".WEBAPPDIR_ATTR";
 
+	/** configuration attribute for the web application directory. */
+	public static final String ATTR_EXCLUDE_CLASSPATH = Plugin.PLUGIN_ID
+			+ ".EXCLUDE_CLASSPATH_ATTR";
+
 	/** configuration attribute for the port to run Jetty on. */
 	public static final String ATTR_PORT = Plugin.PLUGIN_ID + ".PORT_ATTR";
 

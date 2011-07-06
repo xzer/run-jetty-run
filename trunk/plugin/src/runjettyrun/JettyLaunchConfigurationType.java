@@ -371,6 +371,9 @@ public class JettyLaunchConfigurationType extends
 		addOptionalAttr(configuration, runtimeVmArgs,
 				Plugin.ATTR_SCANINTERVALSECONDS, "scanintervalseconds");
 
+		addOptionalAttr(configuration, runtimeVmArgs,
+				Plugin.ATTR_EXCLUDE_CLASSPATH, "excludedclasspath");
+
 		addOptionalAttrx(configuration, runtimeVmArgs,
 				Plugin.ATTR_ENABLE_SCANNER, "enablescanner");
 
