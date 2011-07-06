@@ -136,7 +136,7 @@
       <page
             class="runjettyrun.preferences.PreferencePage"
             id="runjettyrun.preferences.Preference"
-            name="RunJettyRunPreference">
+            name="RunJettyRun">
       </page>
    </extension>
    <extension
