@@ -2,8 +2,11 @@ package runjettyrun;
 
 
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.Socket;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -54,11 +57,10 @@ public class Bootstrap {
 
 		// configureScanner
 		if (configs.getEnablescanner())
-			initScanner(web, configs.getWebAppClassPath(),
-					configs.getScanIntervalSeconds());
+			initScanner(web, configs);
 
-		server.setStopAtShutdown(true);
 		initEclipseListener(configs);
+		initCommandListener(configs);
 
 		try {
 			server.start();
@@ -113,7 +115,7 @@ public class Bootstrap {
 
 		if (configs.getWebAppClassPath() != null) {
 			ProjectClassLoader loader = new ProjectClassLoader(web,
-					configs.getWebAppClassPath());
+					configs.getWebAppClassPath(),configs.getExcludedclasspath());
 			web.setClassLoader(loader);
 		}
 
@@ -162,7 +164,7 @@ public class Bootstrap {
 				public void run() {
 					try {
 						while(true){
-							Thread.sleep(10000L);
+							Thread.sleep(5000L);
 							Socket sock = new Socket("127.0.0.1", configs.getEclipseListenerPort());
 							byte[] response = new byte[4];
 							sock.getInputStream().read(response);
@@ -170,6 +172,9 @@ public class Bootstrap {
 							//@see runjettyrun.Plugin#enableListenter
 							if(response[0] ==1 && response[1] ==2){
 								//it's ok!
+							}else if(response[0] == 4 && response[1] == 8){
+								//graceful shutdown
+								shutdownServer();
 							}else{
 								//Eclipse crashs
 								shutdownServer();
@@ -197,10 +202,10 @@ public class Bootstrap {
 	private static void shutdownServer(){
 		try {
 			server.stop();
+			System.exit(-1);
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
-
 	}
 
 	private static void initSSL(Server server, int sslport, String keystore,
@@ -245,7 +250,10 @@ public class Bootstrap {
 	 * @param scanIntervalSeconds
 	 */
 	private static void initScanner(final WebAppContext web,
-			final String webAppClassPath, int scanIntervalSeconds) {
+			final Configs config ) {
+
+		final String webAppClassPath = config.getWebAppClassPath();
+		int scanIntervalSeconds = config.getScanIntervalSeconds();
 
 		final ArrayList<File> scanList = new ArrayList<File>();
 		if (webAppClassPath != null) {
@@ -257,7 +265,20 @@ public class Bootstrap {
 				}
 			}
 		}
-
+		if(config.getScanWEBINF()){
+			Resource r;
+			try {
+				r = web.getResource("/WEB-INF");
+				if(r.exists()){
+					if(r.getFile().isDirectory()){
+						scanList.add(r.getFile());
+						System.err.println("Add WEB-INF to scanning list:"+r.getFile().getAbsolutePath());
+					}
+				}
+			} catch (MalformedURLException e) {
+			} catch (IOException e) {
+			}
+		}
 		// startScanner
 		Scanner scanner = new Scanner();
 		scanner.setReportExistingFilesOnStartup(false);
@@ -276,7 +297,8 @@ public class Bootstrap {
 
 					if (webAppClassPath != null) {
 						ProjectClassLoader loader = new ProjectClassLoader(web,
-								webAppClassPath, false);
+								config.getWebAppClassPath(),
+								config.getExcludedclasspath(), false);
 						web.setClassLoader(loader);
 					}
 					System.err.println("Restarting webapp ...");
@@ -297,6 +319,60 @@ public class Bootstrap {
 			e.printStackTrace();
 		}
 	}
+	private static void initCommandListener(final Configs configs){
+		//init eclipse hook
+		Thread commandListener = new Thread(){
+			public void run() {
+				try {
+					BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+					while(true){
+						String inputStr = input.readLine();
+						if(inputStr != null){
+							inputStr = inputStr.trim();
 
+							if("exit".equalsIgnoreCase(inputStr) ||
+									"quit".equalsIgnoreCase(inputStr) ||
+									"q".equalsIgnoreCase(inputStr)
+							){
+								System.err.println("shutting down");
+								shutdownServer();
+							}else if("r".equalsIgnoreCase(inputStr)
+									|| "restart".equalsIgnoreCase(inputStr)
+							){
+								try{
+									System.err.println("Stopping webapp ...");
+									web.stop();
+
+									if (configs.getWebAppClassPath() != null) {
+										ProjectClassLoader loader = new ProjectClassLoader(web,
+												configs.getWebAppClassPath(),
+												configs.getExcludedclasspath(), false);
+										web.setClassLoader(loader);
+									}
+									System.err.println("Restarting webapp ...");
+									web.start();
+									System.err.println("Restart completed.");
+								} catch (Exception e) {
+									System.err
+									.println("Error reconfiguring/restarting webapp after change in watched files");
+									e.printStackTrace();
+								}
+							}
+
+						}
+					}
+
+				} catch (UnknownHostException e) {
+					System.err.println("lost connection with Eclipse , shutting down.");
+					shutdownServer();
+				} catch (IOException e) {
+					System.err.println("lost connection with Eclipse , shutting down.");
+					shutdownServer();
+				}
+			};
+		};
+		commandListener.start();
+
+	}
 
 }
