@@ -41,6 +41,10 @@ public class PreferencePage
 				new BooleanFieldEditor(PreferenceConstants.P_EnableEclipseListener,
 						"&Enable Eclipse Listener to prevent Jetty leaks when Eclipse crash (Take effect after Eclipse restarted).",
 						getFieldEditorParent()));
+		addField(
+				new BooleanFieldEditor(PreferenceConstants.P_DefaultEnableScanner,
+						"Default Enable &Scanner when create new run configuration.",
+						getFieldEditorParent()));
 	}
 
 	public void init(IWorkbench workbench) {

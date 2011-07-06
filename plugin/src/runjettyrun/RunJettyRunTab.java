@@ -41,7 +41,6 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.debug.ui.launchConfigurations.JavaLaunchTab;
-import org.eclipse.jdt.internal.debug.ui.JDIDebugUIPlugin;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jdt.ui.JavaElementLabelProvider;
 import org.eclipse.jface.viewers.ILabelProvider;
@@ -65,12 +64,11 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.dialogs.ContainerSelectionDialog;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
-import org.eclipse.ui.part.FileEditorInput;
 
 import runjettyrun.extensions.IJettyPackageProvider;
+import runjettyrun.preferences.PreferenceConstants;
 import runjettyrun.utils.ProjectUtil;
 import runjettyrun.utils.RunJettyRunLaunchConfigurationUtil;
 import runjettyrun.utils.UIUtil;
@@ -80,7 +78,6 @@ import runjettyrun.utils.UIUtil;
  *
  * @author hillenius, James Synge
  */
-@SuppressWarnings("restriction")
 public class RunJettyRunTab extends JavaLaunchTab {
 
 	private UpdateModfiyListener _updatedListener = new UpdateModfiyListener();
@@ -1136,7 +1133,7 @@ public class RunJettyRunTab extends JavaLaunchTab {
 
 	}
 
-	private void initProejctInformation(
+	private String getProjectName(
 			ILaunchConfigurationWorkingCopy configuration) {
 
 		// TonyQ: 2011/1/3
@@ -1148,40 +1145,18 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		// so I add some handle for text selection and got the project
 		// information.
 
-		setConfigurationProejct(configuration, null);
 		IJavaElement javaElement = getContext();
 		if (javaElement != null)
 			initializeJavaProject(javaElement, configuration);
 
-		IWorkbenchPage page = JDIDebugUIPlugin.getActivePage();
-		if (page != null) {
-
-			FileEditorInput editorinput = null;
-			try {
-				editorinput = (FileEditorInput) page.getActiveEditor()
-						.getEditorInput().getAdapter(FileEditorInput.class);
-				if (editorinput != null) {
-					try {
-						setConfigurationProejct(configuration, editorinput
-								.getFile().getProject());
-					} catch (Exception e) {
-					}
-				}
-
-			} catch (NullPointerException npe) {
-				// for a bug with ActiveEditor is null. (means user not editing
-				// any item)
-				// if it's a NPE , we just skip it directly...since it's a
-				// add-on.
-			}
-		}
-
+		IResource ir = ProjectUtil.getSelectedResource(Plugin.getDefault().getWorkbench().getActiveWorkbenchWindow());
+		return ir == null ? null : ir.getProject().getName();
 	}
 
 	public static void initDefaultConfiguration(
-			ILaunchConfigurationWorkingCopy configuration, IProject proj,
+			ILaunchConfigurationWorkingCopy configuration, String projectName,
 			String launchConfigName) {
-		setConfigurationProejct(configuration, proj);
+		setConfigurationProejct(configuration, projectName);
 
 		configuration.setAttribute(
 				IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME,
@@ -1195,7 +1170,6 @@ public class RunJettyRunTab extends JavaLaunchTab {
 				"RunJettyRunWebAppClassPathProvider");
 
 		// get the name for this launch configuration
-		String projectName = proj.getName();
 
 		configuration.rename(launchConfigName); // and rename the config
 
@@ -1219,7 +1193,10 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		configuration.setAttribute(Plugin.ATTR_ENABLE_NEED_CLIENT_AUTH, false);
 
 		configuration.setAttribute(Plugin.ATTR_SCANINTERVALSECONDS, "5");
-		configuration.setAttribute(Plugin.ATTR_ENABLE_SCANNER, true);
+
+		boolean defaultEnableScanner = Plugin.getDefault().getPreferenceStore().
+			getBoolean(PreferenceConstants.P_DefaultEnableScanner);
+		configuration.setAttribute(Plugin.ATTR_ENABLE_SCANNER, defaultEnableScanner);
 
 		configuration.setAttribute(Plugin.ATTR_ENABLE_MAVEN_TEST_CLASSES, true);
 		configuration.setAttribute(Plugin.ATTR_ENABLE_PARENT_LOADER_PRIORITY,
@@ -1229,65 +1206,22 @@ public class RunJettyRunTab extends JavaLaunchTab {
 	}
 
 	public void setDefaults(ILaunchConfigurationWorkingCopy configuration) {
-		initProejctInformation(configuration);
-
-		configuration.setAttribute(
-				IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME,
-				Plugin.BOOTSTRAP_CLASS_NAME);
-
-		// set the class path provider so that Jetty and the bootstrap jar are
-		// added to the run time class path. Value has to be the same as the one
-		// defined for the extension point
-		configuration.setAttribute(
-				IJavaLaunchConfigurationConstants.ATTR_CLASSPATH_PROVIDER,
-				"RunJettyRunWebAppClassPathProvider");
-
+		String projectName = getProjectName(configuration);
 		// get the name for this launch configuration
 		String launchConfigName = "";
-		String projectName = "";
-		try {
-			// try to base the launch config name on the current project
-			launchConfigName = configuration.getAttribute(
-					IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME, "");
+		// try to base the launch config name on the current project
+		launchConfigName = projectName == null ? "" :projectName;
 
-			projectName = launchConfigName;
-		} catch (CoreException e) {
-			// ignore
-		}
 		if (launchConfigName == null || launchConfigName.length() == 0) {
 			// if no project name was found, base on a default name
 			launchConfigName = "Jetty Webapp";
 		}
 		// generate an unique name (e.g. myproject(2))
-		launchConfigName = getLaunchConfigurationDialog().generateName(
-				launchConfigName);
-		configuration.rename(launchConfigName); // and rename the config
+		launchConfigName = getLaunchConfigurationDialog().
+			generateName(launchConfigName);
 
-		configuration.setAttribute(Plugin.ATTR_PORT, "8080");
-		configuration.setAttribute(Plugin.ATTR_SSL_PORT, "8443");
-
-		File userHomeDir = new File(System.getProperty("user.home"));
-		File keystoreFile = new File(userHomeDir, ".keystore");
-		String keystore = keystoreFile.getAbsolutePath();
-
-		configuration.setAttribute(Plugin.ATTR_KEYSTORE, keystore);
-		configuration.setAttribute(Plugin.ATTR_PWD, "changeit");
-		configuration.setAttribute(Plugin.ATTR_KEY_PWD, "changeit");
-
-		configuration.setAttribute(Plugin.ATTR_CONTEXT, "/" + projectName);
-
-		configuration.setAttribute(Plugin.ATTR_WEBAPPDIR,
-				detectDefaultWebappdir(projectName));
-		configuration.setAttribute(Plugin.ATTR_ENABLE_SSL, false);
-
-		configuration.setAttribute(Plugin.ATTR_ENABLE_NEED_CLIENT_AUTH, false);
-
-		configuration.setAttribute(Plugin.ATTR_SCANINTERVALSECONDS, "5");
-		configuration.setAttribute(Plugin.ATTR_ENABLE_SCANNER, true);
-
-		configuration.setAttribute(Plugin.ATTR_ENABLE_MAVEN_TEST_CLASSES, true);
-		configuration.setAttribute(Plugin.ATTR_ENABLE_PARENT_LOADER_PRIORITY,
-				true);
+		//TODO test this carefully , since it's a big change.
+		initDefaultConfiguration(configuration,projectName,launchConfigName);
 
 		return;
 	}
@@ -1378,11 +1312,11 @@ public class RunJettyRunTab extends JavaLaunchTab {
 	}
 
 	private static void setConfigurationProejct(
-			ILaunchConfigurationWorkingCopy configuration, IProject proj) {
-		if (proj == null)
+			ILaunchConfigurationWorkingCopy configuration, String proejctName) {
+		if (proejctName == null)
 			configuration.setAttribute(ATTR_PROJECT_NAME, "");
 		else
-			configuration.setAttribute(ATTR_PROJECT_NAME, proj.getName());
+			configuration.setAttribute(ATTR_PROJECT_NAME, proejctName);
 	}
 
 	private static abstract class ButtonListener implements SelectionListener {
