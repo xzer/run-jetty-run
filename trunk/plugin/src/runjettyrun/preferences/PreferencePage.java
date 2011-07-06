@@ -37,14 +37,18 @@ public class PreferencePage
 	 * restore itself.
 	 */
 	public void createFieldEditors() {
-		addField(
-				new BooleanFieldEditor(PreferenceConstants.P_EnableEclipseListener,
-						"&Enable Eclipse Listener to prevent Jetty leaks when Eclipse crash (Take effect after Eclipse restarted).",
-						getFieldEditorParent()));
-		addField(
-				new BooleanFieldEditor(PreferenceConstants.P_DefaultEnableScanner,
-						"Default Enable &Scanner when create new run configuration.",
-						getFieldEditorParent()));
+		addField(new BooleanFieldEditor(
+				PreferenceConstants.P_EnableEclipseListener,
+				"&Enable Eclipse Listener to prevent Jetty leaks when Eclipse crash (Take effect after Eclipse restarted).",
+				getFieldEditorParent()));
+		addField(new BooleanFieldEditor(
+				PreferenceConstants.P_DefaultEnableScanner,
+				"Default Enable &Scanner when create new run configuration.",
+				getFieldEditorParent()));
+		addField(new BooleanFieldEditor(
+				PreferenceConstants.P_AUTO_PORT,
+				"Find a &unused port that between 10000~ 15000 when creating new run configuration.",
+				getFieldEditorParent()));
 	}
 
 	public void init(IWorkbench workbench) {
