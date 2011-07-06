@@ -10,4 +10,6 @@ public class PreferenceConstants {
 
 	public static final String P_DefaultEnableScanner = "defaultEnableScannerPreference";
 
+	public static final String P_AUTO_PORT = "autoPortPreference";
+
 }

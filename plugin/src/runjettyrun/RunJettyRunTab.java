@@ -69,6 +69,7 @@ import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 
 import runjettyrun.extensions.IJettyPackageProvider;
 import runjettyrun.preferences.PreferenceConstants;
+import runjettyrun.utils.PortUtil;
 import runjettyrun.utils.ProjectUtil;
 import runjettyrun.utils.RunJettyRunLaunchConfigurationUtil;
 import runjettyrun.utils.UIUtil;
@@ -1217,7 +1218,16 @@ public class RunJettyRunTab extends JavaLaunchTab {
 
 		configuration.rename(launchConfigName); // and rename the config
 
-		configuration.setAttribute(Plugin.ATTR_PORT, "8080");
+		boolean autoPort = Plugin.getDefault().getPreferenceStore().
+		getBoolean(PreferenceConstants.P_AUTO_PORT);
+
+		int port = 8080;
+		if(autoPort){
+			port = PortUtil.findAAvailablePort(10000, 15000);
+			if(port == -1 ) port = 8080;
+		}
+		configuration.setAttribute(Plugin.ATTR_PORT, String.valueOf(port));
+
 		configuration.setAttribute(Plugin.ATTR_SSL_PORT, "8443");
 
 		File userHomeDir = new File(System.getProperty("user.home"));
