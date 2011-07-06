@@ -33,6 +33,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.graphics.Image;
@@ -41,6 +42,7 @@ import org.osgi.framework.BundleContext;
 
 import runjettyrun.container.Jetty6PackageProvider;
 import runjettyrun.extensions.IJettyPackageProvider;
+import runjettyrun.preferences.PreferenceConstants;
 import runjettyrun.utils.PortUtil;
 
 /**
@@ -142,7 +144,7 @@ public class Plugin extends AbstractUIPlugin {
 	}
 
 	public boolean isListenerEnable(){
-		return true;
+		return  getPreferenceStore().getBoolean(PreferenceConstants.P_EnableEclipseListener);
 	}
 
 	public void start(BundleContext context) throws Exception {

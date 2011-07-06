@@ -6,6 +6,6 @@ package runjettyrun.preferences;
  */
 public class PreferenceConstants {
 
-//	public static final String P_BROWSER_PATH = "browserPathPreference";
+	public static final String P_EnableEclipseListener = "enableEclipseListenerPreference";
 
 }

@@ -17,6 +17,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	 */
 	public void initializeDefaultPreferences() {
 		IPreferenceStore store = Plugin.getDefault().getPreferenceStore();
+		store.setDefault(PreferenceConstants.P_EnableEclipseListener, true);
+
 //
 //		store.setDefault(PreferenceConstants.P_BROWSER_PATH +"0" , "default system browser ");
 //		store.setDefault(PreferenceConstants.P_BROWSER_PATH +"1" , "\"C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe\"");

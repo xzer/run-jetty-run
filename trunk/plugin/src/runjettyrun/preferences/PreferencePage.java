@@ -2,7 +2,6 @@ package runjettyrun.preferences;
 
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
@@ -29,7 +28,7 @@ public class PreferencePage
 	public PreferencePage() {
 		super(GRID);
 		setPreferenceStore(Plugin.getDefault().getPreferenceStore());
-		setDescription("A plug-in provides user to run external browser with Run-Jetty-Run Server.");
+		setDescription("RunJettyRun Settings");
 	}
 	/**
 	 * Creates the field editors. Field editors are abstractions of
@@ -38,18 +37,10 @@ public class PreferencePage
 	 * restore itself.
 	 */
 	public void createFieldEditors() {
-//		addField(
-//				new StringFieldEditor(PreferenceConstants.P_HOST_PATH, "&Host Name", getFieldEditorParent()));
-//
-//		addField(
-//				new BooleanFieldEditor(PreferenceConstants.P_START_RJR,
-//						"&Start up Run-Jetty-Run when the port not using."+
-//						"(Need some time ,please wait and then reload browser.)",
-//						getFieldEditorParent()));
-//		addField(
-//				new BooleanFieldEditor(PreferenceConstants.P_HOST_FAILBACK,
-//						"&Using localhost when hostname lost connection( take time for first time detect host)",
-//						getFieldEditorParent()));
+		addField(
+				new BooleanFieldEditor(PreferenceConstants.P_EnableEclipseListener,
+						"&Enable Eclipse Listener to prevent Jetty leaks when Eclipse crash (Take effect after Eclipse restarted).",
+						getFieldEditorParent()));
 	}
 
 	public void init(IWorkbench workbench) {
