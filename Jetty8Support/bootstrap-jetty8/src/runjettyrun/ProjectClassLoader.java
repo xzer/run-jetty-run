@@ -35,11 +35,11 @@ import org.eclipse.jetty.webapp.WebAppContext;
 public class ProjectClassLoader extends WebAppClassLoader {
   private boolean initialized = false;
 
-  public ProjectClassLoader(WebAppContext context, String projectClassPath)
+  public ProjectClassLoader(WebAppContext context, String projectClassPath,String excluded)
   throws IOException {
-	  this(context, projectClassPath, true);
+	  this(context, projectClassPath,excluded, true);
   }
-  public ProjectClassLoader(WebAppContext context, String projectClassPath, boolean logger)
+  public ProjectClassLoader(WebAppContext context, String projectClassPath, String excluded, boolean logger)
       throws IOException {
     super(context);
 
@@ -59,8 +59,12 @@ public class ProjectClassLoader extends WebAppClassLoader {
     if(projectClassPath!=null){
 	    String[] tokens = projectClassPath.split(String.valueOf(File.pathSeparatorChar));
 	    for(String entry:tokens){
-	    	if (logger) System.err.println("ProjectClassLoader: entry="+entry);
-	        super.addClassPath(entry);
+	    	if(excluded != null && entry.matches(excluded)){
+	    		System.err.println("ProjectClassLoader excluded entry="+entry);
+	    	}else{
+		    	if (logger) System.err.println("ProjectClassLoader: entry="+entry);
+	    		super.addClassPath(entry);
+	    	}
 	    }
     }
 

@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 /**
  * A configuration object to handle the complicated parse job ,
@@ -28,6 +30,7 @@ public class Configs {
 	private String keyPassword;
 	private Integer scanIntervalSeconds;
 	private Boolean enablescanner;
+	private Boolean scanWEBINF;
 	private Boolean parentLoaderPriority;
 
 	private Boolean enablessl;
@@ -35,6 +38,8 @@ public class Configs {
 	private Boolean enableJNDI;
 	private String configurationClasses;
 	private String resourceMapping;
+
+	private String excludedclasspath;
 
 	private int eclipseListener;
 
@@ -56,12 +61,24 @@ public class Configs {
 		keystore = getProp("rjrkeystore");
 		password = getProp("rjrpassword");
 
+		excludedclasspath = getProp("rjrexcludedclasspath");
+		try{
+			if(excludedclasspath != null){
+				Pattern.compile(excludedclasspath);
+			}
+		}catch(PatternSyntaxException ex){
+			System.err.println("Excluded classpath setting occur regex syntax error, skipped. \n(Error Message:" + ex.getMessage()+")");
+			excludedclasspath = null;
+		}
+
 		String classpath = getProp("rjrclasspath");
 		webAppClassPath = resovleWebappClasspath(classpath);
 		keyPassword = getProp("rjrkeypassword");
 		scanIntervalSeconds = getIntProp("rjrscanintervalseconds");
 
 		enablescanner = getBooleanProp("rjrenablescanner");
+
+		scanWEBINF = getBooleanProp("rjrscanWEBINF");
 
 		parentLoaderPriority = getBooleanProp("rjrparentloaderpriority", true);
 
@@ -328,6 +345,14 @@ public class Configs {
 
 	public int getEclipseListenerPort() {
 		return eclipseListener;
+	}
+
+	public Boolean getScanWEBINF() {
+		return scanWEBINF;
+	}
+
+	public String getExcludedclasspath() {
+		return excludedclasspath;
 	}
 
 }
