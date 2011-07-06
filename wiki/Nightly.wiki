@@ -12,12 +12,19 @@ It's very welcome to report the bug from nightly build.
 = Details =
     * Issue list http://code.google.com/p/run-jetty-run/issues/list?can=1&q=label%3Afix-1.3
 
- * Latest Nightly Version 20110704
+ * Latest Nightly Version 20110706
    * features 
-     * Jetty7 support
-     * Jetty8 support
+     * Issue 55 : Jetty7/Jetty8 support
      * Issue 54 : show warning or ignore jars when user using server runtime lib.	 
      * Issue 81 :M2E issue with web container classpath
+     * Issue 76 :add scanner for those "system config"
+     * Issue 72 :if eclipse crash, auto terminate RJR
+     * Issue 68 :add a option to exclude classpath entry.
+     * Issue 66 :write a preference to config default enable source scanner or not. 
+     * Issue 65 :provide a option to automatically find a unused port when creating a run configuration 
+     * Issue 64 :shutdown issue    
+     * Issue 62 :change default MexPermSize to 128m
+
    * Fixed bugs 
       * Issue 75 [nightly]source scanner not working in Jetty7
       * Issue 63 port detect not working when you launch multiple times very fast
