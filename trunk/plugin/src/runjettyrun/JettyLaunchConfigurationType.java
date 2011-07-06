@@ -370,8 +370,12 @@ public class JettyLaunchConfigurationType extends
 				"password");
 		addOptionalAttr(configuration, runtimeVmArgs,
 				Plugin.ATTR_SCANINTERVALSECONDS, "scanintervalseconds");
+
 		addOptionalAttrx(configuration, runtimeVmArgs,
 				Plugin.ATTR_ENABLE_SCANNER, "enablescanner");
+
+		addOptionalAttrx(configuration, runtimeVmArgs,
+				Plugin.ATTR_SCANNER_SCAN_WEBINF, "scanWEBINF");
 
 		addOptionalAttrx(configuration, runtimeVmArgs,
 				Plugin.ATTR_ENABLE_SSL, "enablessl");
