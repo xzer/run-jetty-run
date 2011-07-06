@@ -174,9 +174,6 @@ public class Bootstrap {
 							//@see runjettyrun.Plugin#enableListenter
 							if(response[0] ==1 && response[1] ==2){
 								//it's ok!
-							}else if(response[0] == 4 && response[1] == 8){
-								//graceful shutdown
-								shutdownServer();
 							}else{
 								//Eclipse crashs
 								shutdownServer();
