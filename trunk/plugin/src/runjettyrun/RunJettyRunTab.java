@@ -289,7 +289,7 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		 */
 
 
-		fShowAdvancebox = createCheckButton(parent, "Show Advance Options");
+		fShowAdvancebox = createCheckButton(parent, "Show Advanced Options");
 		fShowAdvancebox.addSelectionListener(new ButtonListener() {
 			public void widgetSelected(SelectionEvent e) {
 				advanceGroup.setVisible(fShowAdvancebox.getSelection());
@@ -1252,7 +1252,7 @@ public class RunJettyRunTab extends JavaLaunchTab {
 			getBoolean(PreferenceConstants.P_DefaultEnableScanner);
 		configuration.setAttribute(Plugin.ATTR_ENABLE_SCANNER, defaultEnableScanner);
 
-		configuration.setAttribute(Plugin.ATTR_SCANNER_SCAN_WEBINF, true);
+		configuration.setAttribute(Plugin.ATTR_SCANNER_SCAN_WEBINF, false);
 
 		configuration.setAttribute(Plugin.ATTR_ENABLE_MAVEN_TEST_CLASSES, true);
 		configuration.setAttribute(Plugin.ATTR_ENABLE_PARENT_LOADER_PRIORITY,
