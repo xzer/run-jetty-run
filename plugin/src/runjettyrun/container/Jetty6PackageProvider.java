@@ -18,11 +18,27 @@ public class Jetty6PackageProvider implements IJettyPackageProvider {
 			if (type == TYPE_JETTY_BUNDLE) {
 
 				return ProjectUtil.getLibs(Plugin.getDefault().getBundle(),
-						"lib/");
+						new String[]{
+							"lib/core-3.1.1.jar",
+							"lib/jetty-6.1.26.jar",
+							"lib/jetty-management-6.1.26.jar",
+							"lib/jetty-util-6.1.26.jar",
+							"lib/jsp-2.1.jar",
+							"lib/jsp-api-2.1.jar",
+							"lib/run-jetty-run-bootstrap.jar",
+							"lib/servlet-api-2.5-20081211.jar"
+						}
+					);
 
 			} else if (type == TYPE_UTIL) {
 				return ProjectUtil.getLibs(Plugin.getDefault().getBundle(),
-				"jndilib/");
+						new String[]{
+						"jndilib/activation-1.1.1.jar",
+						"jndilib/jetty-naming-6.1.26.jar",
+						"jndilib/jetty-plus-6.1.26.jar",
+						"jndilib/mail-1.4.jar"
+					}
+				);
 			}
 		} catch (MalformedURLException e) {
 			e.printStackTrace();

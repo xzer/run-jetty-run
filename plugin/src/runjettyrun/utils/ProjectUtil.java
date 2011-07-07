@@ -1,6 +1,5 @@
 package runjettyrun.utils;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -125,26 +124,23 @@ public class ProjectUtil {
 		}
 	}
 
-	public static IRuntimeClasspathEntry[] getLibs(Bundle bundle, String libpath)
+	public static IRuntimeClasspathEntry[] getLibs(Bundle bundle, String[] filelist)
 			throws MalformedURLException, URISyntaxException {
 
 		List<IRuntimeClasspathEntry> entries = new ArrayList<IRuntimeClasspathEntry>();
-		URL installUrl = bundle.getEntry("/"+libpath);
-		try {
-			// Resolve the URL
-			URL libs = FileLocator.resolve(installUrl);
-			File flibs = new File(libs.getFile());
+		URL installUrl = bundle.getEntry("/");
 
-			if(flibs.listFiles() != null){
-				for (File f : flibs.listFiles()) {
-					if(f.getName().endsWith(".jar")){
-						entries.add(JavaRuntime.newArchiveRuntimeClasspathEntry(new Path(f.getAbsolutePath())));
-					}
-				}
+		try {
+			for(String filepath:filelist){
+				//Note the FileLocator will generate a file for us when we use FileLocator.toFileURL ,
+				//it's very important.
+				URL fileUrl = FileLocator.toFileURL(new URL(installUrl,filepath));
+				entries.add(JavaRuntime.newArchiveRuntimeClasspathEntry(new Path(fileUrl.getPath())));
 			}
 			if(entries.size() == 0 ){
-				throw new IllegalStateException("Assuming we should find jars in ["+flibs.getAbsolutePath()+"] but not.");
+				throw new IllegalStateException("RJR finding jar failed");
 			}
+
 		} catch (IOException e) {
 			Plugin.logError(e);
 		}
