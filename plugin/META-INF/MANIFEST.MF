@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Run Jetty Run Plug-in
 Bundle-SymbolicName: runjettyrun;singleton:=true
-Bundle-Version: 1.2.2.20110706
+Bundle-Version: 1.2.2.20110707
 Bundle-Activator: runjettyrun.Plugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
@@ -16,12 +16,34 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.ide,
  org.eclipse.core.resources,
  org.eclipse.core.expressions
-Eclipse-LazyStart: true
+Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-Vendor: http://code.google.com/p/run-jetty-run/
-Export-Package: runjettyrun,
- runjettyrun.container,
+Export-Package: runjettyrun;uses:="org.mortbay.resource,org.mortbay.jetty.webapp,org.mortbay.util",
+ runjettyrun.container;
+  uses:="org.eclipse.debug.core,
+   org.eclipse.core.runtime,
+   org.eclipse.jdt.launching,
+   org.eclipse.jdt.core,
+   org.eclipse.core.resources,
+   runjettyrun.extensions,
+   org.w3c.dom",
  runjettyrun.extensions,
- runjettyrun.handlers,
- runjettyrun.utils
+ runjettyrun.handlers;uses:="org.eclipse.core.runtime,org.eclipse.ui,org.eclipse.core.commands",
+ runjettyrun.launchshortcut;
+  uses:="org.eclipse.debug.core,
+   org.eclipse.debug.ui,
+   org.eclipse.ui,
+   org.eclipse.core.resources,
+   org.eclipse.jface.viewers",
+ runjettyrun.launchshortcut.properties;uses:="org.eclipse.core.expressions",
+ runjettyrun.preferences;uses:="org.eclipse.jface.preference,org.eclipse.ui,org.eclipse.core.runtime.preferences",
+ runjettyrun.utils;
+  uses:="org.eclipse.debug.core,
+   org.eclipse.ui.browser,
+   org.eclipse.ui,
+   org.eclipse.core.resources,
+   org.eclipse.jface.viewers,
+   org.osgi.framework,
+   org.eclipse.swt.widgets"
