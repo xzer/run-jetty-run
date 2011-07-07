@@ -9,6 +9,11 @@ for example , Jetty7 or Jetty8 support is a big milestone and need more testing.
 It's very welcome to report the bug from nightly build.
 
 
+= Nightly Update Site =
+
+http://run-jetty-run.googlecode.com/svn/trunk/updatesite-nightly
+
+
 = Details =
     * Issue list http://code.google.com/p/run-jetty-run/issues/list?can=1&q=label%3Afix-1.3
 
