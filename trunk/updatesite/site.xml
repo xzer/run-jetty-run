@@ -30,7 +30,17 @@
    <feature url="features/runjettyrun_feature_1.2.2.1.jar" id="runjettyrun_feature" version="1.2.2.1">
       <category name="RunJettyRun 1.2"/>
    </feature>
+   <feature url="features/runjettyrun_feature_1.3.0.jar" id="runjettyrun_feature" version="1.3.0">
+      <category name="RunJettyRun 1.3"/>
+   </feature>
+   <feature url="features/runjettyrun_feature_support_jetty7_1.3.0.jar" id="runjettyrun_feature_support_jetty7" version="1.3.0">
+      <category name="RunJettyRun 1.3"/>
+   </feature>
+   <feature url="features/runjettyrun_feature_support_jetty8_1.3.0.jar" id="runjettyrun_feature_support_jetty8" version="1.3.0">
+      <category name="RunJettyRun 1.3"/>
+   </feature>
    <category-def name="RunJettyRun 1.2" label="RunJettyRun 1.2"/>
    <category-def name="RunJettyRun 1.1" label="RunJettyRun 1.1"/>
    <category-def name="RunJettyRun 1.0" label="RunJettyRun 1.0"/>
+   <category-def name="RunJettyRun 1.3" label="RunJettyRun 1.3"/>
 </site>
