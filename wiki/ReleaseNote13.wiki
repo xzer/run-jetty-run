@@ -7,7 +7,7 @@
 = Introduction =
 
 It's a newer version for Run Jetty Run again,
-refine the Run configuration and new features/bug fixs for RJR.
+refine the run configuration and new features/bug fixs for RJR.
 
 
 = Update Site =
