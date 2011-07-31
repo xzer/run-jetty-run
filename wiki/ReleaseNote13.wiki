@@ -22,7 +22,7 @@ http://run-jetty-run.googlecode.com/svn/trunk/updatesite
  * What's new in 1.3
    * features 
      * Issue 55 : Jetty7/Jetty8 support
-     * Issue 54 : show warning or ignore jars when user using server runtime lib.	 
+     * Issue 54 : ignore WTP runtime jars when user using server runtime lib.	 
      * Issue 81 :M2E issue with web container classpath
      * Issue 76 :add a option to let source scanner scan WEB-INF folder
      * Issue 72 :if eclipse crash, auto terminate RJR
