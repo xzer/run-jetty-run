@@ -44,7 +44,7 @@ http://run-jetty-run.googlecode.com/svn/trunk/updatesite
 
   * Feel free to report anything you find , no matter bug or opinion. :p
 
-  * Please don't check this option to speed up your installation.
+  * To speed up your installation ,please don't check this option.
     http://screencast.com/t/DuCNNp4D59R
 
   * For Jetty8 's restriction , you have to use a "JDK Runtime" instead of default JRE Runtime to run it, or the JSP complier will not work.
