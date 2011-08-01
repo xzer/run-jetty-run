@@ -898,8 +898,8 @@ public class RunJettyRunTab extends JavaLaunchTab {
 	public static String detectDefaultWebappdir(IProject project) {
 		if (project != null) {
 			for (String path : DEFAULT_WEBAPP_DIR_SET) {
-				IFile file = project
-						.getFile(new Path(path + "/WEB-INF/web.xml"));
+				IFolder file = project
+						.getFolder(new Path(path + "/WEB-INF"));
 				if (file.exists()) {
 					return path;
 				}
@@ -915,14 +915,13 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		if (project != null) {
 
 			IFolder pwebinf = project.getFolder(new Path("WEB-INF"));
-			if (pwebinf.exists() && pwebinf.getFile("web.xml").exists()) {
+			if (pwebinf.exists()) {
 				return "/";
 			}
 
 			try {
 				IContainer webInf = scanWEBINF(project);
-				if (webInf != null && webInf.exists()
-						&& webInf.getFile(new Path("web.xml")).exists()) {
+				if (webInf != null && webInf.exists()) {
 					return ((IFolder) webInf).getParent()
 							.getProjectRelativePath().toString();
 				}
@@ -942,8 +941,7 @@ public class RunJettyRunTab extends JavaLaunchTab {
 			if (ir.getType() == IResource.FOLDER) {
 
 				if ("WEB-INF".equals(ir.getName())) {
-					if (((IFolder) ir).getFile("web.xml").exists())
-						return (IFolder) ir;
+					return (IFolder) ir;
 				} else {
 					result = scanWEBINF((IFolder) ir);
 					if (result != null)
@@ -1044,10 +1042,10 @@ public class RunJettyRunTab extends JavaLaunchTab {
 				return false;
 			}
 
-			IFile file = folder.getFile(new Path("WEB-INF/web.xml"));
+			IFolder file = folder.getFolder(new Path("WEB-INF"));
 			if (!file.exists()) {
 				setErrorMessage(MessageFormat
-						.format("Directory {0} does not contain WEB-INF/web.xml; it is not a valid web application directory",
+						.format("Directory {0} does not contain WEB-INF; it is not a valid web application directory",
 								directory));
 				return false;
 			}

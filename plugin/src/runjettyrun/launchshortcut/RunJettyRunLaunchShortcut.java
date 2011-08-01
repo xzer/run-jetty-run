@@ -91,7 +91,7 @@ public class RunJettyRunLaunchShortcut implements ILaunchShortcut2 {
 				wc.setMappedResources(new IResource[] {type});
 				config = wc.doSave();
 			}else{
-				showError("Project is not a regular webapp project (missing WEB-INF\\web.xml");
+				showError("Project is not a regular webapp project (missing WEB-INF)");
 			}
 		} catch (CoreException exception) {
 			showError( exception.getStatus().getMessage());
