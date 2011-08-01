@@ -84,8 +84,8 @@ public class RunJettyRunLaunchConfigurationUtil {
 				if (!folder.exists()) {
 					return false;
 				}
-				IFile file = project.getFile(new Path(directory
-						+ "/WEB-INF/web.xml"));
+				IFolder file = project.getFolder(new Path(directory
+						+ "/WEB-INF"));
 				if (!file.exists()) {
 					return false;
 				}
