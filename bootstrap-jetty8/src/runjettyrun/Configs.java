@@ -191,6 +191,14 @@ public class Configs {
 
 	public List<String> getConfigurationClassesList(){
 		ArrayList<String> configuration = new ArrayList<String>();
+
+		configuration.add("org.eclipse.jetty.webapp.WebInfConfiguration");
+		configuration.add("org.eclipse.jetty.webapp.WebXmlConfiguration");
+		configuration.add("org.eclipse.jetty.webapp.MetaInfConfiguration");
+		configuration.add("org.eclipse.jetty.webapp.FragmentConfiguration");
+		configuration.add("runjettyrun.annotation.RJRAnnotationConfiguration");
+		configuration.add("org.eclipse.jetty.webapp.JettyWebXmlConfiguration");
+		configuration.add("org.eclipse.jetty.webapp.TagLibConfiguration");
 		if (getEnableJNDI()) {
 
 			//http://wiki.eclipse.org/Jetty/Feature/JNDI#Applying_JNDI_to_a_Single_Web_App
@@ -202,11 +210,8 @@ public class Configs {
 			org.eclipse.jetty.webapp.TagLibConfiguration d5;
 			*/
 
-			configuration.add("org.eclipse.jetty.webapp.WebInfConfiguration");
 			configuration.add("org.eclipse.jetty.plus.webapp.EnvConfiguration");
 			configuration.add("org.eclipse.jetty.plus.webapp.PlusConfiguration");
-			configuration.add("org.eclipse.jetty.webapp.JettyWebXmlConfiguration");
-			configuration.add("org.eclipse.jetty.webapp.TagLibConfiguration");
 
 		}
 		if (!"".equals(getConfigurationClasses())) {

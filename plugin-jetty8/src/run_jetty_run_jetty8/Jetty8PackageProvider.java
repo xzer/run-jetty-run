@@ -46,7 +46,9 @@ public class Jetty8PackageProvider implements IJettyPackageProvider {
 					"lib/jsp-impl-2.2.2.b05.0.jar",
 					"lib/org.apache.taglibs.standard.glassfish_1.2.0.v201004190952.jar",
 					"lib/run-jetty-run-bootstrap-jetty8.jar",
-					"lib/servlet-api-3.0.jar"
+					"lib/servlet-api-3.0.jar",
+					"lib/javax.annotation_1.1.0.v201105051105.jar",
+					"lib/org.objectweb.asm_3.3.1.v201101071600.jar"
 				});
 
 			} else if (type == TYPE_UTIL) {
