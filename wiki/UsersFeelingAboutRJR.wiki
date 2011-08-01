@@ -24,4 +24,4 @@ Also any suggestion , opinion about features is welcome.
 
   * [http://morado106.blog106.fc2.com/blog-entry-76.html Android i-jettyを使ってサーブレットを作ってみる]
 
-  * [http://code.google.com/p/run-jetty-run/wiki/GettingStarted Jetty and Eclipse Integration]
+  * [http://java.dzone.com/articles/jetty-and-eclipse-integration Jetty and Eclipse Integration]
