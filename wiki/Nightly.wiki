@@ -17,9 +17,9 @@ http://run-jetty-run.googlecode.com/svn/trunk/updatesite-nightly
 = Details =
     * Issue list http://code.google.com/p/run-jetty-run/issues/list?can=1&q=label%3Afix-1.3.1
 
- * Latest Nightly Version 20110707
+ * Latest Nightly Version 20110801
    * features 
-     * Empty
+     * Issue 85 Jetty8 servlet3 annotation support
    * Fixed bugs 
      * Empty
  
