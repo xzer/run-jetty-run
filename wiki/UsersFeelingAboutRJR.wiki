@@ -25,3 +25,5 @@ Also any suggestion , opinion about features is welcome.
   * [http://morado106.blog106.fc2.com/blog-entry-76.html Android i-jettyを使ってサーブレットを作ってみる]
 
   * [http://java.dzone.com/articles/jetty-and-eclipse-integration Jetty and Eclipse Integration]
+
+  * [http://loianegroner.com/2011/07/running-a-web-application-on-jetty-webserver-from-eclipse-ide/ Running a Web Application on Jetty Webserver from Eclipse IDE]
