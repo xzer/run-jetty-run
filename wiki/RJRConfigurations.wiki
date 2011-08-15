@@ -1,0 +1,46 @@
+#summary One-sentence summary of this page.
+
+= Introduction =
+
+RunJettyRun Configurations for 1.3
+
+
+= Run Configuration =
+
+== Screenshot ==
+
+http://files.tonyq.org/eclipse/runjettyrun/RunJettyRun13.png
+
+== Details ==
+
+1.Jetty Version , if you install Jetty7/Jetty8 support , here you could select the version you like . Default is Jetty6. (#1)
+
+2.Project , usually the selected one. It's seldom to changed.
+
+3.The port , which should not conflict with other existing service or web container , by default is 8080.
+
+4.context path, which will be part of your URL, it should start with "/". 
+
+5.Web application directory ,system will look out the one contains WEB-INF/web.xml , so usually we seldom change it.
+
+6.Scan - A button to help you search the folder that contains "WEB-INF/web.xml".
+
+7.Only visible when you have M2Eclipse installed, it will exclude all the classpath that endwith test-classes folder.A specific feature for maven project. (Reference to Issue 42 )
+
+
+8.Advanced Options : Here's those very specific option and that user will feel confuse in the beginning , so we group them here. (kind of expert mode...)
+
+9. SSL support , check and enter all the data you need , since it's seldom used feature ,it's disabled by default.
+
+10.Scanner: (To be continued)
+11.
+12.
+13.
+14.
+15.
+
+
+
+#1 Note that if you select Jetty8 and need to work with JSP (most of projects need JSP support) , you have to configuration the JRE with a JDK version.  That's the restriction of Jetty8. 
+
+
