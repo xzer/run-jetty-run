@@ -20,7 +20,7 @@ http://files.tonyq.org/eclipse/runjettyrun/RunJettyRun13.png
   # Web application directory ,system will look out the one contains WEB-INF/web.xml , so usually we seldom change it.
   # Scan - A button to help you search the folder that contains "WEB-INF/web.xml". 
   # Only visible when you have M2Eclipse installed, it will exclude all the classpath that endwith test-classes folder.A specific feature for maven project. (Reference to Issue 42 )
-  # Advanced Options : Here's those very specific option and that user will feel confuse in the beginning , so we group them here. (kind of expert mode...)
+  # Advanced Options : Kind of expert mode.
   # SSL support , check and enter all the data you need , since it's seldom used feature ,it's disabled by default.
   # Scanner: Source scanner will scan all the source folder (but not the WEB-INF) , and restart the server when you updated the source code or some resource in the folder , like hibernate.cfg.xml ...etc
   # Scanner Interval: the scanner period , default is 5 seconds.
