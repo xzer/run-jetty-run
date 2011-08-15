@@ -13,34 +13,21 @@ http://files.tonyq.org/eclipse/runjettyrun/RunJettyRun13.png
 
 == Details ==
 
-1.Jetty Version , if you install Jetty7/Jetty8 support , here you could select the version you like . Default is Jetty6. (#1)
-
-2.Project , usually the selected one. It's seldom to changed.
-
-3.The port , which should not conflict with other existing service or web container , by default is 8080.
-
-4.context path, which will be part of your URL, it should start with "/". 
-
-5.Web application directory ,system will look out the one contains WEB-INF/web.xml , so usually we seldom change it.
-
-6.Scan - A button to help you search the folder that contains "WEB-INF/web.xml".
-
-7.Only visible when you have M2Eclipse installed, it will exclude all the classpath that endwith test-classes folder.A specific feature for maven project. (Reference to Issue 42 )
-
-
-8.Advanced Options : Here's those very specific option and that user will feel confuse in the beginning , so we group them here. (kind of expert mode...)
-
-9. SSL support , check and enter all the data you need , since it's seldom used feature ,it's disabled by default.
-
-10.Scanner: (To be continued)
-11.
-12.
-13.
-14.
-15.
+  # Jetty Version , if you install Jetty7/Jetty8 support , here you could select the version you like . Default is Jetty6. (#1)
+  # Project , usually the selected one. It's seldom to changed.
+  # The port , which should not conflict with other existing service or web container , by default is 8080.
+  # context path, which will be part of your URL, it should start with "/". 
+  # Web application directory ,system will look out the one contains WEB-INF/web.xml , so usually we seldom change it.
+  # Scan - A button to help you search the folder that contains "WEB-INF/web.xml". Only visible when you have M2Eclipse installed, it will exclude all the classpath that endwith test-classes folder.A specific feature for maven project. (Reference to Issue 42 )
+  # Advanced Options : Here's those very specific option and that user will feel confuse in the beginning , so we group them here. (kind of expert mode...)
+  # SSL support , check and enter all the data you need , since it's seldom used feature ,it's disabled by default.
+  # Scanner: Source scanner will scan all the source folder (but not the WEB-INF) , and restart the server when you updated the source code or some resource in the folder , like hibernate.cfg.xml ...etc
+  # Scanner Interval: the scanner period , default is 5 seconds.
+  # Scan web-inf folder , it's useful for you need to change web.xml or applicationContext.xml (spring) often and want to restart automatically, it is not enabled by default.
+  # parentLoaderPriority , a Jetty configuration , my suggestion is better to enable it . For more details , reference to [http://docs.codehaus.org/display/JETTY/Classloading Jetty Classloading].
+  # JNDI support : if you need JNDI , just enable it. 
+  # A chance to exclude some classpath you don't like , it will use this to match each classpath  one by one , if the classpath matched ,RJR won't load it . (The matched result will show up on the console.)
 
 
 
-#1 Note that if you select Jetty8 and need to work with JSP (most of projects need JSP support) , you have to configuration the JRE with a JDK version.  That's the restriction of Jetty8. 
-
-
+_#1 If you select Jetty8 and need to work with JSP (most of projects need JSP support) , you have to configuration the Project JRE for a JDK version.  That's the restriction of Jetty8. _
