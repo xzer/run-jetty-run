@@ -28,7 +28,7 @@ Here is a screen shot of the Jetty tab in the launch dialog:
 http://files.tonyq.org/eclipse/runjettyrun/RunJettyRun13.png
 
 These options are required: 
-  We have a useful default setting when you create it , so usually you will find it's simple and easy.
+  We have a useful default setting for you, so usually you don't have to config it by default.
 
   * Project (must be a Java Project, default is the selected one.)
   * Web application directory (inside the Project,default will find the folder which contains "WEB-INF" )
@@ -41,14 +41,15 @@ If SSL is enabled, these options area also required:
   * The keystore password (used to check the integrity of the keystore)
   * The key password (required to unlock the key)
 
+For all functionality, please reference to [RJRConfigurations RunJettyRun Configurations] . 
+
 
 For the classpath tab , you could find more detail in [Classpath].
 
 If you need more control than Run Jetty Run provides, you have choices:
   * Post a new issue directly to let us know.
   * Use another plug-in that provides you with more control
-  * Write your own main method that starts Jetty (see the Bootstrap class in
-Run Jetty Run, or the various projects of that are part of the [http://wicket.apache.org/ Wicket family].
+  * Write your own main method that starts Jetty (see the Bootstrap class in Run Jetty Run, or the various projects of that are part of the [http://wicket.apache.org/ Wicket family].
   * Extend Run Jetty Run, and feed your changes back so that others can benefit
 
 Have fun with it!
