@@ -35,7 +35,7 @@ These options are required:
   * Context (can just be "/", default is the project name)
   * A web server port , default is 8080.
 
-If SSL is enabled, these options area also required:
+If SSL is enabled, the options below are also required:
   * HTTPS port , default is 8443.
   * Keystore file (typically `.keystore` in the user's home directory)
   * The keystore password (used to check the integrity of the keystore)
