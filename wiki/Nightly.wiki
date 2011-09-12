@@ -11,21 +11,12 @@ It's very welcome to report the bug from nightly build.
 
 = Nightly Update Site =
 
-http://run-jetty-run.googlecode.com/svn/trunk/updatesite-nightly
+~~http://run-jetty-run.googlecode.com/svn/trunk/updatesite-nightly~~
 
 
 = Details =
-    * Issue list http://code.google.com/p/run-jetty-run/issues/list?can=1&q=label%3Afix-1.3.1
-
- * Latest Nightly Version 20110801
-   * features 
-     * Issue 85 Jetty8 servlet3 annotation support
-   * Fixed bugs 
-     * Empty
+   Currently no any nightly version , the official one is the latest.
  
-* Fixed but not in latest nightly issues yet
-  * None
-
 = Next Official build =
 
 1.3.1
