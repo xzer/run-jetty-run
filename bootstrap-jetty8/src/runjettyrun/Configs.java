@@ -196,7 +196,10 @@ public class Configs {
 		configuration.add("org.eclipse.jetty.webapp.WebXmlConfiguration");
 		configuration.add("org.eclipse.jetty.webapp.MetaInfConfiguration");
 		configuration.add("org.eclipse.jetty.webapp.FragmentConfiguration");
-		configuration.add("runjettyrun.annotation.RJRAnnotationConfiguration");
+
+		if(!getBooleanProp("rjrDisableannotation")){
+			configuration.add("runjettyrun.annotation.RJRAnnotationConfiguration");
+		}
 		configuration.add("org.eclipse.jetty.webapp.JettyWebXmlConfiguration");
 		configuration.add("org.eclipse.jetty.webapp.TagLibConfiguration");
 		if (getEnableJNDI()) {
