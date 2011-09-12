@@ -42,7 +42,7 @@ public class Bootstrap {
 	 * @param args
 	 */
 	public static void main(String[] args) throws Exception {
-		System.err.println("Running Jetty 7.4.2.v20110526");
+		System.err.println("Running Jetty 7.5.1.v20110908");
 
 		Configs configs = new Configs();
 
