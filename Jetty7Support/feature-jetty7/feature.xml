@@ -23,8 +23,9 @@
       provider-name="http://code.google.com/p/run-jetty-run/">
 
    <description url="http://code.google.com/p/run-jetty-run/">
-      Run web applications in Eclipse using the Jetty distribution (Jetty 7.4.2.v20110526) embedded in this plug-in,
-have to work with RunJettyRun core.
+      Run web applications in Eclipse using the Jetty7 distribution
+ embedded in this plug-in,
+it have to work with RunJettyRun core.
    </description>
 
    <copyright>
