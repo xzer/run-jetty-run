@@ -14,6 +14,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
 import org.eclipse.jdt.launching.JavaRuntime;
@@ -33,7 +34,10 @@ public class ProjectUtil {
 
 		if (selection instanceof TreeSelection) {// could be project explorer
 			Object first = ((TreeSelection) selection).getFirstElement();
-			if (first instanceof IResource)
+
+			if (first instanceof IJavaElement){
+				return ((IJavaElement) first).getResource();
+			}else if (first instanceof IResource)
 				return (IResource) first;
 			else if (first instanceof IJavaProject)
 				return ((IJavaProject) first).getResource();
@@ -58,14 +62,18 @@ public class ProjectUtil {
 		if (ir != null)
 			return ir;
 
-		IEditorInput editorinput = window.getActivePage().getActiveEditor()
-				.getEditorInput();
-		FileEditorInput fileEditorInput = (FileEditorInput) editorinput
-				.getAdapter(FileEditorInput.class);
-		if (fileEditorInput == null || fileEditorInput.getFile() == null) {
+		try{
+			IEditorInput editorinput = window.getActivePage().getActiveEditor()
+					.getEditorInput();
+			FileEditorInput fileEditorInput = (FileEditorInput) editorinput
+					.getAdapter(FileEditorInput.class);
+			if (fileEditorInput == null || fileEditorInput.getFile() == null) {
+				return null;
+			}
+			return fileEditorInput.getFile();
+		}catch(NullPointerException ex){
 			return null;
 		}
-		return fileEditorInput.getFile();
 	}
 
 	/**
