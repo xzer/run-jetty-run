@@ -416,8 +416,13 @@ public class JettyLaunchConfigurationType extends
 		String value = configuration.getAttribute(cfgAttr, "");
 
 		if("/".equals(value)){
-			value = proj.getResource().getRawLocation().toOSString();
+			IPath path = (IPath)proj.getResource().getLocation().clone();
+			path.makeAbsolute();
+			value = path.toOSString();
 		}else{
+			if(proj.getProject().getFolder(value).getRawLocation() == null){
+				throw new IllegalStateException("raw location shouldn't be null");
+			}
 			value = proj.getProject().getFolder(value).getRawLocation().toOSString();
 		}
 
