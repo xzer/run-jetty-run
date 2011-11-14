@@ -23,7 +23,6 @@ import java.io.File;
 import java.text.MessageFormat;
 
 import org.eclipse.core.resources.IContainer;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -1135,6 +1134,9 @@ public class RunJettyRunTab extends JavaLaunchTab {
 
 		configuration.setAttribute(Plugin.ATTR_ENABLE_JNDI,
 				fEnableJNDI.getSelection());
+
+		configuration.setAttribute(Plugin.ATTR_ENABLE_MAVEN_TEST_CLASSES,
+				fEnableMavenDisableTestClassesBox.getSelection());
 
 		configuration.setAttribute(Plugin.ATTR_KEYSTORE,
 				fKeystoreText.getText());
