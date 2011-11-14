@@ -80,14 +80,23 @@ public class RunJettyRunLaunchConfigurationUtil {
 			}
 			String directory = config.getAttribute(Plugin.ATTR_WEBAPPDIR, "");
 			if (!"".equals(directory.trim())) {
-				IFolder folder = project.getFolder(directory);
-				if (!folder.exists()) {
-					return false;
-				}
-				IFolder file = project.getFolder(new Path(directory
-						+ "/WEB-INF"));
-				if (!file.exists()) {
-					return false;
+
+				if("/".equals(directory)){ //root as webapp folder
+					IFolder file = project.getFolder(new Path("/WEB-INF"));
+					if (!file.exists()) {
+						return false;
+					}
+
+				}else{
+					IFolder folder = project.getFolder(directory);
+					if (!folder.exists()) {
+						return false;
+					}
+					IFolder file = project.getFolder(new Path(directory
+							+ "/WEB-INF"));
+					if (!file.exists()) {
+						return false;
+					}
 				}
 			} else {
 				return false;
