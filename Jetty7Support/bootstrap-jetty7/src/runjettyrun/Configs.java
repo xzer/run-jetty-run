@@ -39,6 +39,7 @@ public class Configs {
 	private String configurationClasses;
 	private String resourceMapping;
 
+	private String jettyXML ;
 	private String excludedclasspath;
 
 	private int eclipseListener;
@@ -60,6 +61,8 @@ public class Configs {
 		sslport = getIntProp("rjrsslport");
 		keystore = getProp("rjrkeystore");
 		password = getProp("rjrpassword");
+
+		jettyXML = getProp("rjrjettyXMLPath");
 
 		excludedclasspath = getProp("rjrexcludedclasspath");
 		try{
@@ -362,6 +365,14 @@ public class Configs {
 
 	public String getExcludedclasspath() {
 		return excludedclasspath;
+	}
+
+	public String getJettyXML() {
+		return jettyXML;
+	}
+
+	public void setJettyXML(String jettyXML) {
+		this.jettyXML = jettyXML;
 	}
 
 }

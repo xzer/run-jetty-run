@@ -61,7 +61,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.ContainerSelectionDialog;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
@@ -71,7 +70,6 @@ import runjettyrun.preferences.PreferenceConstants;
 import runjettyrun.utils.PortUtil;
 import runjettyrun.utils.ProjectUtil;
 import runjettyrun.utils.RunJettyRunLaunchConfigurationUtil;
-import runjettyrun.utils.UIUtil;
 
 /**
  * Launch tab for the RunJettyRun plugin.
@@ -89,6 +87,8 @@ public class RunJettyRunTab extends JavaLaunchTab {
 	private Text fSSLPortText;
 
 	private Text fKeystoreText;
+
+	private Text fJettyXMLText;
 
 	private Text fKeyPasswordText;
 
@@ -109,6 +109,8 @@ public class RunJettyRunTab extends JavaLaunchTab {
 	private Button fEnableNeedClientAuth;
 
 	private Button fKeystoreButton;
+
+	private Button fJettyXMLButton;
 
 	private Button fWebappDirButton;
 
@@ -393,7 +395,8 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		fKeystoreButton.addSelectionListener(new ButtonListener() {
 
 			public void widgetSelected(SelectionEvent e) {
-				handleBrowseFileSystem();
+				handleBrowseFileSystem(fKeystoreText,getDefaultKeystoreLocation(),
+						"Choose a keystore file",new String[] { "*.keystore", "*" });
 			}
 		});
 		fKeystoreButton.setEnabled(false);
@@ -561,14 +564,45 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		 * ---------------------------------------------------------------------
 		 */
 
-		Link systemProperties = UIUtil
-				.createLink(
-						advanceGroup,
-						SWT.NONE,
-						"...You could set "
-								+ "<a href=\"http://communitymapbuilder.org/display/JETTY/SystemProperties\">"
-								+ "more control </a> in VM argument.(-Dkey=value) ");
-		systemProperties.setLayoutData(createHFillGridData(3, SWT.RIGHT));
+		/*
+		 * ---------------------------------------------------------------------
+		 */
+
+		new Label(advanceGroup, SWT.LEFT).setText("Additional Jetty.xml");
+
+		/*
+		 * ---------------------------------------------------------------------
+		 */
+
+		fJettyXMLText = new Text(advanceGroup, SWT.SINGLE | SWT.BORDER);
+		fJettyXMLText.addModifyListener(_updatedListener);
+		fJettyXMLText.setLayoutData(createHFillGridData(2,-1));
+		fJettyXMLText.setFont(font);
+
+		/*
+		 * ---------------------------------------------------------------------
+		 */
+
+		fJettyXMLButton = createPushButton(advanceGroup, "&Browse...", null);
+		fJettyXMLButton.addSelectionListener(new ButtonListener() {
+			public void widgetSelected(SelectionEvent e) {
+				String current = System.getProperty("user.home");
+				IProject project = getProject(fProjText.getText());
+				if(project != null ){
+					current = project.getLocation().toOSString();
+				}
+				handleBrowseFileSystem(fJettyXMLText,current,
+						"Choose a jetty.xml file" , new String[] {"*.xml", "*" });
+			}
+		});
+		fJettyXMLButton.setLayoutData(new GridData());
+
+	}
+
+	private String getDefaultKeystoreLocation(){
+		String userHome = System.getProperty("user.home");
+		String fileSeparator = System.getProperty("file.separator");
+		return userHome + fileSeparator + ".keystore";
 
 	}
 
@@ -842,6 +876,8 @@ public class RunJettyRunTab extends JavaLaunchTab {
 			fEnableParentLoadPriorityBox.setSelection(configuration
 					.getAttribute(Plugin.ATTR_ENABLE_PARENT_LOADER_PRIORITY,
 							true));
+
+			fJettyXMLText.setText(configuration.getAttribute(Plugin.ATTR_JETTY_XML_PATH,""));
 
 			String ver = configuration.getAttribute(
 					Plugin.ATTR_SELECTED_JETTY_VERSION, "");
@@ -1167,6 +1203,7 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		configuration.setAttribute(Plugin.ATTR_ENABLE_PARENT_LOADER_PRIORITY,
 				fEnableParentLoadPriorityBox.getSelection());
 
+		configuration.setAttribute(Plugin.ATTR_JETTY_XML_PATH, fJettyXMLText.getText());
 
 		/*
 		 * when provider only one , it's not event inited for fJettyVersion.
@@ -1257,6 +1294,8 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		configuration.setAttribute(Plugin.ATTR_ENABLE_MAVEN_TEST_CLASSES, true);
 		configuration.setAttribute(Plugin.ATTR_ENABLE_PARENT_LOADER_PRIORITY,
 				true);
+
+		configuration.setAttribute(Plugin.ATTR_JETTY_XML_PATH, "");
 
 		return;
 	}
@@ -1350,20 +1389,21 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		fProjText.setText(projectName);
 	}
 
-	protected void handleBrowseFileSystem() {
-		String current = fKeystoreText.getText();
-		if (current == null || current.trim().equals("")) {
-			String userHome = System.getProperty("user.home");
-			String fileSeparator = System.getProperty("file.separator");
-			current = userHome + fileSeparator + ".keystore";
+
+	protected void handleBrowseFileSystem(Text target,String defaultpath,String label,String[] filterExtension) {
+		String current = target.getText();
+
+		if(current == null || "".equals(current.trim())){
+			current = defaultpath;
 		}
+
 		FileDialog dialog = new FileDialog(getControl().getShell());
-		dialog.setFilterExtensions(new String[] { "*.keystore", "*" }); //$NON-NLS-1$
-		dialog.setFilterPath(fKeystoreText.getText());
-		dialog.setText("Choose a keystore file");
+		dialog.setFilterExtensions(filterExtension); //$NON-NLS-1$
+		dialog.setFilterPath(current);
+		dialog.setText(label);
 		String res = dialog.open();
 		if (res != null)
-			fKeystoreText.setText(res);
+			target.setText(res);
 	}
 
 	private static void setConfigurationProejct(

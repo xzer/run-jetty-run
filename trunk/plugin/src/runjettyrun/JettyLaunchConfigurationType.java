@@ -378,6 +378,11 @@ public class JettyLaunchConfigurationType extends
 				"keypassword");
 		addOptionalAttr(configuration, runtimeVmArgs, Plugin.ATTR_PWD,
 				"password");
+
+		addOptionalAttr(configuration, runtimeVmArgs, Plugin.ATTR_JETTY_XML_PATH,
+		"jettyXMLPath");
+
+
 		addOptionalAttr(configuration, runtimeVmArgs,
 				Plugin.ATTR_SCANINTERVALSECONDS, "scanintervalseconds");
 

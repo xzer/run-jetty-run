@@ -39,6 +39,8 @@ public class Configs {
 	private String configurationClasses;
 	private String resourceMapping;
 
+	private String jettyXML;
+
 	private String excludedclasspath;
 
 	private int eclipseListener;
@@ -54,6 +56,8 @@ public class Configs {
 				webAppDir = webAppDir.substring(1,webAppDir.length()-1);
 			}
 		}
+
+		jettyXML = getProp("rjrjettyXMLPath");
 
 		eclipseListener = getIntProp("rjrEclipseListener", -1);
 		port = getIntProp("rjrport");
@@ -353,6 +357,14 @@ public class Configs {
 
 	public String getExcludedclasspath() {
 		return excludedclasspath;
+	}
+
+	public String getJettyXML() {
+		return jettyXML;
+	}
+
+	public void setJettyXML(String jettyXML) {
+		this.jettyXML = jettyXML;
 	}
 
 }
