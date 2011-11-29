@@ -24,6 +24,7 @@ import org.eclipse.jetty.util.resource.FileResource;
 import org.eclipse.jetty.util.resource.Resource;
 import org.eclipse.jetty.util.resource.ResourceCollection;
 import org.eclipse.jetty.webapp.WebAppContext;
+import org.eclipse.jetty.xml.XmlConfiguration;
 
 /**
  * Started up by the plugin's runner. Starts Jetty.
@@ -54,6 +55,19 @@ public class Bootstrap {
 		initConnnector(server, configs);
 
 		initWebappContext(server,configs);
+
+
+		if(configs.getJettyXML() != null && !"".equals(configs.getJettyXML().trim())){
+			System.err.println("Loading Jetty.xml:"+configs.getJettyXML());
+			try{
+				XmlConfiguration configuration = new XmlConfiguration(
+						new File(configs.getJettyXML()).toURI().toURL());
+				configuration.configure(server);
+			}catch(Exception ex){
+				System.err.println("Exception happened when loading Jetty.xml:");
+				ex.printStackTrace();
+			}
+		}
 
 		// configureScanner
 		if (configs.getEnablescanner())
@@ -93,7 +107,6 @@ public class Bootstrap {
 
 			for (String conf : configurationClasses)
 				System.err.println("Enable config class:" + conf);
-
 		}
 
 
