@@ -127,6 +127,10 @@ public class Plugin extends AbstractUIPlugin {
 	public static final String ATTR_ENABLE_PARENT_LOADER_PRIORITY = Plugin.PLUGIN_ID
 			+ ".ENABLE_PARENT_LOADER_PRIORITY_ATTR";
 
+	public static final String ATTR_JETTY_XML_PATH = Plugin.PLUGIN_ID
+	+ ".JETTY_XML_PATH";
+
+
 	public static final String CONTAINER_RJR_JETTY = "RJRJetty";
 	public static final String CONTAINER_RJR_JETTY_JNDI = "RJRJetty6JNDI";
 
