@@ -17,7 +17,6 @@
  */
 package runjettyrun;
 
-import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTabGroup;
 import org.eclipse.debug.ui.CommonTab;
 import org.eclipse.debug.ui.EnvironmentTab;
@@ -25,8 +24,11 @@ import org.eclipse.debug.ui.ILaunchConfigurationDialog;
 import org.eclipse.debug.ui.ILaunchConfigurationTab;
 import org.eclipse.debug.ui.sourcelookup.SourceLookupTab;
 import org.eclipse.jdt.debug.ui.launchConfigurations.JavaArgumentsTab;
-import org.eclipse.jdt.debug.ui.launchConfigurations.JavaClasspathTab;
 import org.eclipse.jdt.debug.ui.launchConfigurations.JavaJRETab;
+
+import runjettyrun.tabs.JettyClasspathTab;
+import runjettyrun.tabs.ScanFolderTab;
+import runjettyrun.tabs.WebcontextClasspathTab;
 
 public class JettyLaunchConfigurationTabGroup extends
 		AbstractLaunchConfigurationTabGroup {
@@ -35,16 +37,13 @@ public class JettyLaunchConfigurationTabGroup extends
 	}
 
 	public void createTabs(ILaunchConfigurationDialog dialog, String mode) {
-		JavaClasspathTab jct = new JavaClasspathTab(){
-			public void initializeFrom(ILaunchConfiguration configuration) {
-				super.initializeFrom(configuration);
-				fClasspathViewer.expandToLevel(3);
-			}
-		};
 
 		ILaunchConfigurationTab[] tabs = new ILaunchConfigurationTab[] {
 				new RunJettyRunTab(), new JavaArgumentsTab(), new JavaJRETab(),
-				jct, new SourceLookupTab(),
+				new JettyClasspathTab(),
+				new WebcontextClasspathTab(),
+				new ScanFolderTab(),
+				new SourceLookupTab(),
 				new EnvironmentTab(), new CommonTab() };
 		setTabs(tabs);
 	}

@@ -23,6 +23,7 @@ import java.io.StringWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URL;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,9 +34,13 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
+import org.eclipse.jface.dialogs.ErrorDialog;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -51,96 +56,116 @@ import runjettyrun.utils.PortUtil;
  */
 public class Plugin extends AbstractUIPlugin {
 	/** The icon for the RunJettyRunWebApp launch type */
-	private static final String JETTY_ICON_PATH = "/icons/jetty.gif";
+	private static final String JETTY_ICON_PATH = "/icons/jetty.gif"; //$NON-NLS-1$
 
 	/** The plug-in ID. */
-	public static final String PLUGIN_ID = "run_jetty_run";
+	public static final String PLUGIN_ID = "run_jetty_run"; //$NON-NLS-1$
 
-	private static final String JETTY_ICON = PLUGIN_ID + ".jettyIcon";
+	private static final String JETTY_ICON = PLUGIN_ID + ".jettyIcon"; //$NON-NLS-1$
 
 	/** configuration attribute for the full class name of the bootstrap class. */
-	public static final String BOOTSTRAP_CLASS_NAME = "runjettyrun.Bootstrap";
+	public static final String BOOTSTRAP_CLASS_NAME = "runjettyrun.Bootstrap"; //$NON-NLS-1$
 
 	/** configuration attribute for context of the web application. */
 	public static final String ATTR_CONTEXT = Plugin.PLUGIN_ID
-			+ ".CONTEXT_ATTR";
+			+ ".CONTEXT_ATTR"; //$NON-NLS-1$
 
 	/** configuration attribute for the web application directory. */
 	public static final String ATTR_WEBAPPDIR = Plugin.PLUGIN_ID
-			+ ".WEBAPPDIR_ATTR";
+			+ ".WEBAPPDIR_ATTR"; //$NON-NLS-1$
 
 	/** configuration attribute for the web application directory. */
 	public static final String ATTR_EXCLUDE_CLASSPATH = Plugin.PLUGIN_ID
-			+ ".EXCLUDE_CLASSPATH_ATTR";
+			+ ".EXCLUDE_CLASSPATH_ATTR"; //$NON-NLS-1$
 
 	/** configuration attribute for the port to run Jetty on. */
-	public static final String ATTR_PORT = Plugin.PLUGIN_ID + ".PORT_ATTR";
+	public static final String ATTR_PORT = Plugin.PLUGIN_ID + ".PORT_ATTR"; //$NON-NLS-1$
 
 	/**
 	 * configuration attribute for the SSL enable to run Jetty on.
 	 */
 	public static final String ATTR_ENABLE_SSL = Plugin.PLUGIN_ID
-			+ ".ENABLE_SSL_ATTR";
+			+ ".ENABLE_SSL_ATTR"; //$NON-NLS-1$
 
 	/**
 	 * configuration attribute for need client auth.
 	 */
 	public static final String ATTR_ENABLE_NEED_CLIENT_AUTH = Plugin.PLUGIN_ID
-			+ ".ENABLE_NEED_CLIENT_AUTH_ATTR";
+			+ ".ENABLE_NEED_CLIENT_AUTH_ATTR"; //$NON-NLS-1$
 
 	/** configuration attribute for the SSL port to run Jetty on. */
 	public static final String ATTR_SSL_PORT = Plugin.PLUGIN_ID
-			+ ".SSL_PORT_ATTR";
+			+ ".SSL_PORT_ATTR"; //$NON-NLS-1$
 
 	/** configuration attribute for the location of the keystore. */
 	public static final String ATTR_KEYSTORE = Plugin.PLUGIN_ID
-			+ ".KEYSTORE_ATTR";
+			+ ".KEYSTORE_ATTR"; //$NON-NLS-1$
 
 	/** configuration attribute for the SSL port to run Jetty on. */
 	public static final String ATTR_KEY_PWD = Plugin.PLUGIN_ID
-			+ ".KEY_PWD_ATTR";
+			+ ".KEY_PWD_ATTR"; //$NON-NLS-1$
 
 	/** configuration attribute for the SSL port to run Jetty on. */
-	public static final String ATTR_PWD = Plugin.PLUGIN_ID + ".PWD_ATTR";
+	public static final String ATTR_PWD = Plugin.PLUGIN_ID + ".PWD_ATTR"; //$NON-NLS-1$
 	/** configuration attribute for the scan interval seconds. */
 	public static final String ATTR_SCANINTERVALSECONDS = Plugin.PLUGIN_ID
-			+ ".SCANINTERVALSECONDS_ATTR";
+			+ ".SCANINTERVALSECONDS_ATTR"; //$NON-NLS-1$
 	/** configuration attribute for the scan interval seconds. */
 	public static final String ATTR_ENABLE_SCANNER = Plugin.PLUGIN_ID
-			+ ".ENABLE_SCANNER_ATTR";
+			+ ".ENABLE_SCANNER_ATTR"; //$NON-NLS-1$
 
 	public static final String ATTR_SCANNER_SCAN_WEBINF = Plugin.PLUGIN_ID
-	+ ".ENABLE_SCANNER_SCAN_WEBINF_ATTR";
+	+ ".ENABLE_SCANNER_SCAN_WEBINF_ATTR"; //$NON-NLS-1$
 
 	/** used to calculate the jars to include. */
-	public static final String JETTY_VERSION = "6.1.26";
+	public static final String JETTY_VERSION = "6.1.26"; //$NON-NLS-1$
 
 	/**
 	 * filter test-classes or not
 	 */
 	public static final String ATTR_ENABLE_MAVEN_TEST_CLASSES = Plugin.PLUGIN_ID
-			+ ".ENABLE_MAVEN_TEST_CLASSES_ATTR";
+			+ ".ENABLE_MAVEN_TEST_CLASSES_ATTR"; //$NON-NLS-1$
 
 	public static final String ATTR_SELECTED_JETTY_VERSION = Plugin.PLUGIN_ID
-	+ ".SELECTED_JETTY_VERSION_ATTR";
+	+ ".SELECTED_JETTY_VERSION_ATTR"; //$NON-NLS-1$
 
 	public static final String ATTR_ENABLE_PARENT_LOADER_PRIORITY = Plugin.PLUGIN_ID
-			+ ".ENABLE_PARENT_LOADER_PRIORITY_ATTR";
+			+ ".ENABLE_PARENT_LOADER_PRIORITY_ATTR"; //$NON-NLS-1$
 
 	public static final String ATTR_JETTY_XML_PATH = Plugin.PLUGIN_ID
-	+ ".JETTY_XML_PATH";
+	+ ".JETTY_XML_PATH"; //$NON-NLS-1$
 
 
-	public static final String CONTAINER_RJR_JETTY = "RJRJetty";
-	public static final String CONTAINER_RJR_JETTY_JNDI = "RJRJetty6JNDI";
+	public static final String CONTAINER_RJR_JETTY = "RJRJetty"; //$NON-NLS-1$
+	public static final String CONTAINER_RJR_JETTY_JNDI = "RJRJetty6JNDI"; //$NON-NLS-1$
 
 	public static final String ATTR_ENABLE_JNDI = Plugin.PLUGIN_ID
-			+ ".ENABLE_JNDI_ATTR";
+			+ ".ENABLE_JNDI_ATTR"; //$NON-NLS-1$
 
-	public static final String IPROVIDER_ID ="runjettyrun.jetty.providers";
+	public static final String IPROVIDER_ID ="runjettyrun.jetty.providers"; //$NON-NLS-1$
 
 	public static final String ATTR_SHOW_ADVANCE = Plugin.PLUGIN_ID
-			+ ".SHOW_ADVANCE_ATTR";
+			+ RunJettyRunMessages.RJRPlugin_0;
+
+
+	public static final String ATTR_JETTY_CLASSPATH_NON_CHECKED = Plugin.PLUGIN_ID
+	+ ".JETTY_CLASSPATH_NON_CHECKED"; //$NON-NLS-1$
+
+	public static final String ATTR_JETTY_CUSTOM_CLASSPATH = Plugin.PLUGIN_ID
+	+ ".JETTY_CUSTOM_CLASSPATH"; //$NON-NLS-1$
+
+	public static final String ATTR_WEB_CONTEXT_CLASSPATH_NON_CHECKED = Plugin.PLUGIN_ID
+	+ ".WEB_CONTEXT_CLASSPATH_NON_CHECKED"; //$NON-NLS-1$
+
+	public static final String ATTR_WEB_CONTEXT_CUSTOM_CLASSPATH = Plugin.PLUGIN_ID
+	+ ".WEB_CONTEXT_CUSTOM_CLASSPATH"; //$NON-NLS-1$
+
+
+	public static final String ATTR_SCAN_FOLDER_NON_CHECKED = Plugin.PLUGIN_ID
+	+ ".SCAN_FOLDER_NON_CHECKED"; //$NON-NLS-1$
+
+	public static final String ATTR_CUSTOM_SCAN_FOLDER = Plugin.PLUGIN_ID
+	+ ".CUSTOM_SCAN_FOLDER"; //$NON-NLS-1$
 
 	// The shared instance
 	private static Plugin plugin;
@@ -208,7 +233,7 @@ public class Plugin extends AbstractUIPlugin {
 		for (IConfigurationElement e : config) {
 			try {
 
-					final Object o = e.createExecutableExtension("class");
+					final Object o = e.createExecutableExtension("class"); //$NON-NLS-1$
 					if (o instanceof IJettyPackageProvider) {
 						extensions.add(((IJettyPackageProvider) o));
 					}
@@ -230,7 +255,7 @@ public class Plugin extends AbstractUIPlugin {
 
 	public void addRunJettyRunPackageProvider(IJettyPackageProvider provider) {
 		if (provider.getName() == null) {
-			throw new IllegalArgumentException("provider's name can't be null.");
+			throw new IllegalArgumentException(RunJettyRunMessages.RJRPlugin_provider_null);
 		}
 		this.extensions.add(provider);
 	}
@@ -242,7 +267,7 @@ public class Plugin extends AbstractUIPlugin {
 		for (IJettyPackageProvider jpp : extensions) {
 			if (jpp.getName() == null || provider.getName() == null)
 				throw new IllegalStateException(
-						"provider's name can't be null.");
+						RunJettyRunMessages.RJRPlugin_provider_null);
 
 			if (jpp.getName().equals(provider.getName()))
 				list.add(jpp);
@@ -296,7 +321,7 @@ public class Plugin extends AbstractUIPlugin {
 					.createFromURL(imageURL);
 			reg.put(JETTY_ICON, descriptor);
 		} else {
-			logError("resource " + JETTY_ICON_PATH + " was not found");
+			logError(MessageFormat.format(RunJettyRunMessages.RJRPlugin_resource_not_found, new Object[] {JETTY_ICON_PATH}));
 		}
 	}
 
@@ -317,7 +342,50 @@ public class Plugin extends AbstractUIPlugin {
 	static public void logError(String msg) {
 		ILog log = plugin.getLog();
 		Status status = new Status(IStatus.ERROR, getDefault().getBundle()
-				.getSymbolicName(), IStatus.ERROR, msg + "\n", null);
+				.getSymbolicName(), IStatus.ERROR, msg + "\n", null); //$NON-NLS-1$
 		log.log(status);
 	}
+
+	public static IWorkbenchWindow getActiveWorkbenchWindow() {
+		return getDefault().getWorkbench().getActiveWorkbenchWindow();
+	}
+
+	public static Shell getActiveWorkbenchShell() {
+		IWorkbenchWindow window = getActiveWorkbenchWindow();
+		if (window != null) {
+			return window.getShell();
+		}
+		return null;
+	}
+	public static void statusDialog(IStatus status) {
+		switch (status.getSeverity()) {
+		case IStatus.ERROR:
+			statusDialog(RunJettyRunMessages.RJRPlugin_error, status);
+			break;
+		case IStatus.WARNING:
+			statusDialog(RunJettyRunMessages.RJRPlugin_warning, status);
+			break;
+		case IStatus.INFO:
+			statusDialog(RunJettyRunMessages.RJRPlugin_info, status);
+			break;
+		}
+	}
+
+	public static void statusDialog(String title, IStatus status) {
+		Shell shell = getActiveWorkbenchShell();
+		if (shell != null) {
+			switch (status.getSeverity()) {
+			case IStatus.ERROR:
+				ErrorDialog.openError(shell, title, null, status);
+				break;
+			case IStatus.WARNING:
+				MessageDialog.openWarning(shell, title, status.getMessage());
+				break;
+			case IStatus.INFO:
+				MessageDialog.openInformation(shell, title, status.getMessage());
+				break;
+			}
+		}
+	}
+
 }
