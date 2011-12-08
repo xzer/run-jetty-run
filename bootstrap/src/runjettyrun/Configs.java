@@ -39,6 +39,7 @@ public class Configs {
 	private String configurationClasses;
 	private String resourceMapping;
 
+	private String scanlist;
 	private String jettyXML;
 
 	private String excludedclasspath;
@@ -76,7 +77,10 @@ public class Configs {
 		}
 
 		String classpath = getProp("rjrclasspath");
-		webAppClassPath = resovleWebappClasspath(classpath);
+		webAppClassPath = resovlePropConfigFile(classpath);
+
+		scanlist = resovlePropConfigFile(getProp("rjrscanlist"));
+
 		keyPassword = getProp("rjrkeypassword");
 		scanIntervalSeconds = getIntProp("rjrscanintervalseconds");
 
@@ -304,11 +308,11 @@ public class Configs {
 	 * 		we use file to handle it in this case.
 	 * @return
 	 */
-	private static String resovleWebappClasspath(String classpath) {
+	private static String resovlePropConfigFile(String prop) {
 
-		if (classpath != null && classpath.startsWith("file://")) {
+		if (prop != null && prop.startsWith("file://")) {
 			try {
-				String filePath = classpath.substring(7);
+				String filePath = prop.substring(7);
 
 				BufferedReader br = new BufferedReader(new InputStreamReader(
 						new FileInputStream(filePath), "UTF-8"));
@@ -326,7 +330,7 @@ public class Configs {
 			}
 		}
 
-		return classpath;
+		return prop;
 	}
 
 
@@ -365,6 +369,10 @@ public class Configs {
 
 	public void setJettyXML(String jettyXML) {
 		this.jettyXML = jettyXML;
+	}
+
+	public String getScanlist() {
+		return scanlist;
 	}
 
 }

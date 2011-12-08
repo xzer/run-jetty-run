@@ -15,34 +15,58 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
+import org.eclipse.jdt.launching.JavaRuntime;
 
 import runjettyrun.Plugin;
 
 public class RunJettyRunClasspathUtil {
 
-	public static HashSet<String> getWebInfLibLocations(ILaunchConfiguration configuration){
-		HashSet<String> result = new HashSet<String>();
+	public static List<IRuntimeClasspathEntry>  getWebInfLibRuntimeClasspathEntrys(ILaunchConfiguration configuration){
+		List<IRuntimeClasspathEntry> result = new ArrayList<IRuntimeClasspathEntry>();
 
 		IFolder lib = getWebInfLib(configuration);
-		
+
 		if (lib == null || !lib.exists()) {
 			return result;
 		}
 		try{
 			IResource[] resources = lib.members();
-			
+
 			for(IResource res:resources){
 				if("jar".equalsIgnoreCase(res.getFileExtension())){
-					result.add(res.getLocation().toOSString());
+					result.add(JavaRuntime.newArchiveRuntimeClasspathEntry(res));
 				}
 			}
-			
+
 		}catch(CoreException e){
 			e.printStackTrace();
 		}
 		return result;
 	}
-	
+
+	public static HashSet<String> getWebInfLibLocations(ILaunchConfiguration configuration){
+		HashSet<String> result = new HashSet<String>();
+
+		IFolder lib = getWebInfLib(configuration);
+
+		if (lib == null || !lib.exists()) {
+			return result;
+		}
+		try{
+			IResource[] resources = lib.members();
+
+			for(IResource res:resources){
+				if("jar".equalsIgnoreCase(res.getFileExtension())){
+					result.add(res.getLocation().toOSString());
+				}
+			}
+
+		}catch(CoreException e){
+			e.printStackTrace();
+		}
+		return result;
+	}
+
 	public static IFolder getWebInfLib(ILaunchConfiguration configuration){
 		IJavaModel javaModel = JavaCore.create(ResourcesPlugin.getWorkspace()
 				.getRoot());
@@ -77,11 +101,11 @@ public class RunJettyRunClasspathUtil {
 		if (lib == null || !lib.exists()) {
 			return null;
 		}
-		
+
 		return lib;
 	}
-	
-	
+
+
 	public static IRuntimeClasspathEntry[] filterWebInfLibs(
 			IRuntimeClasspathEntry[] defaults,
 			ILaunchConfiguration configuration) {

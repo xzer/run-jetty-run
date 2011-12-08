@@ -49,6 +49,13 @@ public class RunJettyRunClasspathResolver {
 		return resolvedProjectClasspath(entries,configuration,ProjectUtil.isMavenProject(proj.getProject()));
 	}
 
+//	private static IRuntimeClasspathEntry[] resolvedProjectClasspathSelf(){
+//		IProject p = ResourcesPlugin.getWorkspace().getRoot().getProject(cpe.getPath().segment(0));
+//		IJavaProject jp = JavaCore.create(p);
+//
+//		return JavaRuntime.resolveRuntimeClasspathEntry(new RuntimeClasspathEntry(cpe), jp);
+//	}
+
 	private static IRuntimeClasspathEntry[] resolvedProjectClasspath(
 			IRuntimeClasspathEntry[] entries,ILaunchConfiguration configuration,boolean isMaven)throws CoreException{
 		Set<IRuntimeClasspathEntry> all = new LinkedHashSet<IRuntimeClasspathEntry>(entries.length);
@@ -119,7 +126,7 @@ public class RunJettyRunClasspathResolver {
 
 	/**
 	 * Sometimes for M2E , if you set package type as war , it will load some dependency to WEB App Container,
-	 * as 
+	 * as
 	 * @param entryCur
 	 * @return
 	 */
