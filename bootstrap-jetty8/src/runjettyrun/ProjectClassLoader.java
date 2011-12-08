@@ -60,22 +60,21 @@ public class ProjectClassLoader extends WebAppClassLoader {
 		 * to split the projectClassPath, and hand each entry to the super
 		 * class, one at a time.
 		 */
-		if (projectClassPath != null) {
-			String[] tokens = projectClassPath.split(String
-					.valueOf(File.pathSeparatorChar));
-			for (String entry : tokens) {
-				if (excluded != null && entry.matches(excluded)) {
-					System.err.println("ProjectClassLoader excluded entry="
-							+ entry);
-				} else {
-					if (logger)
-						System.err
-								.println("ProjectClassLoader: entry=" + entry);
-					classpaths.add(entry);
-					super.addClassPath(entry);
-				}
-			}
-		}
+	    if(projectClassPath!=null){
+		    String[] tokens = projectClassPath.split(String.valueOf(File.pathSeparatorChar));
+		    for(String entry:tokens){
+		    	String path = entry;
+		    	if(path.startsWith("-y-")|| path.startsWith("-n-")){ //backard compatiable.
+		    		path = path.substring(3);
+		    	}
+		    	if(entry.startsWith("-n-")){
+		    		System.err.println("ProjectClassLoader excluded entry="+ path);
+		    	}else{
+			    	if (logger) System.err.println("ProjectClassLoader: entry="+ path);
+		    		super.addClassPath( path);
+		    	}
+		    }
+	    }
 
 		initialized = true;
 	}
