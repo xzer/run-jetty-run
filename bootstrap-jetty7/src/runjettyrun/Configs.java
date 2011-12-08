@@ -39,7 +39,9 @@ public class Configs {
 	private String configurationClasses;
 	private String resourceMapping;
 
-	private String jettyXML ;
+	private String scanlist;
+	private String jettyXML;
+
 	private String excludedclasspath;
 
 	private int eclipseListener;
@@ -56,13 +58,13 @@ public class Configs {
 			}
 		}
 
+		jettyXML = getProp("rjrjettyXMLPath");
+
 		eclipseListener = getIntProp("rjrEclipseListener", -1);
 		port = getIntProp("rjrport");
 		sslport = getIntProp("rjrsslport");
 		keystore = getProp("rjrkeystore");
 		password = getProp("rjrpassword");
-
-		jettyXML = getProp("rjrjettyXMLPath");
 
 		excludedclasspath = getProp("rjrexcludedclasspath");
 		try{
@@ -75,11 +77,15 @@ public class Configs {
 		}
 
 		String classpath = getProp("rjrclasspath");
-		webAppClassPath = resovleWebappClasspath(classpath);
+		webAppClassPath = resovlePropConfigFile(classpath);
+
+		scanlist = resovlePropConfigFile(getProp("rjrscanlist"));
+
 		keyPassword = getProp("rjrkeypassword");
 		scanIntervalSeconds = getIntProp("rjrscanintervalseconds");
 
 		enablescanner = getBooleanProp("rjrenablescanner");
+
 		scanWEBINF = getBooleanProp("rjrscanWEBINF");
 
 		parentLoaderPriority = getBooleanProp("rjrparentloaderpriority", true);
@@ -221,6 +227,7 @@ public class Configs {
 		return configuration;
 	}
 
+
 	public void validation() {
 		if (getContext() == null) {
 			throw new IllegalStateException(
@@ -312,11 +319,11 @@ public class Configs {
 	 * 		we use file to handle it in this case.
 	 * @return
 	 */
-	private static String resovleWebappClasspath(String classpath) {
+	private static String resovlePropConfigFile(String prop) {
 
-		if (classpath != null && classpath.startsWith("file://")) {
+		if (prop != null && prop.startsWith("file://")) {
 			try {
-				String filePath = classpath.substring(7);
+				String filePath = prop.substring(7);
 
 				BufferedReader br = new BufferedReader(new InputStreamReader(
 						new FileInputStream(filePath), "UTF-8"));
@@ -334,7 +341,7 @@ public class Configs {
 			}
 		}
 
-		return classpath;
+		return prop;
 	}
 
 
@@ -373,6 +380,10 @@ public class Configs {
 
 	public void setJettyXML(String jettyXML) {
 		this.jettyXML = jettyXML;
+	}
+
+	public String getScanlist() {
+		return scanlist;
 	}
 
 }

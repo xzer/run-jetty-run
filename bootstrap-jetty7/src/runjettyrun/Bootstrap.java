@@ -264,19 +264,20 @@ public class Bootstrap {
 	private static void initScanner(final WebAppContext web,
 			final Configs config ) {
 
-		final String webAppClassPath = config.getWebAppClassPath();
 		int scanIntervalSeconds = config.getScanIntervalSeconds();
 
 		final ArrayList<File> scanList = new ArrayList<File>();
-		if (webAppClassPath != null) {
-			for (URL url : ((ProjectClassLoader) web.getClassLoader())
-					.getURLs()) {
-				File f = new File(url.getFile());
-				if (f.isDirectory()) {
-					scanList.add(f);
-				}
+
+		System.err.println("init scanning folders...");
+		if (config.getScanlist() != null) {
+			String[] items = config.getScanlist().split(File.pathSeparator);
+			for (String item:items) {
+				File f = new File(item);
+				scanList.add(f);
+				System.err.println("add to scan list :"+item);
 			}
 		}
+
 		if(config.getScanWEBINF()){
 			Resource r;
 			try {
@@ -284,7 +285,7 @@ public class Bootstrap {
 				if(r.exists()){
 					if(r.getFile().isDirectory()){
 						scanList.add(r.getFile());
-						System.err.println("Add WEB-INF to scanning list:"+r.getFile().getAbsolutePath());
+						System.err.println("add to scan list :" + r.getFile().getAbsolutePath());
 					}
 				}
 			} catch (MalformedURLException e) {
@@ -301,13 +302,15 @@ public class Bootstrap {
 
 			public void filesChanged(@SuppressWarnings("rawtypes") List changes) {
 				try {
-					// boolean reconfigure = changes.contains(getProject()
-					// .getFile().getCanonicalPath());
-					System.err.println("Stopping webapp ...");
+					if(changes.size() > 0 ){
+						System.err.println("Stopping webapp ...(File changed:"+changes.get(0)+")");
+					}else{
+						System.err.println("Stopping webapp ...");
+					}
 
 					web.stop();
 
-					if (webAppClassPath != null) {
+					if (config.getWebAppClassPath() != null) {
 						ProjectClassLoader loader = new ProjectClassLoader(web,
 								config.getWebAppClassPath(),
 								config.getExcludedclasspath(), false);
