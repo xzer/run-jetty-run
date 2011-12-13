@@ -240,8 +240,23 @@ public class ClasspathEntry extends AbstractClasspathEntry implements
 				IJavaProject project = JavaCore.create(ir.getProject());
 				childs = RunJettyRunClasspathUtil.getProjectClasspathsForUserlibs(project, maven);
 				return create(childs, maven);
+
 			} else if (delegate.getType() == IRuntimeClasspathEntry.CONTAINER) {
-				if (RunJettyRunClasspathResolver.isM2EMavenContainer(delegate)) {
+
+				// Note: 2011/12/14 Tony:
+				// Here the reason we also handle the webapplication container for maven resolving issue is,
+				// the web app is impossible to have project as web app .
+
+				// In general case , WTP resolved jars in WEB-INF/lib ,
+				// when we have M2E to resolved pom file , sometimes it will load dependency in WEBAPP Container ,
+
+				// yep , it's weird , I mean it should only use existing M2E Container ,
+				// but it does happened in some case , I decide to check the project entry in WEB APP Conainer.
+
+				// There shouldn't be proejct entrys in general case, so it should be working fine.
+				if (RunJettyRunClasspathResolver.isM2EMavenContainer(delegate) ||
+						RunJettyRunClasspathResolver.isWebAppContainer(delegate)
+				) {
 					IClasspathContainer container = JavaCore.getClasspathContainer(delegate.getPath(),	delegate.getJavaProject());
 					if (container == null) {
 						return null;
