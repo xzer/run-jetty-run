@@ -77,7 +77,7 @@ public class RunJettyRunClasspathResolver {
 	private static IRuntimeClasspathEntry[] resolveRuntimeClasspathEntry(
 			IRuntimeClasspathEntry entry,ILaunchConfiguration configuration,boolean isMaven)throws CoreException{
 
-		if(entry instanceof DefaultProjectClasspathEntry){
+		if(RunJettyRunClasspathUtil.isDefaultProjectClasspathEntry(entry)){
 			IRuntimeClasspathEntry2 entry2 = (IRuntimeClasspathEntry2)entry;
 			IRuntimeClasspathEntry[] entries = entry2.getRuntimeClasspathEntries(configuration);
 			List<IRuntimeClasspathEntry> resolved = new ArrayList<IRuntimeClasspathEntry>();

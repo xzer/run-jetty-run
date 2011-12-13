@@ -153,7 +153,7 @@ public class JettyLaunchConfigurationType extends
 	 */
 	private String[] getJettyClasspath(ILaunchConfiguration configuration)
 			throws CoreException {
-		String[] paths = getClasspath(configuration);
+		String[] paths = getResolvedJettyClasspath(configuration);
 		Set<String> finalPaths = new HashSet<String>();
 		for (String path : paths) {
 			finalPaths.add(path);
@@ -171,6 +171,50 @@ public class JettyLaunchConfigurationType extends
 		}
 
 		return results.toArray(new String[0]);
+
+	}
+	public String[] getResolvedJettyClasspath(ILaunchConfiguration configuration)
+		throws CoreException {
+		IRuntimeClasspathEntry[] entries = JavaRuntime
+				.computeUnresolvedRuntimeClasspath(configuration);
+
+		entries = JavaRuntime.resolveRuntimeClasspath(filterProejctEntries(entries), configuration);
+		List<String> userEntries = new ArrayList<String>(entries.length);
+		Set<String> set = new HashSet<String>(entries.length);
+		for (int i = 0; i < entries.length; i++) {
+			if (entries[i].getClasspathProperty() == IRuntimeClasspathEntry.USER_CLASSES) {
+				String location = entries[i].getLocation();
+				if (location != null) {
+					if (!set.contains(location)) {
+						userEntries.add(location);
+						set.add(location);
+					}
+				}
+			}
+		}
+		return (String[]) userEntries.toArray(new String[userEntries.size()]);
+	}
+
+	private IRuntimeClasspathEntry[] filterProejctEntries(IRuntimeClasspathEntry[] entries){
+
+		if(entries == null) {
+			return null;
+		}
+		List<IRuntimeClasspathEntry> items = new ArrayList<IRuntimeClasspathEntry>();
+
+		for(IRuntimeClasspathEntry entry:entries){
+			if(entry.getType() == IRuntimeClasspathEntry.PROJECT){
+				continue;
+			}
+
+			if(RunJettyRunClasspathUtil.isDefaultProjectClasspathEntry(entry)){
+				continue;
+			}
+
+			items.add(entry);
+
+		}
+		return items.toArray(new IRuntimeClasspathEntry[0]);
 
 	}
 
@@ -631,7 +675,6 @@ public class JettyLaunchConfigurationType extends
 				if(!checked.contains(item)){
 					result.add("-y-"+item);
 				}else{
-					System.out.println("removed:"+item);
 					result.add("-n-"+item);
 				}
 			}

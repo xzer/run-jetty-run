@@ -3,7 +3,6 @@ package runjettyrun.tabs.classpath;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -18,11 +17,6 @@ import runjettyrun.tabs.AbstractClasspathTab;
  * viewer.
  */
 public class UserClassesClasspathContentProvider implements ITreeContentProvider {
-	/**
-	 * Logger for this class
-	 */
-	private static final Logger logger = Logger
-			.getLogger(UserClassesClasspathContentProvider.class.getName());
 
 	private TreeViewer treeViewer;
 	private UserClassesClasspathModel model= null;

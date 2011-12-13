@@ -19,6 +19,7 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
+import org.eclipse.jdt.launching.IRuntimeClasspathEntry2;
 import org.eclipse.jdt.launching.JavaRuntime;
 
 import runjettyrun.Plugin;
@@ -163,6 +164,19 @@ public class RunJettyRunClasspathUtil {
 			e.printStackTrace();
 		}
 		return result;
+	}
+
+	public static boolean isDefaultProjectClasspathEntry(IRuntimeClasspathEntry entry){
+
+		if(entry instanceof IRuntimeClasspathEntry2){
+			IRuntimeClasspathEntry2 item = (IRuntimeClasspathEntry2)entry;
+
+			if("org.eclipse.jdt.launching.classpathentry.defaultClasspath".equals(item.getTypeId())){
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	public static IFolder getWebInfLib(ILaunchConfiguration configuration){

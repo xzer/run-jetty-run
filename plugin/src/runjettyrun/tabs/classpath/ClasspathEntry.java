@@ -253,7 +253,7 @@ public class ClasspathEntry extends AbstractClasspathEntry implements
 				// yep , it's weird , I mean it should only use existing M2E Container ,
 				// but it does happened in some case , I decide to check the project entry in WEB APP Conainer.
 
-				// There shouldn't be proejct entrys in general case, so it should be working fine.
+				//There shouldn't be proejct entrys in general case, so it should be working fine.
 				if (RunJettyRunClasspathResolver.isM2EMavenContainer(delegate) ||
 						RunJettyRunClasspathResolver.isWebAppContainer(delegate)
 				) {
