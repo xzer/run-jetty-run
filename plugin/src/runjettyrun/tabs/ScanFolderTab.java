@@ -31,7 +31,7 @@ public class ScanFolderTab extends AbstractClasspathTab {
 
 	public UserClassesClasspathModel createClasspathModel(
 			ILaunchConfiguration configuration) throws Exception {
-		UserClassesClasspathModel theModel = new UserClassesClasspathModel("Project scan folder","Custom Scan Folder");
+		UserClassesClasspathModel theModel = new UserClassesClasspathModel("Project Scan Folders","Custom Scan Folder/Files");
 		List<IRuntimeClasspathEntry> entries = getClasspathProvider().getDefaultScanList(configuration);
 		for (IRuntimeClasspathEntry entry:entries) {
 			switch (entry.getClasspathProperty()) {

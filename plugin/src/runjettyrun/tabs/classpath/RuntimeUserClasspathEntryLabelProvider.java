@@ -60,14 +60,18 @@ public class RuntimeUserClasspathEntryLabelProvider extends LabelProvider {
 				if (resource instanceof IContainer) {
 					return lp.getImage(resource);
 				}
+				if(resource !=  null && resource.getRawLocation().toFile().isDirectory()){
+					return PlatformUI.getWorkbench().getSharedImages().getImage(
+							org.eclipse.ui.ISharedImages.IMG_OBJ_FOLDER);
+				}
+
 				boolean external = resource == null;
-				boolean source = (entry.getSourceAttachmentPath() != null && !Path.EMPTY.equals(entry.getSourceAttachmentPath()));
+				boolean source = true ;//(entry.getSourceAttachmentPath() != null && !Path.EMPTY.equals(entry.getSourceAttachmentPath()));
 				String key = null;
 				if (external) {
 					IPath path = entry.getPath();
 					if (path != null)
 					{
-						//TODO: check for invalid paths and change image
 						File file = path.toFile();
 						if (file.exists() && file.isDirectory()) {
 							key = ISharedImages.IMG_OBJS_PACKFRAG_ROOT;
@@ -184,7 +188,11 @@ public class RuntimeUserClasspathEntryLabelProvider extends LabelProvider {
 						} else {
 							IClasspathContainer container = JavaCore.getClasspathContainer(entry.getPath(), project);
 							if (container != null) {
-								return container.getDescription();
+								if(container.getDescription().startsWith("Persisted container")){
+									return container.getPath().toString();
+								}else{
+									return container.getDescription();
+								}
 							}
 						}
 					} catch (CoreException e) {

@@ -9,14 +9,14 @@ public class ClasspathGroup extends AbstractClasspathEntry {
 	private boolean canBeRemoved= true;
 	private boolean editable = false;
 
-	public ClasspathGroup(String name, IClasspathEntry parent, boolean canBeRemoved, boolean editable) {
+	public ClasspathGroup(String name, IRJRClasspathEntry parent, boolean canBeRemoved, boolean editable) {
 		this.parent= parent;
 		this.name= name;
 		this.canBeRemoved= canBeRemoved;
 		this.editable = editable;
 	}
 
-	public void addEntry(IClasspathEntry entry, Object beforeEntry) {
+	public void addEntry(IRJRClasspathEntry entry, Object beforeEntry) {
 		if (!childEntries.contains(entry)) {
 			int index = -1;
 			if (beforeEntry != null) {
@@ -30,11 +30,11 @@ public class ClasspathGroup extends AbstractClasspathEntry {
 		}
 	}
 
-	public void removeEntry(IClasspathEntry entry) {
+	public void removeEntry(IRJRClasspathEntry entry) {
 		childEntries.remove(entry);
 	}
 
-	public boolean contains(IClasspathEntry entry) {
+	public boolean contains(IRJRClasspathEntry entry) {
 		return childEntries.contains(entry);
 	}
 

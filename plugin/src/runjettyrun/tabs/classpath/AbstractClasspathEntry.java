@@ -4,21 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public abstract class AbstractClasspathEntry implements IClasspathEntry {
+public abstract class AbstractClasspathEntry implements IRJRClasspathEntry {
 
-	protected List<Object> childEntries = new ArrayList<Object>();
-	protected IClasspathEntry parent = null;
+	protected List<IRJRClasspathEntry> childEntries = new ArrayList<IRJRClasspathEntry>();
+	protected IRJRClasspathEntry parent = null;
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.ant.internal.ui.preferences.IClasspathEntry#moveChild(int)
 	 */
-	public void moveChild(boolean up, IClasspathEntry child) {
+	public void moveChild(boolean up, IRJRClasspathEntry child) {
 		int index= childEntries.indexOf(child);
 		int direction= 1;
 		if (up) {
 			direction= -1;
 		}
-		Object moved= childEntries.get(index+direction);
+		IRJRClasspathEntry moved= childEntries.get(index+direction);
 		childEntries.set(index + direction, child);
 		childEntries.set(index, moved);
 	}
@@ -26,8 +26,8 @@ public abstract class AbstractClasspathEntry implements IClasspathEntry {
 	/* (non-Javadoc)
 	 * @see org.eclipse.ant.internal.ui.preferences.IClasspathEntry#getEntries()
 	 */
-	public IClasspathEntry[] getEntries() {
-		return (IClasspathEntry[])childEntries.toArray(new IClasspathEntry[childEntries.size()]);
+	public IRJRClasspathEntry[] getEntries() {
+		return (IRJRClasspathEntry[])childEntries.toArray(new IRJRClasspathEntry[childEntries.size()]);
 	}
 
 	/* (non-Javadoc)
@@ -40,14 +40,14 @@ public abstract class AbstractClasspathEntry implements IClasspathEntry {
 	/* (non-Javadoc)
 	 * @see org.eclipse.jdt.debug.ui.launchConfigurations.IClasspathEntry#getParent()
 	 */
-	public IClasspathEntry getParent() {
+	public IRJRClasspathEntry getParent() {
 		return parent;
 	}
 
 	/**
 	 * @param parent The parent to set.
 	 */
-	public void setParent(IClasspathEntry parent) {
+	public void setParent(IRJRClasspathEntry parent) {
 		this.parent = parent;
 	}
 }

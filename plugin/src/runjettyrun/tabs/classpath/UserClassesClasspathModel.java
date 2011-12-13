@@ -20,14 +20,14 @@ public class UserClassesClasspathModel extends AbstractClasspathEntry {
 	public Object addEntry(Object entry) {
 		if (entry instanceof ClasspathGroup) {
 			if (!childEntries.contains(entry)) {
-				childEntries.add(entry);
+				childEntries.add((IRJRClasspathEntry)entry);
 				return entry;
 			}
 			return null;
 		}
 		ClasspathEntry newEntry = createEntry((IRuntimeClasspathEntry) entry,
 				null);
-		Iterator<Object> entries = childEntries.iterator();
+		Iterator<IRJRClasspathEntry> entries = childEntries.iterator();
 		while (entries.hasNext()) {
 			Object element = entries.next();
 			if (element instanceof ClasspathGroup) {
@@ -42,8 +42,9 @@ public class UserClassesClasspathModel extends AbstractClasspathEntry {
 		return newEntry;
 	}
 
+
 	public Object addEntry(int entryType, IRuntimeClasspathEntry entry) {
-		IClasspathEntry entryParent = null;
+		IRJRClasspathEntry entryParent = null;
 		switch (entryType) {
 		case USER:
 			entryParent = getUserEntry();
@@ -56,7 +57,7 @@ public class UserClassesClasspathModel extends AbstractClasspathEntry {
 		}
 
 		ClasspathEntry newEntry = createEntry(entry, entryParent);
-		Iterator<Object> entries = childEntries.iterator();
+		Iterator<IRJRClasspathEntry> entries = childEntries.iterator();
 		while (entries.hasNext()) {
 			Object element = entries.next();
 			if (element instanceof ClasspathGroup) {
@@ -81,7 +82,7 @@ public class UserClassesClasspathModel extends AbstractClasspathEntry {
 	 * @param entryType
 	 * @return the entries of the given type, or an empty collection if none
 	 */
-	public IClasspathEntry[] getEntries(int entryType) {
+	public IRJRClasspathEntry[] getEntries(int entryType) {
 		switch (entryType) {
 		case USER:
 			if (userEntries != null) {
@@ -94,11 +95,11 @@ public class UserClassesClasspathModel extends AbstractClasspathEntry {
 			}
 			break;
 		}
-		return new IClasspathEntry[0];
+		return new IRJRClasspathEntry[0];
 	}
 
 	public IRuntimeClasspathEntry[] getAllEntries() {
-		IClasspathEntry[] user = getEntries(USER);
+		IRJRClasspathEntry[] user = getEntries(USER);
 		IRuntimeClasspathEntry[] all = new IRuntimeClasspathEntry[user.length];
 		if (user.length > 0) {
 			System.arraycopy(user, 0, all, 0, user.length);
@@ -108,7 +109,7 @@ public class UserClassesClasspathModel extends AbstractClasspathEntry {
 
 
 	public IRuntimeClasspathEntry[] getCustomEntries() {
-		IClasspathEntry[] user = getEntries(CUSTOM);
+		IRJRClasspathEntry[] user = getEntries(CUSTOM);
 		IRuntimeClasspathEntry[] all = new IRuntimeClasspathEntry[user.length];
 		if (user.length > 0) {
 			System.arraycopy(user, 0, all, 0, user.length);
@@ -131,7 +132,7 @@ public class UserClassesClasspathModel extends AbstractClasspathEntry {
 	}
 
 	public ClasspathEntry createEntry(IRuntimeClasspathEntry entry,
-			IClasspathEntry entryParent) {
+			IRJRClasspathEntry entryParent) {
 		if (entry instanceof ClasspathEntry) {
 			entry = ((ClasspathEntry) entry).getDelegate();
 		}
@@ -158,7 +159,7 @@ public class UserClassesClasspathModel extends AbstractClasspathEntry {
 		for (int i = 0; i < entries.length; i++) {
 			Object object = entries[i];
 			if (object instanceof ClasspathEntry) {
-				IClasspathEntry entryParent = ((ClasspathEntry) object)
+				IRJRClasspathEntry entryParent = ((ClasspathEntry) object)
 						.getParent();
 				if (entryParent instanceof ClasspathGroup) {
 					((ClasspathGroup) entryParent)
@@ -200,7 +201,7 @@ public class UserClassesClasspathModel extends AbstractClasspathEntry {
 		}
 	}
 
-	public IClasspathEntry getCustomEntry() {
+	public IRJRClasspathEntry getCustomEntry() {
 		if (customEntries == null) {
 			customEntries = createGroupEntry(new IRuntimeClasspathEntry[0],
 					null, this.customLabel, false, true, true);
@@ -208,7 +209,7 @@ public class UserClassesClasspathModel extends AbstractClasspathEntry {
 		return customEntries;
 	}
 
-	public IClasspathEntry getUserEntry() {
+	public IRJRClasspathEntry getUserEntry() {
 		if (userEntries == null) {
 			userEntries = createGroupEntry(new IRuntimeClasspathEntry[0], null,
 					this.defaultLabel, false, true, false);

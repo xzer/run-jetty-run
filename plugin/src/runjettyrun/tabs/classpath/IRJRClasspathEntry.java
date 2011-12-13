@@ -12,14 +12,14 @@
 package runjettyrun.tabs.classpath;
 
 
-public interface IClasspathEntry {
+public interface IRJRClasspathEntry {
 
 	/**
 	 * Returns the classpath entries that are the children of this classpath entry
 	 *
 	 * @return the child classpath entries of this entry
 	 */
-	public IClasspathEntry[] getEntries();
+	public IRJRClasspathEntry[] getEntries();
 
 	/**
 	 * Returns whether this classpath entries has child entries.
@@ -33,7 +33,7 @@ public interface IClasspathEntry {
 	 *
 	 * @return the parent of this classpath entry, or <code>null</code> if none.
 	 */
-	public IClasspathEntry getParent();
+	public IRJRClasspathEntry getParent();
 
 	/**
 	 * Move this entries child entry in the direction indicated.
@@ -41,7 +41,7 @@ public interface IClasspathEntry {
 	 * Otherwise, move the child down one position.
 	 * @param child the child entry to move
 	 */
-	public void moveChild(boolean up, IClasspathEntry child);
+	public void moveChild(boolean up, IRJRClasspathEntry child);
 
 	/**
 	 * Returns whether this entry is editable.

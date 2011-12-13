@@ -110,7 +110,7 @@ public class RunJettyRunContainerClasspathEntry implements IClasspathEntry,
 	}
 
 	/**
-	 * @see IClasspathEntry
+	 * @see IRJRClasspathEntry
 	 * @deprecated
 	 */
 	public IClasspathEntry getResolvedEntry() {
