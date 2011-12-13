@@ -71,6 +71,7 @@ public class ProjectClassLoader extends WebAppClassLoader {
 		    		System.err.println("ProjectClassLoader excluded entry="+ path);
 		    	}else{
 			    	if (logger) System.err.println("ProjectClassLoader: entry="+ path);
+			    	classpaths.add(path);
 		    		super.addClassPath( path);
 		    	}
 		    }
