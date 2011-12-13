@@ -5,21 +5,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
-import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
-import org.eclipse.jdt.launching.IRuntimeClasspathEntry2;
-import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 
 import runjettyrun.tabs.AbstractClasspathTab;
-import runjettyrun.utils.RunJettyRunClasspathResolver;
 
 /**
  * Content provider that maintains a list of classpath entries which are shown in a tree
@@ -42,7 +34,7 @@ public class UserClassesClasspathContentProvider implements ITreeContentProvider
 		fTab = tab;
 	}
 
-	public void add(IClasspathEntry parent, IRuntimeClasspathEntry child, Object beforeElement) {
+	public void add(IRJRClasspathEntry parent, IRuntimeClasspathEntry child, Object beforeElement) {
 		Object newEntry= null;
 		if (parent == null || parent == model) {
 			newEntry= model.addEntry(child);
@@ -81,7 +73,7 @@ public class UserClassesClasspathContentProvider implements ITreeContentProvider
 		}
 	}
 
-	public void removeAll(IClasspathEntry parent) {
+	public void removeAll(IRJRClasspathEntry parent) {
 		if (parent instanceof ClasspathGroup) {
 			((ClasspathGroup)parent).removeAll();
 		}
@@ -166,36 +158,11 @@ public class UserClassesClasspathContentProvider implements ITreeContentProvider
 			return returnObjectArray;
 		}
 		if (parentElement instanceof ClasspathEntry) {
-			IRuntimeClasspathEntry entry = ((ClasspathEntry) parentElement).getDelegate();
-
-			if(entry.getType() != IRuntimeClasspathEntry.PROJECT){
-				if(entry instanceof IRuntimeClasspathEntry2){
-					IRuntimeClasspathEntry2 entry2 = (IRuntimeClasspathEntry2) entry;
-					try {
-						IRuntimeClasspathEntry[] entries = entry2.getRuntimeClasspathEntries(fTab.getLaunchConfiguration());
-						return convertRuntimeToClasspathEntry( (ClasspathEntry) parentElement, entries);
-					} catch (CoreException e) {
-						logger.severe("Object - exception: " + e);
-						return null;
-					}
-				}
-			}else if(entry.getType() == IRuntimeClasspathEntry.PROJECT){
-				try {
-
-					IRuntimeClasspathEntry[] entries = filteBootstrapEntries(JavaRuntime.computeUnresolvedRuntimeClasspath((IJavaProject)JavaCore.create(entry.getResource())));
-					entries = RunJettyRunClasspathResolver.resolveClasspath(entries, fTab.getLaunchConfiguration());
-					entries = converProjectToSourceFolder(entry,entries);
-					return convertRuntimeToClasspathEntry( (ClasspathEntry) parentElement, entries);
-				} catch (CoreException e) {
-					logger.severe("Object - exception: " + e);
-
-					return null;
-				}
-			}
+			 return ((ClasspathEntry)parentElement).getChildren(fTab.getLaunchConfiguration());
 		}
 		if (parentElement == null) {
 			List<Object> all= new ArrayList<Object>();
-			IClasspathEntry[] topEntries= model.getEntries();
+			IRJRClasspathEntry[] topEntries= model.getEntries();
 			for (int i = 0; i < topEntries.length; i++) {
 				Object object = topEntries[i];
 				if (object instanceof ClasspathEntry) {
@@ -211,58 +178,6 @@ public class UserClassesClasspathContentProvider implements ITreeContentProvider
 		return null;
 	}
 
-	private IRuntimeClasspathEntry[] converProjectToSourceFolder(IRuntimeClasspathEntry projectEntry,IRuntimeClasspathEntry[] entries){
-		if(entries==  null) {
-			throw new IllegalArgumentException("Entries can't be null");
-		}
-		List<IRuntimeClasspathEntry> lists = new ArrayList<IRuntimeClasspathEntry>();
-		for(IRuntimeClasspathEntry entry:entries){
-			if(isSameProjectClasspathEntry(entry, projectEntry)){
-				//This means prjoect only have default output location.
-				IPath path= new Path(entry.getLocation()).makeAbsolute();
-				lists.add(
-					JavaRuntime.newArchiveRuntimeClasspathEntry(path)
-				);
-			}else{
-				lists.add(entry);
-			}
-		}
-		return lists.toArray(new IRuntimeClasspathEntry[0]);
-	}
-
-	private boolean isSameProjectClasspathEntry(IRuntimeClasspathEntry entry,IRuntimeClasspathEntry entry2){
-		if(entry.getType() == IRuntimeClasspathEntry.PROJECT &&
-				entry2.getType() == IRuntimeClasspathEntry.PROJECT
-		){
-			return entry.getResource().equals(entry2.getResource());
-		}
-
-		return false;
-	}
-
-
-	private IRuntimeClasspathEntry[] filteBootstrapEntries(IRuntimeClasspathEntry[] entries){
-		if(entries==  null) {
-			throw new IllegalArgumentException("Entries can't be null");
-		}
-		List<IRuntimeClasspathEntry> lists = new ArrayList<IRuntimeClasspathEntry>();
-		for(IRuntimeClasspathEntry entry:entries){
-			if(entry.getClasspathProperty() != IRuntimeClasspathEntry.STANDARD_CLASSES){
-				lists.add(entry);
-			}
-		}
-		return lists.toArray(new IRuntimeClasspathEntry[0]);
-	}
-
-	private IClasspathEntry[]  convertRuntimeToClasspathEntry(ClasspathEntry parentElement,IRuntimeClasspathEntry[] entries ){
-		IClasspathEntry[] cps = new IClasspathEntry[entries.length];
-		for (int i = 0; i < entries.length; i++) {
-			IRuntimeClasspathEntry childEntry = entries[i];
-			cps[i] = new ClasspathEntry(childEntry, (ClasspathEntry) parentElement);
-		}
-		return cps;
-	}
-
 	public void removeAll(List<?> selection) {
 		Object[] array= selection.toArray();
 		model.removeAll(array);
@@ -270,16 +185,16 @@ public class UserClassesClasspathContentProvider implements ITreeContentProvider
 		refresh();
 	}
 
-	public IClasspathEntry[] getCustomClasspathEntries() {
+	public IRJRClasspathEntry[] getCustomClasspathEntries() {
 		return model.getEntries(UserClassesClasspathModel.CUSTOM);
 	}
 
-	public IClasspathEntry[] getUserClasspathEntries() {
+	public IRJRClasspathEntry[] getUserClasspathEntries() {
 		return model.getEntries(UserClassesClasspathModel.USER);
 	}
 
-	public void handleMove(boolean direction, IClasspathEntry entry) {
-		IClasspathEntry parent = (IClasspathEntry)getParent(entry);
+	public void handleMove(boolean direction, IRJRClasspathEntry entry) {
+		IRJRClasspathEntry parent = (IRJRClasspathEntry)getParent(entry);
 		parent.moveChild(direction, entry);
 	}
 

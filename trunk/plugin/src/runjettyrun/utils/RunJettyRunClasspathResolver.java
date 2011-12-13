@@ -26,7 +26,6 @@ import runjettyrun.Plugin;
  * @author TonyQ
  *
  */
-@SuppressWarnings("restriction")
 public class RunJettyRunClasspathResolver {
 	/**
 	 * reference to M2E project , 20101115 version.
@@ -95,7 +94,7 @@ public class RunJettyRunClasspathResolver {
 					continue;
 				}
 
-				if(isMaven && isProjectIncludedByM2E(entryCur)){
+				if(isMaven && isM2EMavenContainer(entryCur)){
 					temp = computeMavenContainerEntries(entryCur,configuration);
 				}else {
 					temp = JavaRuntime.resolveRuntimeClasspathEntry(entryCur, configuration);
@@ -130,16 +129,34 @@ public class RunJettyRunClasspathResolver {
 	 * @param entryCur
 	 * @return
 	 */
-	private static boolean isProjectIncludedByM2E(IRuntimeClasspathEntry entryCur){
+	public static boolean isM2EMavenContainer(IRuntimeClasspathEntry entryCur){
 		String entryPath = entryCur.getPath() == null ? "" : entryCur.getPath().toString();
 		return entryCur.getType()== IRuntimeClasspathEntry.CONTAINER &&
 			( MAVEN_CONTAINER_ID.equals(entryCur.getVariableName()) || WEBAPP_CONTAINER_PATH.equals(entryPath));
 	}
+
+
+	public static IRuntimeClasspathEntry[] computeSubClasspathEntries(IRuntimeClasspathEntry entry, ILaunchConfiguration config,boolean isMaven) throws CoreException {
+
+
+		if(entry.getType() == IRuntimeClasspathEntry.ARCHIVE){
+			return new IRuntimeClasspathEntry[0];
+		}else if(entry.getType() == IRuntimeClasspathEntry.PROJECT){
+
+		}else if(entry.getType() == IRuntimeClasspathEntry.VARIABLE){
+		}else if(entry.getType() == IRuntimeClasspathEntry.CONTAINER){
+		}else if(entry.getType() == IRuntimeClasspathEntry.OTHER){
+
+		}
+
+		return null;
+	}
+
 	/**
 	 * Performs default resolution for a container entry.
 	 * Delegates to the Java model.
 	 */
-	private static IRuntimeClasspathEntry[] computeMavenContainerEntries(IRuntimeClasspathEntry entry, ILaunchConfiguration config) throws CoreException {
+	public static IRuntimeClasspathEntry[] computeMavenContainerEntries(IRuntimeClasspathEntry entry, ILaunchConfiguration config) throws CoreException {
 		IJavaProject project = entry.getJavaProject();
 		if (project == null) {
 			project = JavaRuntime.getJavaProject(config);

@@ -23,7 +23,7 @@ public class JettyClasspathTab extends AbstractClasspathTab{
 
 	public UserClassesClasspathModel createClasspathModel(ILaunchConfiguration configuration)
 			throws Exception {
-		UserClassesClasspathModel theModel= new UserClassesClasspathModel();
+		UserClassesClasspathModel theModel= new UserClassesClasspathModel("Default Jetty Classpath","Custom Jetty Classpath");
 		IRuntimeClasspathEntry[] entries= getClasspathProvider().computeUnresolvedJettyClasspath(configuration);
 		for (int i = 0; i < entries.length; i++) {
 			IRuntimeClasspathEntry entry = entries[i];

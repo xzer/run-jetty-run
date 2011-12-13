@@ -63,6 +63,18 @@
             id="RunJettyRunWebAppClassPathProvider">
       </classpathProvider>
    </extension>
+   <extension point="org.eclipse.jdt.launching.runtimeClasspathEntryResolvers">
+  		<runtimeClasspathEntryResolver
+   			class="runjettyrun.JettyLaunchConfigurationClassPathProvider"
+   			id="RunJettyRunWebAppClassPathProvider"
+   			container="RJRJetty">
+  		</runtimeClasspathEntryResolver>
+  		<runtimeClasspathEntryResolver
+   			class="runjettyrun.JettyLaunchConfigurationClassPathProvider"
+   			id="RunJettyRunWebAppClassPathProvider"
+   			container="RJRJettyJNDI">
+  		</runtimeClasspathEntryResolver>
+ 	</extension>
     <extension
           point="org.eclipse.ui.commands">
        <command

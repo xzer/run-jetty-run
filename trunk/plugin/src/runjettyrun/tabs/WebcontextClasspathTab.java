@@ -26,11 +26,7 @@ public class WebcontextClasspathTab extends AbstractClasspathTab {
 		IRuntimeClasspathEntry[] entries = getClasspathProvider().computeWebcontextClassPath(configuration);
 		for (int i = 0; i < entries.length; i++) {
 			IRuntimeClasspathEntry entry = entries[i];
-			switch (entry.getClasspathProperty()) {
-				case IRuntimeClasspathEntry.USER_CLASSES:
-					theModel.addEntry(UserClassesClasspathModel.USER, entry);
-					break;
-			}
+			theModel.addEntry(UserClassesClasspathModel.USER, entry);
 		}
 
 		entries = getClasspathProvider().computeUnresolvedCustomClasspath(

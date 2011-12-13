@@ -137,7 +137,7 @@ public class Plugin extends AbstractUIPlugin {
 
 
 	public static final String CONTAINER_RJR_JETTY = "RJRJetty"; //$NON-NLS-1$
-	public static final String CONTAINER_RJR_JETTY_JNDI = "RJRJetty6JNDI"; //$NON-NLS-1$
+	public static final String CONTAINER_RJR_JETTY_JNDI = "RJRJettyJNDI"; //$NON-NLS-1$
 
 	public static final String ATTR_ENABLE_JNDI = Plugin.PLUGIN_ID
 			+ ".ENABLE_JNDI_ATTR"; //$NON-NLS-1$

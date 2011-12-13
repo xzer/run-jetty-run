@@ -612,7 +612,7 @@ public class JettyLaunchConfigurationType extends
 	private String[] getProjectClasspath(ILaunchConfiguration configuration)
 			throws CoreException {
 		try {
-			IRuntimeClasspathEntry[] entries = prepareWebAppClasspaths(configuration);
+			IRuntimeClasspathEntry[] entries = RunJettyRunClasspathUtil.getDefaultWebAppClasspaths(configuration);
 			entries = RunJettyRunClasspathResolver.resolveClasspath(entries,
 					configuration);
 
@@ -655,38 +655,4 @@ public class JettyLaunchConfigurationType extends
 		return locations;
 	}
 
-	private IRuntimeClasspathEntry[] prepareWebAppClasspaths(
-			ILaunchConfiguration configuration) throws CoreException {
-		IJavaProject proj = JavaRuntime.getJavaProject(configuration);
-		if (proj == null) {
-			Plugin.logError("No project!");
-			throw new IllegalArgumentException("project is null");
-		}
-		IRuntimeClasspathEntry[] entries = RunJettyRunClasspathUtil
-				.filterWebInfLibs(
-						JavaRuntime.computeUnresolvedRuntimeClasspath(proj),
-						configuration);
-
-		// Remove JRE entry/entries.
-
-		IRuntimeClasspathEntry stdJreEntry = JavaRuntime
-				.computeJREEntry(configuration);
-		IRuntimeClasspathEntry projJreEntry = JavaRuntime.computeJREEntry(proj);
-		List<IRuntimeClasspathEntry> entryList = new ArrayList<IRuntimeClasspathEntry>(
-				entries.length);
-
-		for (int i = 0; i < entries.length; i++) {
-			IRuntimeClasspathEntry entry = entries[i];
-			if (entry.equals(stdJreEntry))
-				continue;
-			if (entry.equals(projJreEntry))
-				continue;
-			entryList.add(entry);
-		}
-
-		// Resolve the entries to actual file/folder locations.
-
-		entries = entryList.toArray(new IRuntimeClasspathEntry[0]);
-		return entries;
-	}
 }

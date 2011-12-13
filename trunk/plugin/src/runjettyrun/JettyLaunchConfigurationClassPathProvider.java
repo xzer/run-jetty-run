@@ -30,9 +30,12 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
+import org.eclipse.jdt.launching.IRuntimeClasspathEntryResolver;
+import org.eclipse.jdt.launching.IVMInstall;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.jdt.launching.StandardClasspathProvider;
 
@@ -43,7 +46,7 @@ import runjettyrun.utils.RunJettyRunClasspathUtil;
 import runjettyrun.utils.RunJettyRunLaunchConfigurationUtil;
 
 public class JettyLaunchConfigurationClassPathProvider extends
-		StandardClasspathProvider {
+		StandardClasspathProvider implements IRuntimeClasspathEntryResolver{
 
 	public JettyLaunchConfigurationClassPathProvider() {
 	}
@@ -150,40 +153,8 @@ public class JettyLaunchConfigurationClassPathProvider extends
 			return new IRuntimeClasspathEntry[0];
 		}
 
-		IRuntimeClasspathEntry[] entries = RunJettyRunClasspathUtil
-				.filterWebInfLibs(
-						JavaRuntime.computeUnresolvedRuntimeClasspath(proj),
-						configuration);
-
-		// Remove JRE entry/entries.
-
-		IRuntimeClasspathEntry stdJreEntry = JavaRuntime
-				.computeJREEntry(configuration);
-		IRuntimeClasspathEntry projJreEntry = JavaRuntime.computeJREEntry(proj);
-		List<IRuntimeClasspathEntry> entryList = new ArrayList<IRuntimeClasspathEntry>(
-				entries.length);
-
-		for (int i = 0; i < entries.length; i++) {
-			IRuntimeClasspathEntry entry = entries[i];
-			if (entry.equals(stdJreEntry))
-				continue;
-			if (entry.equals(projJreEntry))
-				continue;
-			entryList.add(entry);
-		}
-
-		// Resolve the entries to actual file/folder locations.
-
-		entries = entryList.toArray(new IRuntimeClasspathEntry[0]);
-		entries = RunJettyRunClasspathResolver.resolveClasspath(entries,
-				configuration);
-
-		List<IRuntimeClasspathEntry> locations = onlyUserClass(entries);
-		locations.addAll(RunJettyRunClasspathUtil
-				.getWebInfLibRuntimeClasspathEntrys(configuration));
-
-		return (IRuntimeClasspathEntry[]) locations
-				.toArray(new IRuntimeClasspathEntry[0]);
+		List<IRuntimeClasspathEntry> entryList =  RunJettyRunClasspathUtil.getProjectClasspathsForUserlibs(proj, false);
+		return (IRuntimeClasspathEntry[]) entryList.toArray(new IRuntimeClasspathEntry[0]);
 	}
 
 	public IRuntimeClasspathEntry[] computeUnresolvedCustomClasspath(
@@ -330,16 +301,21 @@ public class JettyLaunchConfigurationClassPathProvider extends
 
 	}
 
-	private List<IRuntimeClasspathEntry> onlyUserClass(
-			IRuntimeClasspathEntry[] entries) {
-		ArrayList<IRuntimeClasspathEntry> locations = new ArrayList<IRuntimeClasspathEntry>();
-		for (int i = 0; i < entries.length; i++) {
-			IRuntimeClasspathEntry entry = entries[i];
-			if (entry.getClasspathProperty() == IRuntimeClasspathEntry.USER_CLASSES) {
-				locations.add(entry);
-			}
-		}
-		return locations;
-
+	public IRuntimeClasspathEntry[] resolveRuntimeClasspathEntry(
+			IRuntimeClasspathEntry entry, ILaunchConfiguration configuration)
+			throws CoreException {
+		return resolveClasspath(new IRuntimeClasspathEntry[]{entry},configuration );
 	}
+
+	public IRuntimeClasspathEntry[] resolveRuntimeClasspathEntry(
+			IRuntimeClasspathEntry entry, IJavaProject project)
+			throws CoreException {
+		throw new UnsupportedOperationException();
+	}
+
+	public IVMInstall resolveVMInstall(IClasspathEntry entry)
+			throws CoreException {
+		throw new UnsupportedOperationException();
+	}
+
 }

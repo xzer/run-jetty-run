@@ -34,7 +34,7 @@ public class RuntimeClasspathViewer extends ContainerCheckedTreeViewer implement
 	 */
 	private ListenerList fListeners = new ListenerList();
 
-	private IClasspathEntry fCurrentParent= null;
+	private IRJRClasspathEntry fCurrentParent= null;
 
 	/**
 	 * Creates a runtime classpath viewer with the given parent.
@@ -109,7 +109,7 @@ public class RuntimeClasspathViewer extends ContainerCheckedTreeViewer implement
 		IStructuredSelection sel = (IStructuredSelection) getSelection();
 		Object beforeElement = sel.getFirstElement();
 		resolveCurrentParent(getSelection());
-		List<IClasspathEntry> existingEntries= Arrays.asList(fCurrentParent.getEntries());
+		List<IRJRClasspathEntry> existingEntries= Arrays.asList(fCurrentParent.getEntries());
 		for (int i = 0; i < entries.length; i++) {
 			if ( !existingEntries.contains(entries[i])) {
 				getClasspathContentProvider().add(fCurrentParent, entries[i], beforeElement);
@@ -126,7 +126,7 @@ public class RuntimeClasspathViewer extends ContainerCheckedTreeViewer implement
 		while (selected.hasNext()) {
 			Object element = selected.next();
 			if (element instanceof ClasspathEntry) {
-				IClasspathEntry parent= ((IClasspathEntry)element).getParent();
+				IRJRClasspathEntry parent= ((IRJRClasspathEntry)element).getParent();
 				if (fCurrentParent != null) {
 					if (!fCurrentParent.equals(parent)) {
 						return false;
@@ -140,7 +140,7 @@ public class RuntimeClasspathViewer extends ContainerCheckedTreeViewer implement
 						return false;
 					}
 				} else {
-					fCurrentParent= (IClasspathEntry)element;
+					fCurrentParent= (IRJRClasspathEntry)element;
 				}
 			}
 		}
@@ -185,16 +185,16 @@ public class RuntimeClasspathViewer extends ContainerCheckedTreeViewer implement
 	 * @see org.eclipse.jdt.internal.debug.ui.launcher.IClasspathViewer#indexOf(org.eclipse.jdt.launching.IRuntimeClasspathEntry)
 	 */
 	public int indexOf(IRuntimeClasspathEntry entry) {
-		IClasspathEntry[] entries= getClasspathContentProvider().getCustomClasspathEntries();
+		IRJRClasspathEntry[] entries= getClasspathContentProvider().getCustomClasspathEntries();
 		for (int i = 0; i < entries.length; i++) {
-			IClasspathEntry existingEntry = entries[i];
+			IRJRClasspathEntry existingEntry = entries[i];
 			if (existingEntry.equals(entry)) {
 				return 1;
 			}
 		}
 		entries=  getClasspathContentProvider().getUserClasspathEntries();
 		for (int i = 0; i < entries.length; i++) {
-			IClasspathEntry existingEntry = entries[i];
+			IRJRClasspathEntry existingEntry = entries[i];
 			if (existingEntry.equals(entry)) {
 				return 1;
 			}
@@ -227,9 +227,9 @@ public class RuntimeClasspathViewer extends ContainerCheckedTreeViewer implement
 			case RuntimeClasspathAction.ADD :
 				Iterator<?> selected= selection.iterator();
 				while (selected.hasNext()) {
-					IClasspathEntry entry = (IClasspathEntry)selected.next();
+					IRJRClasspathEntry entry = (IRJRClasspathEntry)selected.next();
 					if(entry != null){
-						IClasspathEntry point = entry ;
+						IRJRClasspathEntry point = entry ;
 						while(point!=null){
 							if(point instanceof ClasspathGroup){
 								if(((ClasspathGroup)point).isEditable()){
@@ -245,7 +245,7 @@ public class RuntimeClasspathViewer extends ContainerCheckedTreeViewer implement
 			case RuntimeClasspathAction.REMOVE :
 				selected= selection.iterator();
 				while (selected.hasNext()) {
-					IClasspathEntry entry = (IClasspathEntry)selected.next();
+					IRJRClasspathEntry entry = (IRJRClasspathEntry)selected.next();
 					if(entry instanceof ClasspathGroup && !((ClasspathGroup)entry).canBeRemoved()){
 						return false;
 					}else if (!entry.isEditable()) {
@@ -256,7 +256,7 @@ public class RuntimeClasspathViewer extends ContainerCheckedTreeViewer implement
 			case RuntimeClasspathAction.MOVE :
 				selected= selection.iterator();
 				while (selected.hasNext()) {
-					IClasspathEntry entry = (IClasspathEntry)selected.next();
+					IRJRClasspathEntry entry = (IRJRClasspathEntry)selected.next();
 					if (!entry.isEditable()) {
 						return false;
 					}
@@ -274,10 +274,10 @@ public class RuntimeClasspathViewer extends ContainerCheckedTreeViewer implement
 	 */
 	public ISelection getSelectedEntries() {
 		IStructuredSelection selection= (IStructuredSelection)getSelection();
-		List<IClasspathEntry> entries= new ArrayList<IClasspathEntry>(selection.size() * 2);
+		List<IRJRClasspathEntry> entries= new ArrayList<IRJRClasspathEntry>(selection.size() * 2);
 		Iterator<?> itr= selection.iterator();
 		while (itr.hasNext()) {
-			IClasspathEntry element = (IClasspathEntry) itr.next();
+			IRJRClasspathEntry element = (IRJRClasspathEntry) itr.next();
 			if (element.hasEntries()) {
 				entries.addAll(Arrays.asList(element.getEntries()));
 			} else {
