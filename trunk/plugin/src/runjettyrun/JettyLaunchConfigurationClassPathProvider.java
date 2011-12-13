@@ -250,7 +250,7 @@ public class JettyLaunchConfigurationClassPathProvider extends
 	public IRuntimeClasspathEntry[] resolveClasspath(
 			IRuntimeClasspathEntry[] entries, ILaunchConfiguration configuration)
 			throws CoreException {
-		return resolveClasspath(entries, configuration, true);
+		return resolveClasspath(entries, configuration, false);
 	}
 
 	public IRuntimeClasspathEntry[] resolveClasspath(
