@@ -31,6 +31,13 @@ public class RunJettyRunClasspathResolver {
 	 * reference to M2E project , 20101115 version.
 	 */
 	private static String MAVEN_CONTAINER_ID = "org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER";
+
+	/**
+	 * M2E updated a newer version after Eclispe 3.7 , that's the reason it's a new container name.
+	 * Please reference to http://code.google.com/p/run-jetty-run/issues/detail?id=102 .
+	 */
+	private static String NEW_MAVEN_CONTAINER_ID = "org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER";
+
 	private static String WEBAPP_CONTAINER_PATH = "org.eclipse.jst.j2ee.internal.web.container";
 
 	//path:org.eclipse.jst.server.core.container/org.eclipse.jst.server.jetty.runtimeTarget/Jetty v7.2
@@ -47,13 +54,6 @@ public class RunJettyRunClasspathResolver {
 
 		return resolvedProjectClasspath(entries,configuration,ProjectUtil.isMavenProject(proj.getProject()));
 	}
-
-//	private static IRuntimeClasspathEntry[] resolvedProjectClasspathSelf(){
-//		IProject p = ResourcesPlugin.getWorkspace().getRoot().getProject(cpe.getPath().segment(0));
-//		IJavaProject jp = JavaCore.create(p);
-//
-//		return JavaRuntime.resolveRuntimeClasspathEntry(new RuntimeClasspathEntry(cpe), jp);
-//	}
 
 	private static IRuntimeClasspathEntry[] resolvedProjectClasspath(
 			IRuntimeClasspathEntry[] entries,ILaunchConfiguration configuration,boolean isMaven)throws CoreException{
@@ -94,7 +94,19 @@ public class RunJettyRunClasspathResolver {
 					continue;
 				}
 
-				if(isMaven && isM2EMavenContainer(entryCur)){
+				if(isMaven &&
+						(isM2EMavenContainer(entryCur) ||isWebAppContainer(entryCur))){
+					// Note: 2011/12/14 Tony:
+					// Here the reason we also handle the webapplication container for maven resolving issue is,
+					// the web app is impossible to have project as web app .
+
+					// In general case , WTP resolved jars in WEB-INF/lib ,
+					// when we have M2E to resolved pom file , sometimes it will load dependency in WEBAPP Container ,
+
+					// yep , it's weird , I mean it should only use existing M2E Container ,
+					// but it does happened in some case , I decide to check the project entry in WEB APP Conainer.too.
+
+					// There shouldn't be proejct entrys in general case, so it should be working fine.
 					temp = computeMavenContainerEntries(entryCur,configuration);
 				}else {
 					temp = JavaRuntime.resolveRuntimeClasspathEntry(entryCur, configuration);
@@ -124,34 +136,23 @@ public class RunJettyRunClasspathResolver {
 	}
 
 	/**
-	 * Sometimes for M2E , if you set package type as war , it will load some dependency to WEB App Container,
-	 * as
+	 * Sometimes for M2E , if you set package type as war , it will load some dependency to WEB App Container.
+	 *
+	 * Here the method is actaully
 	 * @param entryCur
 	 * @return
 	 */
 	public static boolean isM2EMavenContainer(IRuntimeClasspathEntry entryCur){
+		return entryCur.getType()== IRuntimeClasspathEntry.CONTAINER &&
+			(( MAVEN_CONTAINER_ID.equals(entryCur.getVariableName()) ||
+				NEW_MAVEN_CONTAINER_ID.equals(entryCur.getVariableName())) );
+	}
+
+	public static boolean isWebAppContainer(IRuntimeClasspathEntry entryCur){
 		String entryPath = entryCur.getPath() == null ? "" : entryCur.getPath().toString();
 		return entryCur.getType()== IRuntimeClasspathEntry.CONTAINER &&
-			( MAVEN_CONTAINER_ID.equals(entryCur.getVariableName()) || WEBAPP_CONTAINER_PATH.equals(entryPath));
+			( WEBAPP_CONTAINER_PATH.equals(entryPath));
 	}
-
-
-	public static IRuntimeClasspathEntry[] computeSubClasspathEntries(IRuntimeClasspathEntry entry, ILaunchConfiguration config,boolean isMaven) throws CoreException {
-
-
-		if(entry.getType() == IRuntimeClasspathEntry.ARCHIVE){
-			return new IRuntimeClasspathEntry[0];
-		}else if(entry.getType() == IRuntimeClasspathEntry.PROJECT){
-
-		}else if(entry.getType() == IRuntimeClasspathEntry.VARIABLE){
-		}else if(entry.getType() == IRuntimeClasspathEntry.CONTAINER){
-		}else if(entry.getType() == IRuntimeClasspathEntry.OTHER){
-
-		}
-
-		return null;
-	}
-
 	/**
 	 * Performs default resolution for a container entry.
 	 * Delegates to the Java model.
