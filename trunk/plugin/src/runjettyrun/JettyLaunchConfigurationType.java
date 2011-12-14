@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.resources.IContainer;
@@ -104,12 +105,12 @@ public class JettyLaunchConfigurationType extends
 
 	private String getScanlist(ILaunchConfiguration configuration) throws CoreException{
 		Set<String> paths = provider.getAllScanPathList(configuration);
-		Set<String> nonChecked = getAttributeFromLaunchConfiguration(configuration, Plugin.ATTR_SCAN_FOLDER_NON_CHECKED);
+		Map<String,String> nonChecked = getAttributeFromLaunchConfiguration(configuration, Plugin.ATTR_SCAN_FOLDER_NON_CHECKED);
 
 		StringBuffer scanList = new StringBuffer();
 
 		for(String path:paths){
-			if(nonChecked.contains(path)){
+			if(nonChecked.containsKey(path) && nonChecked.get(path).equals("1")){
 				continue;
 			}
 			if (scanList.length() > 0){
@@ -160,12 +161,12 @@ public class JettyLaunchConfigurationType extends
 		}
 		finalPaths.addAll(getJettyCustomClasspath(configuration));
 
-		Set<String> checked = getAttributeFromLaunchConfiguration(configuration, Plugin.ATTR_JETTY_CLASSPATH_NON_CHECKED);
+		Map<String,String> checked = getAttributeFromLaunchConfiguration(configuration, Plugin.ATTR_JETTY_CLASSPATH_NON_CHECKED);
 
 		HashSet<String> results = new HashSet<String>();
 
 		for (String path : finalPaths) {
-			if (!checked.contains(path)) {
+			if (!checked.containsKey(path) ||checked.get(path).equals("0")) {
 				results.add(path);
 			}
 		}
@@ -219,13 +220,16 @@ public class JettyLaunchConfigurationType extends
 	}
 
 	@SuppressWarnings("unchecked")
-	private Set<String> getAttributeFromLaunchConfiguration(
+	private Map<String,String> getAttributeFromLaunchConfiguration(
 			ILaunchConfiguration configuration, String attribute) {
-		Set<String> checked = null;
+		Map<String,String> checked = null;
 		try {
-			checked = (Set<String>) configuration.getAttribute(attribute,
-					new HashSet<String>());
+			checked = (Map<String,String>) configuration.getAttribute(attribute,
+					(Map<String,String>) null);
 		} catch (CoreException e) {
+		}
+		if(checked == null){
+			checked = new HashMap<String,String>();
 		}
 
 		return checked;
@@ -669,10 +673,10 @@ public class JettyLaunchConfigurationType extends
 					.getWebInfLibLocations(configuration));
 
 			List<String> result = new ArrayList<String>();
-			Set<String> checked = getAttributeFromLaunchConfiguration(configuration, Plugin.ATTR_WEB_CONTEXT_CLASSPATH_NON_CHECKED);
+			Map<String,String>  checked = getAttributeFromLaunchConfiguration(configuration, Plugin.ATTR_WEB_CONTEXT_CLASSPATH_NON_CHECKED);
 
 			for(String item:locations){
-				if(!checked.contains(item)){
+				if(!checked.containsKey(item) || checked.get(item).equals("0")){
 					result.add("-y-"+item);
 				}else{
 					result.add("-n-"+item);

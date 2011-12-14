@@ -2,9 +2,9 @@ package runjettyrun.tabs;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -46,10 +46,11 @@ import runjettyrun.tabs.action.RemoveAction;
 import runjettyrun.tabs.action.RestoreDefaultEntriesAction;
 import runjettyrun.tabs.action.RuntimeClasspathAction;
 import runjettyrun.tabs.classpath.ClasspathEntry;
+import runjettyrun.tabs.classpath.ClasspathGroup;
 import runjettyrun.tabs.classpath.ClasspathLabelProvider;
-import runjettyrun.tabs.classpath.IRJRClasspathEntry;
 import runjettyrun.tabs.classpath.IClasspathViewer;
 import runjettyrun.tabs.classpath.IEntriesChangedListener;
+import runjettyrun.tabs.classpath.IRJRClasspathEntry;
 import runjettyrun.tabs.classpath.RuntimeClasspathViewer;
 import runjettyrun.tabs.classpath.UserClassesClasspathContentProvider;
 import runjettyrun.tabs.classpath.UserClassesClasspathModel;
@@ -80,7 +81,7 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 	protected RuntimeClasspathViewer fClasspathViewer;
 	private UserClassesClasspathModel fModel;
 
-	private Set<String> checked;
+	protected Map<String,String> checked;
 
 	protected static final String DIALOG_SETTINGS_PREFIX = "JavaClasspathTab"; //$NON-NLS-1$
 
@@ -150,16 +151,15 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 				return false;
 			}
 			public boolean isChecked(Object element) {
-				boolean ret = !checked.contains(element.toString());
-				return ret;
+				return AbstractClasspathTab.this.isChecked(element);
 			}
 		});
 		fClasspathViewer.addCheckStateListener(new ICheckStateListener() {
 			public void checkStateChanged(CheckStateChangedEvent event) {
 				if (event.getChecked()) {
-					removeEntry(checked, (IRJRClasspathEntry) event.getElement());
+					checkEntry(checked, (IRJRClasspathEntry) event.getElement());
 				} else {
-					addEntry(checked, (IRJRClasspathEntry) event.getElement());
+					uncheckEntry(checked, (IRJRClasspathEntry) event.getElement());
 				}
 
 				try {
@@ -194,6 +194,21 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 		createPathButtons(pathButtonComp);
 	}
 
+	protected boolean isChecked(Object element){
+
+		if(element instanceof ClasspathGroup){
+			return false;
+		}
+		if(!checked.containsKey(element.toString())){
+			return isDefaultChecked(element);
+		}
+		return checked.get(element.toString()).equals("0");
+	}
+
+	protected boolean isDefaultChecked(Object element){
+		return true;
+	}
+
 	private ILaunchConfigurationWorkingCopy getWorkingCopy() throws CoreException{
 		ILaunchConfigurationWorkingCopy workingcopy = null;
 
@@ -205,8 +220,8 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 		return workingcopy;
 	}
 
-	private void removeEntry(Set<String> set, IRJRClasspathEntry entry) {
-		set.remove(entry.toString());
+	private void checkEntry(Map<String,String> set, IRJRClasspathEntry entry) {
+		set.put(entry.toString(),"0");
 		if (logger.isLoggable(Level.CONFIG)) {
 			logger.config("Set<String>, IClasspathEntry - removed:"
 					+ entry.toString());
@@ -214,7 +229,7 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 		IRJRClasspathEntry[] entrys = entry.getEntries();
 		if (entrys != null && entrys.length > 0) {
 			for (IRJRClasspathEntry childentry : entrys) {
-				removeEntry(set, childentry);
+				checkEntry(set, childentry);
 			}
 		}
 
@@ -227,14 +242,14 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 
 			if (childentrys != null && childentrys.length > 0) {
 				for (IRJRClasspathEntry childentry : childentrys) {
-					removeEntry(set, childentry);
+					checkEntry(set, childentry);
 				}
 			}
 		}
 	}
 
-	private void addEntry(Set<String> set, IRJRClasspathEntry entry) {
-		set.add(entry.toString());
+	private void uncheckEntry(Map<String,String> set, IRJRClasspathEntry entry) {
+		set.put(entry.toString(),"1");
 		if (logger.isLoggable(Level.CONFIG)) {
 			logger.config("Set<String>, IClasspathEntry - add:"
 					+ entry.toString());
@@ -242,7 +257,7 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 		IRJRClasspathEntry[] entrys = entry.getEntries();
 		if (entrys != null && entrys.length > 0) {
 			for (IRJRClasspathEntry childentry : entrys) {
-				addEntry(set, childentry);
+				uncheckEntry(set, childentry);
 			}
 		}
 
@@ -255,7 +270,7 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 
 			if (childentrys != null && childentrys.length > 0) {
 				for (IRJRClasspathEntry childentry : childentrys) {
-					addEntry(set, childentry);
+					uncheckEntry(set, childentry);
 				}
 			}
 		}
@@ -523,12 +538,12 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 	private void setLaunchConfiguration(ILaunchConfiguration config) {
 		fLaunchConfiguration = config;
 		try {
-			checked = (Set<String>) fLaunchConfiguration.getAttribute(getNonCheckedAttributeName(),(Set<String>)null);
+			checked = (Map<String,String>) fLaunchConfiguration.getAttribute(getNonCheckedAttributeName(),(Map<String,String>)null);
 		} catch (CoreException e) {
 		}
 
 		if(checked == null){
-			checked = new HashSet<String>();
+			checked = new HashMap<String,String>();
 		}
 
 	}
