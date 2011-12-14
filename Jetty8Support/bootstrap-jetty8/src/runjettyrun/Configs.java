@@ -203,7 +203,7 @@ public class Configs {
 
 		configuration.add("runjettyrun.webapp.RJRWebInfConfiguration");
 		configuration.add("org.eclipse.jetty.webapp.WebXmlConfiguration");
-		configuration.add("org.eclipse.jetty.webapp.MetaInfConfiguration");
+		configuration.add("runjettyrun.webapp.RJRMetaInfoConfiguration");
 		configuration.add("org.eclipse.jetty.webapp.FragmentConfiguration");
 
 		if(!getBooleanProp("rjrDisableannotation")){
