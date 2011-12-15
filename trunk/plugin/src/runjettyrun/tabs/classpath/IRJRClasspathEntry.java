@@ -49,4 +49,7 @@ public interface IRJRClasspathEntry {
 	 * @return whether this entry is editable
 	 */
 	public boolean isEditable();
+
+	public boolean isCustom();
+
 }

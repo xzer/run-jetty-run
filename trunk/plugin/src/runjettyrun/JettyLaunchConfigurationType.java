@@ -113,6 +113,11 @@ public class JettyLaunchConfigurationType extends
 			if(nonChecked.containsKey(path) && nonChecked.get(path).equals("1")){
 				continue;
 			}
+
+			if(!nonChecked.containsKey(path) && path.endsWith("test-classes")){
+				continue;
+			}
+
 			if (scanList.length() > 0){
 				scanList.append(File.pathSeparator);
 			}
@@ -669,24 +674,35 @@ public class JettyLaunchConfigurationType extends
 
 			Set<String> locations = searchUserClass(entries);
 			locations.addAll(getWebappCustomClasspath(configuration));
-			locations.addAll(RunJettyRunClasspathUtil
-					.getWebInfLibLocations(configuration));
+			locations.addAll(RunJettyRunClasspathUtil.getWebInfLibLocations(configuration));
 
 			List<String> result = new ArrayList<String>();
 			Map<String,String>  checked = getAttributeFromLaunchConfiguration(configuration, Plugin.ATTR_WEB_CONTEXT_CLASSPATH_NON_CHECKED);
 
-			for(String item:locations){
-				if(!checked.containsKey(item) || checked.get(item).equals("0")){
-					result.add("-y-"+item);
-				}else{
-					result.add("-n-"+item);
-				}
-			}
+			addResult(result,locations,checked,true);
+
 			return (String[]) result.toArray(new String[0]);
 		} catch (IllegalArgumentException e) {
 			return new String[0];
 		}
 	}
+
+	private void addResult(List<String> result,Set<String> locations,Map<String,String>  checked,boolean ignoreTestClassesByDefault){
+		for(String item:locations){
+			if(!checked.containsKey(item) ){
+				if(ignoreTestClassesByDefault && item.endsWith("test-classes")){
+					result.add("-n-"+item);
+				}else{
+					result.add("-y-"+item);
+				}
+			}else if(checked.get(item).equals("0")){
+				result.add("-y-"+item);
+			}else{
+				result.add("-n-"+item);
+			}
+		}
+	}
+
 
 	private Set<String> searchUserClass(IRuntimeClasspathEntry[] entries) {
 		Set<String> locations = new LinkedHashSet<String>();

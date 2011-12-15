@@ -143,7 +143,7 @@ public class RunJettyRunClasspathUtil {
 		return result;
 	}
 
-	public static HashSet<String> getWebInfLibLocations(ILaunchConfiguration configuration){
+	public static Set<String> getWebInfLibLocations(ILaunchConfiguration configuration){
 		HashSet<String> result = new HashSet<String>();
 
 		IFolder lib = getWebInfLib(configuration);

@@ -64,4 +64,5 @@ public class ClasspathGroup extends AbstractClasspathEntry {
 	public boolean isEditable() {
 		return editable;
 	}
+
 }

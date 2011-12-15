@@ -12,6 +12,10 @@ public class WebcontextClasspathTab extends AbstractClasspathTab {
 		super("webcontext", "Webapp Classpath");
 	}
 
+	public String getHeader() {
+		return "If you don't want or can't change project classpath for some reason , you could edit it here.";
+	}
+
 	public String getCustomAttributeName() {
 		return Plugin.ATTR_WEB_CONTEXT_CUSTOM_CLASSPATH;
 	}

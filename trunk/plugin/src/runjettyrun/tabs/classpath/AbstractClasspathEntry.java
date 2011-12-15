@@ -9,6 +9,8 @@ public abstract class AbstractClasspathEntry implements IRJRClasspathEntry {
 	protected List<IRJRClasspathEntry> childEntries = new ArrayList<IRJRClasspathEntry>();
 	protected IRJRClasspathEntry parent = null;
 
+	protected boolean custom = false;
+
 	/* (non-Javadoc)
 	 * @see org.eclipse.ant.internal.ui.preferences.IClasspathEntry#moveChild(int)
 	 */
@@ -49,5 +51,14 @@ public abstract class AbstractClasspathEntry implements IRJRClasspathEntry {
 	 */
 	public void setParent(IRJRClasspathEntry parent) {
 		this.parent = parent;
+	}
+
+
+	public boolean isCustom() {
+		return custom;
+	}
+
+	public void setCustom(boolean custom) {
+		this.custom = custom;
 	}
 }

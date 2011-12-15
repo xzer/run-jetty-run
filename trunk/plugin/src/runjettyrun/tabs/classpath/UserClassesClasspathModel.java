@@ -53,10 +53,12 @@ public class UserClassesClasspathModel extends AbstractClasspathEntry {
 			entryParent = getCustomEntry();
 			break;
 		default:
-			break;
+			throw new IllegalArgumentException("Unsupported entryType:"+entryType);
 		}
 
 		ClasspathEntry newEntry = createEntry(entry, entryParent);
+		newEntry.setCustom(entryType == CUSTOM);
+
 		Iterator<IRJRClasspathEntry> entries = childEntries.iterator();
 		while (entries.hasNext()) {
 			Object element = entries.next();
@@ -205,6 +207,8 @@ public class UserClassesClasspathModel extends AbstractClasspathEntry {
 		if (customEntries == null) {
 			customEntries = createGroupEntry(new IRuntimeClasspathEntry[0],
 					null, this.customLabel, false, true, true);
+			customEntries.setParent(userEntries);
+			customEntries.setCustom(true);
 		}
 		return customEntries;
 	}

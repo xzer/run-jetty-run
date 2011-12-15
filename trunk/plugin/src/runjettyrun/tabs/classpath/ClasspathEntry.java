@@ -296,6 +296,7 @@ public class ClasspathEntry extends AbstractClasspathEntry implements
 			IRuntimeClasspathEntry childEntry = entries[i];
 			cps[i] = new ClasspathEntry(childEntry, this);
 			cps[i].setMaven(maven);
+			cps[i].setCustom(custom);
 		}
 		return cps;
 	}
@@ -334,4 +335,5 @@ public class ClasspathEntry extends AbstractClasspathEntry implements
 	public void setMaven(boolean maven) {
 		this.maven = maven;
 	}
+
 }
