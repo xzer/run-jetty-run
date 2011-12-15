@@ -114,13 +114,23 @@ public class JettyLaunchConfigurationClassPathProvider extends
 		}
 
 		Set<String> locations = getScanLocations(configuration,proj);
+		locations.addAll(getCustomScanPathList(configuration));
+
+		return locations;
+	}
+	public Set<String> getCustomScanPathList(ILaunchConfiguration configuration)
+	throws CoreException {
+		IJavaProject proj = JavaRuntime.getJavaProject(configuration);
+		if (proj == null) {
+			Plugin.logError("No project!");
+			return new HashSet<String>();
+		}
 
 		IRuntimeClasspathEntry[] customEntries = computeUnresolvedCustomClasspath(configuration, Plugin.ATTR_CUSTOM_SCAN_FOLDER);
-
+		Set<String> locations = new HashSet<String>();
 		for(IRuntimeClasspathEntry entry:customEntries){
 			locations.add(entry.getLocation());
 		}
-
 		return locations;
 	}
 

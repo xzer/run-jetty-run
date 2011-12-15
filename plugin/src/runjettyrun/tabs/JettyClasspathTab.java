@@ -13,6 +13,10 @@ public class JettyClasspathTab extends AbstractClasspathTab{
 		super("jetty",RunJettyRunMessages.JettyClasspathTab_name);
 	}
 
+	public String getHeader() {
+		return "Jetty Classpath , only for updating jetty version or add jetty related libs.";
+	}
+
 	public String getCustomAttributeName() {
 		return Plugin.ATTR_JETTY_CUSTOM_CLASSPATH;
 	}

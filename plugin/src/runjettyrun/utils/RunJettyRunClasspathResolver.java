@@ -113,11 +113,7 @@ public class RunJettyRunClasspathResolver {
 				}
 
 
-				boolean skipTestClasses = configuration.getAttribute(Plugin.ATTR_ENABLE_MAVEN_TEST_CLASSES,true);
 				for (int j = 0; j < temp.length; j++) {
-					if(skipTestClasses && temp[j].getLocation() != null && temp[j].getLocation().endsWith("test-classes")){
-						continue;
-					}
 					resolved.add(temp[j]);
 				}
 			}
@@ -199,10 +195,7 @@ public class RunJettyRunClasspathResolver {
 					for (int j = 0; j < entries.length; j++) {
 						IRuntimeClasspathEntry e =  entries[j];
 
-						//skip test-classes for included maven project.
-						boolean testClasses =  e.getLocation()!=null && e.getLocation().endsWith("test-classes");
-
-						if (!(resolved.contains(e) || testClasses))
+						if (!(resolved.contains(e) ))
 							resolved.add(e);
 
 					}

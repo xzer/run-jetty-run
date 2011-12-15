@@ -44,6 +44,7 @@ import runjettyrun.tabs.action.AddJarAction;
 import runjettyrun.tabs.action.AddProjectAction;
 import runjettyrun.tabs.action.RemoveAction;
 import runjettyrun.tabs.action.RestoreDefaultEntriesAction;
+import runjettyrun.tabs.action.RestoreDefaultSelectionAction;
 import runjettyrun.tabs.action.RuntimeClasspathAction;
 import runjettyrun.tabs.classpath.ClasspathEntry;
 import runjettyrun.tabs.classpath.ClasspathGroup;
@@ -67,6 +68,8 @@ import runjettyrun.tabs.classpath.UserClassesClasspathModel;
  */
 public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 		IEntriesChangedListener {
+	public static final String TEST_CLASSES = "test-classes";
+
 	/**
 	 * Logger for this class
 	 */
@@ -77,6 +80,7 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 
 	private String tabname;
 	private String id;
+
 
 	protected RuntimeClasspathViewer fClasspathViewer;
 	private UserClassesClasspathModel fModel;
@@ -93,6 +97,10 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 	public AbstractClasspathTab(String id, String tabname) {
 		this.id = id;
 		this.tabname = tabname;
+	}
+
+	public String getHeader(){
+		return tabname;
 	}
 
 	abstract String getCustomAttributeName();
@@ -140,7 +148,7 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 		GridData gd;
 
 		Label label = new Label(comp, SWT.NONE);
-		label.setText(tabname);
+		label.setText(getHeader());
 		gd = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING);
 		gd.horizontalSpan = 2;
 		label.setLayoutData(gd);
@@ -151,7 +159,7 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 				return false;
 			}
 			public boolean isChecked(Object element) {
-				return AbstractClasspathTab.this.isChecked(element);
+				return AbstractClasspathTab.this.isChecked((IRJRClasspathEntry)element);
 			}
 		});
 		fClasspathViewer.addCheckStateListener(new ICheckStateListener() {
@@ -194,19 +202,30 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 		createPathButtons(pathButtonComp);
 	}
 
-	protected boolean isChecked(Object element){
+	protected boolean isChecked(IRJRClasspathEntry element){
+		if(element == null){
+			throw new IllegalArgumentException("Classpath Entry shouldn't be null.");
+		}
 
 		if(element instanceof ClasspathGroup){
 			return false;
 		}
+
 		if(!checked.containsKey(element.toString())){
 			return isDefaultChecked(element);
 		}
 		return checked.get(element.toString()).equals("0");
 	}
 
-	protected boolean isDefaultChecked(Object element){
-		return true;
+	protected boolean isDefaultChecked(IRJRClasspathEntry element){
+		if(element == null){
+			throw new IllegalArgumentException("Classpath Entry shouldn't be null.");
+		}
+		if(element.toString().endsWith(TEST_CLASSES)){
+			return false;
+		}else{
+			return true;
+		}
 	}
 
 	private ILaunchConfigurationWorkingCopy getWorkingCopy() throws CoreException{
@@ -294,6 +313,12 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 				DIALOG_SETTINGS_PREFIX));
 		createButton(pathButtonComp, new AddExternalFolderAction(
 				fClasspathViewer, DIALOG_SETTINGS_PREFIX));
+
+
+		RuntimeClasspathAction restoreSelectionAction = new RestoreDefaultSelectionAction(
+				fClasspathViewer, this, this.getNonCheckedAttributeName());
+		createButton(pathButtonComp, restoreSelectionAction);
+		restoreSelectionAction.setEnabled(true);
 
 		RuntimeClasspathAction action = new RestoreDefaultEntriesAction(
 				fClasspathViewer, this, this.getCustomAttributeName());
@@ -655,6 +680,20 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 	 */
 	public boolean isShowBootpath() {
 		return true;
+	}
+
+	@SuppressWarnings("unchecked")
+	public void refreshSelection(){
+		try {
+			checked = (Map<String,String>) fLaunchConfiguration.getAttribute(getNonCheckedAttributeName(),(Map<String,String>)null);
+		} catch (CoreException e) {
+		}
+
+		if(checked == null){
+			checked = new HashMap<String,String>();
+		}
+		this.fClasspathViewer.refresh();
+
 	}
 
 	/**

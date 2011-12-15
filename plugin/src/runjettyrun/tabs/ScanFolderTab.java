@@ -12,13 +12,14 @@ import runjettyrun.tabs.action.AddExternalFileAction;
 import runjettyrun.tabs.action.AddExternalFolderAction;
 import runjettyrun.tabs.action.RemoveAction;
 import runjettyrun.tabs.action.RestoreDefaultEntriesAction;
+import runjettyrun.tabs.action.RestoreDefaultSelectionAction;
 import runjettyrun.tabs.action.RuntimeClasspathAction;
 import runjettyrun.tabs.classpath.UserClassesClasspathModel;
 
 public class ScanFolderTab extends AbstractClasspathTab {
 
 	public ScanFolderTab() {
-		super("sourceScan", "SourceScan List");
+		super("sourceScan", "Source Monitor List");
 	}
 
 	public String getCustomAttributeName() {
@@ -27,6 +28,10 @@ public class ScanFolderTab extends AbstractClasspathTab {
 
 	public String getNonCheckedAttributeName() {
 		return Plugin.ATTR_SCAN_FOLDER_NON_CHECKED;
+	}
+
+	public String getHeader() {
+		return "A collection for resource watch list , will restart server if the resource in watch list changed.(Including all sub-folder and files.)" ;
 	}
 
 	public UserClassesClasspathModel createClasspathModel(
@@ -57,6 +62,12 @@ public class ScanFolderTab extends AbstractClasspathTab {
 		createButton(pathButtonComp, new AddClassFolderAction(fClasspathViewer));
 		createButton(pathButtonComp, new AddExternalFileAction(fClasspathViewer,DIALOG_SETTINGS_PREFIX));
 		createButton(pathButtonComp, new AddExternalFolderAction(fClasspathViewer, DIALOG_SETTINGS_PREFIX));
+
+		RuntimeClasspathAction restoreSelectionAction = new RestoreDefaultSelectionAction(
+				fClasspathViewer, this, this.getNonCheckedAttributeName());
+		createButton(pathButtonComp, restoreSelectionAction);
+		restoreSelectionAction.setEnabled(true);
+
 
 		RuntimeClasspathAction action =  new RestoreDefaultEntriesAction(fClasspathViewer,
 				this,this.getCustomAttributeName());

@@ -40,11 +40,13 @@ public class JettyLaunchConfigurationTabGroup extends
 
 		ILaunchConfigurationTab[] tabs = new ILaunchConfigurationTab[] {
 				new RunJettyRunTab(), new JavaArgumentsTab(), new JavaJRETab(),
-				new JettyClasspathTab(),
 				new WebcontextClasspathTab(),
 				new ScanFolderTab(),
 				new SourceLookupTab(),
-				new EnvironmentTab(), new CommonTab() };
+				new JettyClasspathTab(),
+				new EnvironmentTab(),
+				new CommonTab()
+				};
 		setTabs(tabs);
 	}
 }
