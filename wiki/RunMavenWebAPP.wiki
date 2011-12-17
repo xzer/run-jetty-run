@@ -1,5 +1,5 @@
 #summary Make Maven based web application to support Eclipse IDE
-#labels Maven,Jetty,Eclipse,WebApplication,Run-Jetty-Run,RJR
+#labels Maven,Jetty,Eclipse,WebApplication,Run-Jetty-Run,RJR,Featured
 
 = Introduction =
 
