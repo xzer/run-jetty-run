@@ -3,10 +3,11 @@
 
 = Introduction =
 
-Because Run-Jetty-Run(RJR) support full classpath of project , 
+Because Run-Jetty-Run(RJR) use full project classpath to run the web application, 
 and we did some finetune job for maven by default.
 
-So you could use RJR to run Maven web based web application WITHOUT ANY CONFIGURATION.
+
+*So you could use RJR to run Maven web based web application WITHOUT ANY CONFIGURATION.*
 
 Simple click "Run Jetty" and then it works.
 
