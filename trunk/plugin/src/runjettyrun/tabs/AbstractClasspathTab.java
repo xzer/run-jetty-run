@@ -179,7 +179,6 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 				} catch (CoreException e) {
 					logger.severe("CheckStateChangedEvent - exception: " + e);
 				}
-				fClasspathViewer.refresh();
 			}
 		});
 		fClasspathViewer.addEntriesChangedListener(this);
