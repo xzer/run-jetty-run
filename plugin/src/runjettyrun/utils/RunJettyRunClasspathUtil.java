@@ -53,7 +53,7 @@ public class RunJettyRunClasspathUtil {
 						break;
 					case IClasspathEntry.CPE_SOURCE:
 						IPath path = entry.getOutputLocation();
-						if (path != null) {
+						if (path != null && !sourceTargets.contains(path)) {
 							sourceTargets.add(path);
 							classpathEntries.add(JavaRuntime.newArchiveRuntimeClasspathEntry(path));
 						}
