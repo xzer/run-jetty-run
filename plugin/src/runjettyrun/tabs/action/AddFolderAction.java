@@ -40,18 +40,17 @@ import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
 
 import runjettyrun.Plugin;
 import runjettyrun.tabs.action.helper.ClosedProjectFilter;
-import runjettyrun.tabs.action.helper.OutputFolderOnlyFilter;
+import runjettyrun.tabs.action.helper.FolderOnlyFilter;
 import runjettyrun.tabs.action.helper.SWTFactory;
 import runjettyrun.tabs.classpath.IClasspathViewer;
 
 /**
  * Adds a project to the runtime class path.
  */
-public class AddClassFolderAction extends RuntimeClasspathAction {
+public class AddFolderAction extends RuntimeClasspathAction {
 
-
-	public AddClassFolderAction(IClasspathViewer viewer) {
-		super("Add Class f&olders...", viewer);
+	public AddFolderAction(IClasspathViewer viewer) {
+		super("Add f&olders...", viewer);
 	}
 
 	/**
@@ -63,11 +62,11 @@ public class AddClassFolderAction extends RuntimeClasspathAction {
 
 		List<ViewerFilter> filters = new ArrayList<ViewerFilter>();
 		filters.add(new ClosedProjectFilter());
-		filters.add(new OutputFolderOnlyFilter());
+		filters.add(new FolderOnlyFilter());
 		ElementTreeSelectionDialog dialog= SWTFactory.createAllWorkspaceFileSelectionDialog(
 				getShell(),
-				"Classes folder Selection",
-				"Choose the class-folder to add to list ",
+				"Folder Selection",
+				"Choose the folder to add to list",
 				filters
 		);
 
@@ -110,6 +109,34 @@ public class AddClassFolderAction extends RuntimeClasspathAction {
 		return ADD;
 	}
 
+	/**
+	 * Returns the possible projects that can be added
+	 */
+	protected List<IJavaProject> getPossibleAdditions() {
+		IJavaProject[] projects;
+		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+		try {
+			projects= JavaCore.create(root).getJavaProjects();
+		} catch (JavaModelException e) {
+			Plugin.logError(e);
+			projects= new IJavaProject[0];
+		}
+		List<IJavaProject> remaining = new ArrayList<IJavaProject>();
+		for (int i = 0; i < projects.length; i++) {
+			remaining.add(projects[i]);
+		}
+		List<IJavaProject> alreadySelected = new ArrayList<IJavaProject>();
+		IRuntimeClasspathEntry[] entries = getViewer().getEntries();
+		for (int i = 0; i < entries.length; i++) {
+			if (entries[i].getType() == IRuntimeClasspathEntry.PROJECT) {
+				IResource res = root.findMember(entries[i].getPath());
+				IJavaProject jp = (IJavaProject)JavaCore.create(res);
+				alreadySelected.add(jp);
+			}
+		}
+		remaining.removeAll(alreadySelected);
+		return remaining;
+	}
 
 	/**
 	 * Adds all projects required by <code>proj</code> to the list

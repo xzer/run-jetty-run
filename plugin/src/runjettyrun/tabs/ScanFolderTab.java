@@ -10,6 +10,7 @@ import runjettyrun.Plugin;
 import runjettyrun.tabs.action.AddClassFolderAction;
 import runjettyrun.tabs.action.AddExternalFileAction;
 import runjettyrun.tabs.action.AddExternalFolderAction;
+import runjettyrun.tabs.action.AddFolderAction;
 import runjettyrun.tabs.action.RemoveAction;
 import runjettyrun.tabs.action.RestoreDefaultEntriesAction;
 import runjettyrun.tabs.action.RestoreDefaultSelectionAction;
@@ -36,7 +37,7 @@ public class ScanFolderTab extends AbstractClasspathTab {
 
 	public UserClassesClasspathModel createClasspathModel(
 			ILaunchConfiguration configuration) throws Exception {
-		UserClassesClasspathModel theModel = new UserClassesClasspathModel("Project Scan Folders","Custom Scan Folder/Files");
+		UserClassesClasspathModel theModel = new UserClassesClasspathModel("Project Scan Folders","Custom Scan Folder and Files");
 		List<IRuntimeClasspathEntry> entries = getClasspathProvider().getDefaultScanList(configuration);
 		for (IRuntimeClasspathEntry entry:entries) {
 			switch (entry.getClasspathProperty()) {
@@ -59,7 +60,9 @@ public class ScanFolderTab extends AbstractClasspathTab {
 
 	protected void createPathButtons(Composite pathButtonComp) {
 		createButton(pathButtonComp, new RemoveAction(fClasspathViewer));
+		createButton(pathButtonComp, new AddFolderAction(fClasspathViewer));
 		createButton(pathButtonComp, new AddClassFolderAction(fClasspathViewer));
+
 		createButton(pathButtonComp, new AddExternalFileAction(fClasspathViewer,DIALOG_SETTINGS_PREFIX));
 		createButton(pathButtonComp, new AddExternalFolderAction(fClasspathViewer, DIALOG_SETTINGS_PREFIX));
 
