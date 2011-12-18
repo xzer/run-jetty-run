@@ -34,6 +34,7 @@ import java.util.Set;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -44,17 +45,26 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.model.IProcess;
+import org.eclipse.debug.core.sourcelookup.ISourceContainer;
+import org.eclipse.debug.core.sourcelookup.ISourceLookupDirector;
+import org.eclipse.debug.core.sourcelookup.containers.DefaultSourceContainer;
 import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.internal.launching.JavaSourceLookupDirector;
 import org.eclipse.jdt.launching.AbstractJavaLaunchConfigurationDelegate;
 import org.eclipse.jdt.launching.ExecutionArguments;
 import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.jdt.launching.VMRunnerConfiguration;
+import org.eclipse.jdt.launching.sourcelookup.containers.JavaProjectSourceContainer;
 
+import runjettyrun.utils.ProjectUtil;
 import runjettyrun.utils.RunJettyRunClasspathResolver;
 import runjettyrun.utils.RunJettyRunClasspathUtil;
 import runjettyrun.utils.RunJettyRunLaunchConfigurationUtil;
+import runjettyrun.utils.RunJettyRunSourceLookupUtil;
 
 /**
  * Launch configuration type for Jetty. Based on
@@ -378,6 +388,8 @@ public class JettyLaunchConfigurationType extends
 							null));
 		}
 
+		addSourcesLookupProjectsFromMavenIfExist(configuration);
+
 		if (monitor == null) {
 			monitor = new NullProgressMonitor();
 		}
@@ -439,6 +451,7 @@ public class JettyLaunchConfigurationType extends
 			// set the default source locator if required
 			setDefaultSourceLocator(launch, configuration);
 
+			launch.getSourceLocator();
 			monitor.worked(1);
 
 			synchronized (configuration) {
@@ -703,7 +716,91 @@ public class JettyLaunchConfigurationType extends
 		}
 	}
 
+	/**
+	 * add project sources into ILaunchConfiguration which are referenced by
+	 * maven
+	 *
+	 * Referenced from yanyilin224.
+	 * @param configuration
+	 */
+	private void addSourcesLookupProjectsFromMavenIfExist(ILaunchConfiguration configuration) {
+		try {
 
+			IJavaProject curProject = JavaRuntime.getJavaProject(configuration);
+			boolean isMaven = ProjectUtil.isMavenProject(curProject.getProject());
+
+			if(!isMaven ) {
+				return ;
+			}
+
+			List<IProject> projs = RunJettyRunSourceLookupUtil.findMavenRelatedProjects(configuration);
+			if(projs.size() == 0 ){
+				return ;
+			}
+
+			ISourceLookupDirector sourceDir = new JavaSourceLookupDirector();
+			ILaunchConfigurationWorkingCopy workCopy = configuration.getWorkingCopy();
+			String initMemento = workCopy.getAttribute(
+					ILaunchConfiguration.ATTR_SOURCE_LOCATOR_MEMENTO, "");
+			if (initMemento != null && !initMemento.trim().equals("")) {
+				sourceDir.initializeFromMemento(initMemento);
+			}
+			ISourceContainer[] existContainers = sourceDir
+					.getSourceContainers();
+
+			List<ISourceContainer> realContainers = new ArrayList<ISourceContainer>();
+			//add exsits source containers
+			for (ISourceContainer container : existContainers) {
+				realContainers.add(container);
+			}
+			//check default source container
+			ISourceContainer defaultContainer = new DefaultSourceContainer();
+			if (!contains(existContainers, defaultContainer)) {
+				realContainers.add(defaultContainer);
+			}
+
+			for (IProject dependency : projs) {
+				// handle projects in current workspace
+				ISourceContainer newContainer = new JavaProjectSourceContainer(
+						JavaCore.create((IProject) dependency));
+				if (!contains(existContainers, newContainer)) {
+					realContainers.add(newContainer);
+				}
+			}
+
+			sourceDir.setSourceContainers(realContainers
+					.toArray(new ISourceContainer[realContainers.size()]));
+
+			workCopy.setAttribute(
+					ILaunchConfiguration.ATTR_SOURCE_LOCATOR_MEMENTO,
+					sourceDir.getMemento());
+
+			workCopy.doSave();
+		} catch (Exception e) {
+			// something wrong, skip add sources
+		}
+	}
+
+	/**
+	 * if containers contains target source container
+	 *
+	 * @param containers
+	 *            exsited source containers
+	 * @param target
+	 * @return
+	 */
+	private boolean contains(ISourceContainer[] containers,
+			ISourceContainer target) {
+		String name = target.getName();
+		String type = target.getType().getId();
+		for (ISourceContainer container : containers) {
+			if (name.equals(container.getName())
+					&& type.equals(container.getType().getId())) {
+				return true;
+			}
+		}
+		return false;
+	}
 	private Set<String> searchUserClass(IRuntimeClasspathEntry[] entries) {
 		Set<String> locations = new LinkedHashSet<String>();
 		for (int i = 0; i < entries.length; i++) {
