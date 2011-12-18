@@ -17,8 +17,10 @@ import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.IDialogSettings;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.DirectoryDialog;
+import org.eclipse.ui.actions.SelectionListenerAction;
 
 import runjettyrun.Plugin;
 import runjettyrun.tabs.classpath.IClasspathViewer;
@@ -105,5 +107,16 @@ public class AddExternalFolderAction extends RuntimeClasspathAction {
 	 */
 	protected String getDialogSettingsPrefix() {
 		return prefix;
+	}
+
+	/**
+	 * @see SelectionListenerAction#updateSelection(IStructuredSelection)
+	 */
+	protected boolean updateSelection(IStructuredSelection selection) {
+		return getViewer().updateSelection(getActionType(), selection) && !getPossibleAdditions().isEmpty();
+	}
+
+	protected int getActionType() {
+		return ADD;
 	}
 }

@@ -436,7 +436,7 @@ public class Bootstrap {
 			for (String item:items) {
 				File f = new File(item);
 				scanList.add(f);
-				System.err.println("add to scan list :"+item);
+				System.err.println("add to scan list:"+item);
 			}
 		}
 

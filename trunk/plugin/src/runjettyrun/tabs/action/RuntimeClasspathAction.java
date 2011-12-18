@@ -15,6 +15,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -24,6 +30,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.actions.SelectionListenerAction;
 
+import runjettyrun.Plugin;
 import runjettyrun.tabs.classpath.IClasspathViewer;
 
 /**
@@ -186,5 +193,35 @@ public abstract class RuntimeClasspathAction extends SelectionListenerAction {
 
 	protected int getActionType() {
 		return DEFAULT;
+	}
+
+
+	/**
+	 * Returns the possible projects that can be added
+	 */
+	protected List<IJavaProject> getPossibleAdditions() {
+		IJavaProject[] projects;
+		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+		try {
+			projects= JavaCore.create(root).getJavaProjects();
+		} catch (JavaModelException e) {
+			Plugin.logError(e);
+			projects= new IJavaProject[0];
+		}
+		List<IJavaProject> remaining = new ArrayList<IJavaProject>();
+		for (int i = 0; i < projects.length; i++) {
+			remaining.add(projects[i]);
+		}
+		List<IJavaProject> alreadySelected = new ArrayList<IJavaProject>();
+		IRuntimeClasspathEntry[] entries = getViewer().getEntries();
+		for (int i = 0; i < entries.length; i++) {
+			if (entries[i].getType() == IRuntimeClasspathEntry.PROJECT) {
+				IResource res = root.findMember(entries[i].getPath());
+				IJavaProject jp = (IJavaProject)JavaCore.create(res);
+				alreadySelected.add(jp);
+			}
+		}
+		remaining.removeAll(alreadySelected);
+		return remaining;
 	}
 }
