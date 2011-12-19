@@ -179,7 +179,7 @@ public class RunJettyRunClasspathUtil {
 		return false;
 	}
 
-	public static IFolder getWebInfLib(ILaunchConfiguration configuration){
+	public static IFolder getWebInf(ILaunchConfiguration configuration){
 		IJavaModel javaModel = JavaCore.create(ResourcesPlugin.getWorkspace()
 				.getRoot());
 		String projectName = null;
@@ -206,6 +206,17 @@ public class RunJettyRunClasspathUtil {
 		// this should be fine since the plugin checks whether WEB-INF exists
 		IFolder webInfDir = ProjectUtil.getWebappFolder(project.getProject(), webAppDirName).getFolder(
 				new Path("WEB-INF"));
+		if (webInfDir == null || !webInfDir.exists()) {
+			return null;
+		}
+
+		return webInfDir;
+	}
+
+	public static IFolder getWebInfLib(ILaunchConfiguration configuration){
+
+		// this should be fine since the plugin checks whether WEB-INF exists
+		IFolder webInfDir = getWebInf(configuration);
 		if (webInfDir == null || !webInfDir.exists()) {
 			return null;
 		}
