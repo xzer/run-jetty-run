@@ -8,17 +8,59 @@ for example , Jetty7 or Jetty8 support is a big milestone and need more testing.
 
 It's very welcome to report the bug from nightly build.
 
+= Latest Nightly version =
+
+1.3.1.20111219
+
 
 = Nightly Update Site =
 
-~~http://run-jetty-run.googlecode.com/svn/trunk/updatesite-nightly~~
+http://run-jetty-run.googlecode.com/svn/trunk/updatesite-nightly
+
+
+= Outlines = 
+
+1.*New UI for web classpath in run configuration!*
+    You could now enable specific classpath to be loaded or not!
+
+2.*New UI for source monitor list in run configuration!*
+    It's a ability to scan files in the list , if those files is add/changed/removed , the jetty server will automatically restart.
+
+    It was the source scanner feature ,in past it's only for target output folder , but now you are able to add your own files if you need!
+    
+    We will also scan all XML files in WEB-INF by default!
+    That means web.xml , application-context.xml and some files else will be in the list by default , sure you could disable them in the new UI if you don't need it.
+
+3.*Add support for the newer Maven for Eclipse(M2Eclipse) plugin in Eclipse 3.7*.
+    In Eclispe 3.7, the M2E changed a lot for the package name and also some details configs , we was doing some support feature for old M2E since 1.3.0 , and now we also have well support with new M2E!
+
+4.*Now we have better servlet3 support*.  
+    In 1.3.1 we try to supprot annotation , but it's still not working for web-fragment and META-INF/resource folder since the restriction of the Jetty8 implementation , it's only scanning the WEB-INF/classes and WEB-INF/lib/`*`.jar .
+
+    They didn't consider for those classpath that's not in regular classpath , but we use Maven or referenced to other project very often , so that's a big trouble for Eclipse developement.
+     
+    In 1.3.2 , we use our own configuration classes to fully support those feature!
 
 
 = Details =
-   Currently no any nightly version , the official one is the latest.
- 
+
+  * Features
+     * Issue 88 New view for classpath editor and source monirtor list
+     * Issue 100 add referenced project to source lookup path
+     * Issue 103 Make servlet3  web-fragment.xml working properly in Jetty8
+     * Issue 104 Finetune source scanner with JDT built-in hot-deploy. 
+     * Issue 105 Refine options after new UI change.
+
+
+  * Bugs
+     * Issue 89 RJR restarts on changes in unit tests
+     * Issue 90 NullPointerException when creating new launch configuration
+     * Issue 91 Launching fails when webapp dir is "/" 
+     * Issue 92 Exclude test-classes for maven is not working in 1.3.1
+     * Issue 102 m2e updated container name in newer verison cause issue 
+
 = Next Official build =
 
-1.3.1
+1.3.2
  
   
