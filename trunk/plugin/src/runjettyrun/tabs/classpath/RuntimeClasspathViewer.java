@@ -45,6 +45,7 @@ public class RuntimeClasspathViewer extends ContainerCheckedTreeViewer implement
 		super(parent);
 
 		GridData data = new GridData(GridData.FILL_BOTH);
+		data.horizontalSpan = 3;
 		data.widthHint = IDialogConstants.ENTRY_FIELD_WIDTH;
 		data.heightHint = getTree().getItemHeight();
 		getTree().setLayoutData(data);

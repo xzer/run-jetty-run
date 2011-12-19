@@ -24,9 +24,6 @@ import runjettyrun.ProjectClassLoader;
  */
 public class RJRAnnotationConfiguration extends AnnotationConfiguration {
 	private static Logger logger =  Log.getLogger(RJRAnnotationConfiguration.class);
-	static{
-		logger.setDebugEnabled(true);
-	}
 
 	public void parseWebInfClasses(final WebAppContext context,
 			final AnnotationParser parser) throws Exception {

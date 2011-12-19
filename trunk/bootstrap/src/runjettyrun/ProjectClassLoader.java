@@ -64,7 +64,7 @@ public class ProjectClassLoader extends WebAppClassLoader {
 	    		path = path.substring(3);
 	    	}
 	    	if(entry.startsWith("-n-")){
-	    		excludedString.append("Excluded entry="+ path+" (Not loaded.)\n");
+	    		if (logger) excludedString.append("Excluded entry="+ path+" \n");
 	    	}else{
 		    	if (logger) System.err.println("ProjectClassLoader: entry="+ path);
 	    		super.addClassPath( path);

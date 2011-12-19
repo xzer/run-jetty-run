@@ -74,10 +74,6 @@ public class Plugin extends AbstractUIPlugin {
 	public static final String ATTR_WEBAPPDIR = Plugin.PLUGIN_ID
 			+ ".WEBAPPDIR_ATTR"; //$NON-NLS-1$
 
-	/** configuration attribute for the web application directory. */
-	public static final String ATTR_EXCLUDE_CLASSPATH = Plugin.PLUGIN_ID
-			+ ".EXCLUDE_CLASSPATH_ATTR"; //$NON-NLS-1$
-
 	/** configuration attribute for the port to run Jetty on. */
 	public static final String ATTR_PORT = Plugin.PLUGIN_ID + ".PORT_ATTR"; //$NON-NLS-1$
 
@@ -114,17 +110,8 @@ public class Plugin extends AbstractUIPlugin {
 	public static final String ATTR_ENABLE_SCANNER = Plugin.PLUGIN_ID
 			+ ".ENABLE_SCANNER_ATTR"; //$NON-NLS-1$
 
-	public static final String ATTR_SCANNER_SCAN_WEBINF = Plugin.PLUGIN_ID
-	+ ".ENABLE_SCANNER_SCAN_WEBINF_ATTR"; //$NON-NLS-1$
-
 	/** used to calculate the jars to include. */
 	public static final String JETTY_VERSION = "6.1.26"; //$NON-NLS-1$
-
-	/**
-	 * filter test-classes or not
-	 */
-	public static final String ATTR_ENABLE_MAVEN_TEST_CLASSES = Plugin.PLUGIN_ID
-			+ ".ENABLE_MAVEN_TEST_CLASSES_ATTR"; //$NON-NLS-1$
 
 	public static final String ATTR_SELECTED_JETTY_VERSION = Plugin.PLUGIN_ID
 	+ ".SELECTED_JETTY_VERSION_ATTR"; //$NON-NLS-1$
@@ -166,6 +153,9 @@ public class Plugin extends AbstractUIPlugin {
 
 	public static final String ATTR_CUSTOM_SCAN_FOLDER = Plugin.PLUGIN_ID
 	+ ".CUSTOM_SCAN_FOLDER"; //$NON-NLS-1$
+
+	public static final String ATTR_IGNORE_SCAN_CLASS_WHEN_DEBUG_MODE = Plugin.PLUGIN_ID
+	+ ".IGNORE_SCAN_CLASS_WHEN_DEBUG_MODE"; //$NON-NLS-1$
 
 	// The shared instance
 	private static Plugin plugin;

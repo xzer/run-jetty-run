@@ -27,6 +27,7 @@ import org.eclipse.jdt.debug.ui.launchConfigurations.JavaArgumentsTab;
 import org.eclipse.jdt.debug.ui.launchConfigurations.JavaJRETab;
 
 import runjettyrun.tabs.JettyClasspathTab;
+import runjettyrun.tabs.RunJettyRunTab;
 import runjettyrun.tabs.ScanFolderTab;
 import runjettyrun.tabs.WebcontextClasspathTab;
 

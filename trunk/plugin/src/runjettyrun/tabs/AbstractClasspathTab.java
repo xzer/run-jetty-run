@@ -128,6 +128,10 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 		// updateLaunchConfigurationDialog();
 	}
 
+	public void createHeaderControl(Composite parent){
+
+	}
+
 	/*
 	 * (non-Javadoc)
 	 *
@@ -143,15 +147,18 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 		// PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(),
 		// IJavaDebugHelpContextIds.LAUNCH_CONFIGURATION_DIALOG_CLASSPATH_TAB);
 		GridLayout topLayout = new GridLayout();
-		topLayout.numColumns = 2;
+		topLayout.numColumns = 4;
 		comp.setLayout(topLayout);
 		GridData gd;
 
 		Label label = new Label(comp, SWT.NONE);
 		label.setText(getHeader());
 		gd = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING);
-		gd.horizontalSpan = 2;
+		gd.horizontalSpan = 4;
 		label.setLayoutData(gd);
+
+
+		createHeaderControl(comp);
 
 		fClasspathViewer = new RuntimeClasspathViewer(comp);
 		fClasspathViewer.setCheckStateProvider(new ICheckStateProvider() {
@@ -187,6 +194,7 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 		fClasspathViewer
 				.setContentProvider(new UserClassesClasspathContentProvider(
 						this));
+
 
 		Composite pathButtonComp = new Composite(comp, SWT.NONE);
 		GridLayout pathButtonLayout = new GridLayout();

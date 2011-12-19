@@ -15,7 +15,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package runjettyrun;
+package runjettyrun.tabs;
 
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME;
 
@@ -65,6 +65,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.ContainerSelectionDialog;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 
+import runjettyrun.Plugin;
 import runjettyrun.extensions.IJettyPackageProvider;
 import runjettyrun.preferences.PreferenceConstants;
 import runjettyrun.utils.PortUtil;
@@ -96,11 +97,7 @@ public class RunJettyRunTab extends JavaLaunchTab {
 
 	private Text fContextText;
 
-	private Text fScanText;
-
 	private Text fWebAppDirText;
-
-	private Text fExcludedClasspathText;
 
 	private Button fProjButton;
 
@@ -116,13 +113,7 @@ public class RunJettyRunTab extends JavaLaunchTab {
 
 	private Button fWebappScanButton;
 
-	private Button fEnableScannerbox;
-
-	private Button fScannerWEBINFbox;
-
 	private Button fShowAdvancebox;
-
-	private Button fEnableMavenDisableTestClassesBox;
 
 	private Combo fJettyVersion;
 
@@ -161,8 +152,6 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		createProjectEditor(comp);
 		createVerticalSpacer(comp, 1);
 		createJettyOptionsEditor(comp);
-		createVerticalSpacer(comp, 1);
-		createMavenEditor(comp);
 		createVerticalSpacer(comp, 1);
 		createAdvanceGroup(comp);
 		createVerticalSpacer(comp, 1);
@@ -446,50 +435,6 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		/*
 		 * ---------------------------------------------------------------------
 		 */
-
-		fEnableScannerbox = createCheckButton(advanceGroup, "Enable Scanner");
-		fEnableScannerbox.addSelectionListener(new ButtonListener() {
-
-			public void widgetSelected(SelectionEvent e) {
-				fScanText.setEnabled(fEnableScannerbox.getSelection());
-				fScannerWEBINFbox.setEnabled(fEnableScannerbox.getSelection());
-				updateLaunchConfigurationDialog();
-			}
-		});
-
-		/*
-		 * ---------------------------------------------------------------------
-		 */
-		new Label(advanceGroup, SWT.LEFT).setText("Scan Interval");
-
-		/*
-		 * ---------------------------------------------------------------------
-		 */
-		fScanText = new Text(advanceGroup, SWT.SINGLE | SWT.BORDER);
-		fScanText.addModifyListener(_updatedListener);
-
-		fScanText.setLayoutData(createHFillGridData(1, -1));
-		fScanText.setFont(font);
-		fScanText.setTextLimit(5);
-
-		/*
-		 * ---------------------------------------------------------------------
-		 */
-		new Label(advanceGroup, SWT.LEFT).setText(" seconds");
-
-		/*
-		 * ---------------------------------------------------------------------
-		 */
-		fScannerWEBINFbox = createCheckButton(advanceGroup, "Scan WEB-INF folder");
-		fScannerWEBINFbox.addSelectionListener(new ButtonListener() {
-			public void widgetSelected(SelectionEvent e) {
-				updateLaunchConfigurationDialog();
-			}
-		});
-
-		/*
-		 * ---------------------------------------------------------------------
-		 */
 		new Label(advanceGroup, SWT.LEFT).setText("Other configs");
 
 		/*
@@ -546,19 +491,7 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		 */
 
 		new Label(advanceGroup, SWT.LEFT).setText("");
-		/*
-		 * ---------------------------------------------------------------------
-		 */
-		new Label(advanceGroup, SWT.LEFT).setText("Excluded classpath(Regex)");
 
-		/*
-		 * ---------------------------------------------------------------------
-		 */
-		fExcludedClasspathText = new Text(advanceGroup, SWT.SINGLE | SWT.BORDER);
-		fExcludedClasspathText.addModifyListener(_updatedListener);
-
-		fExcludedClasspathText.setLayoutData(createHFillGridData(4, -1));
-		fExcludedClasspathText.setFont(font);
 
 		/*
 		 * ---------------------------------------------------------------------
@@ -606,50 +539,6 @@ public class RunJettyRunTab extends JavaLaunchTab {
 
 	}
 
-	/**
-	 * create a group for M2E config.
-	 *
-	 * @param parent
-	 *            the parent composite
-	 */
-	private void createMavenEditor(Composite parent) {
-		Font font = parent.getFont();
-
-		/*
-		 * ---------------------------------------------------------------------
-		 */
-
-		mavenGroup = new Group(parent, SWT.NONE);
-		mavenGroup.setVisible(isMavenProject);
-		mavenGroup.setText("RunJettyRun Support for M2Eclipse");
-		mavenGroup.setLayoutData(createHFillGridData());
-		{
-			GridLayout layout = new GridLayout();
-			layout.numColumns = 2;
-			mavenGroup.setLayout(layout);
-		}
-		mavenGroup.setFont(font);
-
-		/*
-		 * ---------------------------------------------------------------------
-		 */
-
-		fEnableMavenDisableTestClassesBox = createCheckButton(mavenGroup,
-				"Exclude test-classes for maven");
-		{
-			GridData gd = new GridData();
-			gd.horizontalAlignment = SWT.LEFT;
-			fEnableMavenDisableTestClassesBox.setLayoutData(gd);
-		}
-		// update configuration directly when user select it.
-		fEnableMavenDisableTestClassesBox
-				.addSelectionListener(new ButtonListener() {
-					public void widgetSelected(SelectionEvent e) {
-						updateLaunchConfigurationDialog();
-					}
-				});
-
-	}
 
 	private GridData createHFillGridData() {
 		GridData gd = new GridData();
@@ -849,29 +738,16 @@ public class RunJettyRunTab extends JavaLaunchTab {
 			fWebAppDirText.setText(configuration.getAttribute(
 					Plugin.ATTR_WEBAPPDIR, ""));
 
-			fExcludedClasspathText.setText(configuration.getAttribute(
-					Plugin.ATTR_EXCLUDE_CLASSPATH,""));
-
-			fScanText.setText(configuration.getAttribute(
-					Plugin.ATTR_SCANINTERVALSECONDS, ""));
 
 			fShowAdvancebox.setSelection(configuration.getAttribute(
 					Plugin.ATTR_SHOW_ADVANCE, false));
 
 			advanceGroup.setVisible(fShowAdvancebox.getSelection());
 
-			fEnableScannerbox.setSelection(configuration.getAttribute(
-					Plugin.ATTR_ENABLE_SCANNER, true));
-
-			fScannerWEBINFbox.setSelection(configuration.getAttribute(
-					Plugin.ATTR_SCANNER_SCAN_WEBINF, true));
 
 			fEnableJNDI.setSelection(configuration.getAttribute(
 					Plugin.ATTR_ENABLE_JNDI, false));
-			fScanText.setEnabled(fEnableScannerbox.getSelection());
 
-			fEnableMavenDisableTestClassesBox.setSelection(configuration
-					.getAttribute(Plugin.ATTR_ENABLE_MAVEN_TEST_CLASSES, true));
 
 			fEnableParentLoadPriorityBox.setSelection(configuration
 					.getAttribute(Plugin.ATTR_ENABLE_PARENT_LOADER_PRIORITY,
@@ -1100,16 +976,6 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		if (isInvalidPort(sslPort))
 			return false;
 
-		if (fEnableScannerbox.getSelection()) {
-			String scan = fScanText.getText().trim();
-
-			if (scan.length() == 0) {
-				setErrorMessage("Must specify at least one scan interval seconds");
-				return false;
-			}
-			if (isInvalidScan(scan))
-				return false;
-		}
 
 		if (fEnableSSLbox.getSelection()) {
 			// Validate that we have the necessary key store info.
@@ -1147,13 +1013,6 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		return res;
 	}
 
-	private boolean isInvalidScan(String s) {
-		boolean res = RunJettyRunLaunchConfigurationUtil.isInvalidPort(s);
-		if (res)
-			setErrorMessage(MessageFormat.format(
-					"Not a valid scan number: {0}", s));
-		return res;
-	}
 
 	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
 		configuration.setAttribute(ATTR_PROJECT_NAME, fProjText.getText());
@@ -1171,9 +1030,6 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		configuration.setAttribute(Plugin.ATTR_ENABLE_JNDI,
 				fEnableJNDI.getSelection());
 
-		configuration.setAttribute(Plugin.ATTR_ENABLE_MAVEN_TEST_CLASSES,
-				fEnableMavenDisableTestClassesBox.getSelection());
-
 		configuration.setAttribute(Plugin.ATTR_KEYSTORE,
 				fKeystoreText.getText());
 		configuration.setAttribute(Plugin.ATTR_PWD, fPasswordText.getText());
@@ -1184,18 +1040,6 @@ public class RunJettyRunTab extends JavaLaunchTab {
 
 		configuration.setAttribute(Plugin.ATTR_WEBAPPDIR,
 				fWebAppDirText.getText());
-
-		configuration.setAttribute(Plugin.ATTR_EXCLUDE_CLASSPATH,
-				fExcludedClasspathText.getText());
-
-		configuration.setAttribute(Plugin.ATTR_SCANINTERVALSECONDS,
-				fScanText.getText());
-
-		configuration.setAttribute(Plugin.ATTR_ENABLE_SCANNER,
-				fEnableScannerbox.getSelection());
-
-		configuration.setAttribute(Plugin.ATTR_SCANNER_SCAN_WEBINF,
-				fScannerWEBINFbox.getSelection());
 
 		configuration.setAttribute(Plugin.ATTR_SHOW_ADVANCE,
 				fShowAdvancebox.getSelection());
@@ -1289,9 +1133,6 @@ public class RunJettyRunTab extends JavaLaunchTab {
 			getBoolean(PreferenceConstants.P_DefaultEnableScanner);
 		configuration.setAttribute(Plugin.ATTR_ENABLE_SCANNER, defaultEnableScanner);
 
-		configuration.setAttribute(Plugin.ATTR_SCANNER_SCAN_WEBINF, false);
-
-		configuration.setAttribute(Plugin.ATTR_ENABLE_MAVEN_TEST_CLASSES, true);
 		configuration.setAttribute(Plugin.ATTR_ENABLE_PARENT_LOADER_PRIORITY,
 				true);
 

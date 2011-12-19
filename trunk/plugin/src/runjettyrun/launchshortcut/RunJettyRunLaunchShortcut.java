@@ -18,7 +18,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchWindow;
 
 import runjettyrun.Plugin;
-import runjettyrun.RunJettyRunTab;
+import runjettyrun.tabs.RunJettyRunTab;
 import runjettyrun.utils.ProjectUtil;
 
 public class RunJettyRunLaunchShortcut implements ILaunchShortcut2 {

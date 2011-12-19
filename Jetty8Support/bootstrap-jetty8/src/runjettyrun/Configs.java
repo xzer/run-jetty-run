@@ -30,12 +30,13 @@ public class Configs {
 	private String keyPassword;
 	private Integer scanIntervalSeconds;
 	private Boolean enablescanner;
-	private Boolean scanWEBINF;
 	private Boolean parentLoaderPriority;
+	private Boolean ignoreScanClassFile = false;
 
 	private Boolean enablessl;
 	private Boolean needClientAuth;
 	private Boolean enableJNDI;
+
 	private String configurationClasses;
 	private String resourceMapping;
 
@@ -86,8 +87,6 @@ public class Configs {
 
 		enablescanner = getBooleanProp("rjrenablescanner");
 
-		scanWEBINF = getBooleanProp("rjrscanWEBINF");
-
 		parentLoaderPriority = getBooleanProp("rjrparentloaderpriority", true);
 
 		enablessl = getBooleanProp("rjrenablessl");
@@ -99,6 +98,8 @@ public class Configs {
 		configurationClasses = getProp("rjrconfigurationclasses", "");
 
 		resourceMapping = trimQuote(getProp("rjrResourceMapping", ""));
+
+		ignoreScanClassFile = getBooleanProp("rjrignoreScanClassFile", false);
 
 	}
 
@@ -373,10 +374,6 @@ public class Configs {
 		return eclipseListener;
 	}
 
-	public Boolean getScanWEBINF() {
-		return scanWEBINF;
-	}
-
 	public String getExcludedclasspath() {
 		return excludedclasspath;
 	}
@@ -391,6 +388,10 @@ public class Configs {
 
 	public String getScanlist() {
 		return scanlist;
+	}
+
+	public Boolean getIgnoreScanClassFile() {
+		return ignoreScanClassFile;
 	}
 
 }
