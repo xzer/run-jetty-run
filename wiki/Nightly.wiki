@@ -34,7 +34,7 @@ http://run-jetty-run.googlecode.com/svn/trunk/updatesite-nightly
 3.*Add support for the newer Maven for Eclipse(M2Eclipse) plugin in Eclipse 3.7*.
     In Eclispe 3.7, the M2E changed a lot for the package name and also some details configs , we was doing some support feature for old M2E since 1.3.0 , and now we also have well support with new M2E!
 
-4.*Now we have better servlet3 support*.  
+4.*Now we have better servlet 3 support*.  
     In 1.3.1 we try to supprot annotation , but it's still not working for web-fragment and META-INF/resource folder since the restriction of the Jetty8 implementation , it's only scanning the WEB-INF/classes and WEB-INF/lib/`*`.jar .
 
     They didn't consider for those classpath that's not in regular classpath , but we use Maven or referenced to other project very often , so that's a big trouble for Eclipse developement.
