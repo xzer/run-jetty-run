@@ -1,5 +1,5 @@
+#summary Last nightly version and features/issues
 #labels Featured
-#Nightly current version and feature/issues
 
 = Introduction =
 
