@@ -25,6 +25,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -57,8 +58,7 @@ public class JettyLaunchConfigurationClassPathProvider extends
 
 		// Remove JRE entry/entries.
 
-		IRuntimeClasspathEntry stdJreEntry = JavaRuntime
-				.computeJREEntry(configuration);
+		IRuntimeClasspathEntry stdJreEntry = JavaRuntime.computeJREEntry(configuration);
 		IRuntimeClasspathEntry projJreEntry = JavaRuntime.computeJREEntry(proj);
 		List<IRuntimeClasspathEntry> entryList = new ArrayList<IRuntimeClasspathEntry>(
 				entries.length);
@@ -102,7 +102,29 @@ public class JettyLaunchConfigurationClassPathProvider extends
 			}
 		}
 
+		locations.addAll(getXMLsUnderWebInf(configuration));
+
 		return locations;
+	}
+
+	private Set<String> getXMLsUnderWebInf(ILaunchConfiguration configuration) throws CoreException{
+		IFolder webinf = RunJettyRunClasspathUtil.getWebInf(configuration);
+
+		Set<String> sets = new HashSet<String>();
+		if(webinf == null) {
+			return sets;
+		}
+		IResource[] resuorces = webinf.members();
+
+		for (IResource ir : resuorces) {
+			if (ir.getType() == IResource.FILE) {
+				if (ir.getName().endsWith(".xml")) {
+					sets.add(ir.getFullPath().toFile().getAbsolutePath());
+				}
+			}
+		}
+		return sets;
+
 	}
 
 	public Set<String> getAllScanPathList(ILaunchConfiguration configuration)
