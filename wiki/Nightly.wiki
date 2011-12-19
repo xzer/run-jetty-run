@@ -41,6 +41,8 @@ http://run-jetty-run.googlecode.com/svn/trunk/updatesite-nightly
      
     In 1.3.2 , we use our own configuration classes to fully support those feature!
 
+5.*We only support Eclipse 3.5 and after in 1.3.2*
+
 
 = Details =
 
