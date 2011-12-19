@@ -3,10 +3,11 @@
 
 = Introduction =
 
-We create a nightly build for those still testing feature , 
-for example , Jetty7 or Jetty8 support is a big milestone and need more testing.
+We create a nightly build for those unstable/new features , 
 
-It's very welcome to report the bug from nightly build.
+The nightly version might still have some bugs , and it's very welcome to report the bugs to help us providing better product!
+
+If you need a stable version, please wait for official release. :)
 
 = Latest Nightly version =
 
