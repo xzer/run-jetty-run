@@ -22,7 +22,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.DatagramSocket;
-import java.net.MalformedURLException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URISyntaxException;
@@ -42,6 +41,8 @@ import org.mortbay.resource.Resource;
 import org.mortbay.resource.ResourceCollection;
 import org.mortbay.util.Scanner;
 import org.mortbay.xml.XmlConfiguration;
+
+import runjettyrun.scanner.RJRFileChangeListener;
 
 /**
  * Started up by the plugin's runner. Starts Jetty.
@@ -440,54 +441,13 @@ public class Bootstrap {
 			}
 		}
 
-		if(config.getScanWEBINF()){
-			Resource r;
-			try {
-				r = web.getResource("/WEB-INF");
-				if(r.exists()){
-					if(r.getFile().isDirectory()){
-						scanList.add(r.getFile());
-						System.err.println("add to scan list :" + r.getFile().getAbsolutePath());
-					}
-				}
-			} catch (MalformedURLException e) {
-			} catch (IOException e) {
-			}
-		}
 		// startScanner
 		Scanner scanner = new Scanner();
-		scanner.setReportExistingFilesOnStartup(false);
 		scanner.setScanInterval(scanIntervalSeconds);
 		scanner.setScanDirs(scanList);
 		scanner.setRecursive(true);
-		scanner.addListener(new Scanner.BulkListener() {
-
-			public void filesChanged(@SuppressWarnings("rawtypes") List changes) {
-				try {
-					// boolean reconfigure = changes.contains(getProject()
-					// .getFile().getCanonicalPath());
-					if(changes.size() > 0 ){
-						System.err.println("Stopping webapp ...(File changed:"+changes.get(0)+")");
-					}else{
-						System.err.println("Stopping webapp ...");
-					}
-					web.stop();
-
-					if (config.getWebAppClassPath() != null) {
-						ProjectClassLoader loader = new ProjectClassLoader(web,
-								config.getWebAppClassPath(), config.getExcludedclasspath(), false);
-						web.setClassLoader(loader);
-					}
-					System.err.println("Restarting webapp ...");
-					web.start();
-					System.err.println("Restart completed.");
-				} catch (Exception e) {
-					System.err
-							.println("Error reconfiguring/restarting webapp after change in watched files");
-					e.printStackTrace();
-				}
-			}
-		});
+		scanner.setReportExistingFilesOnStartup(true);
+		scanner.addListener(new RJRFileChangeListener(web,config));
 		System.err.println("Starting scanner at interval of "
 				+ scanIntervalSeconds + " seconds.");
 		scanner.start();

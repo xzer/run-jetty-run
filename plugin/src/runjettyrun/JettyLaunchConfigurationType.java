@@ -46,6 +46,7 @@ import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
+import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.core.sourcelookup.ISourceContainer;
 import org.eclipse.debug.core.sourcelookup.ISourceLookupDirector;
@@ -290,9 +291,9 @@ public class JettyLaunchConfigurationType extends
 	 * @throws CoreException
 	 */
 	private String[] getRuntimeArguments(ILaunchConfiguration configuration,
-			String[] oringinalVMArguments)
+			String[] oringinalVMArguments,boolean debugMode)
 			throws CoreException {
-		List<String> runtimeVmArgs = getJettyArgs(configuration);
+		List<String> runtimeVmArgs = getJettyArgs(configuration,debugMode);
 
 		boolean maxperm = false;
 		for (String str : oringinalVMArguments) {
@@ -425,10 +426,11 @@ public class JettyLaunchConfigurationType extends
 			// Environment variables
 			runConfig.setEnvironment(getEnvironment(configuration));
 
+			boolean debug = ILaunchManager.DEBUG_MODE.equals(mode);
 			// Here prepare the classpath is really for webapp in Runtime
 			// Arguments , too.
 			runConfig.setVMArguments(getRuntimeArguments(configuration,
-					execArgs.getVMArgumentsArray()));
+					execArgs.getVMArgumentsArray(),debug));
 
 			runConfig
 					.setWorkingDirectory(getWorkingDirectoryAbsolutePath(configuration));
@@ -560,7 +562,7 @@ public class JettyLaunchConfigurationType extends
 			launcher.put(sslPort, launch);
 	}
 
-	private List<String> getJettyArgs(ILaunchConfiguration configuration)
+	private List<String> getJettyArgs(ILaunchConfiguration configuration,boolean debugMode)
 			throws CoreException {
 
 		List<String> runtimeVmArgs = new ArrayList<String>();
@@ -586,14 +588,13 @@ public class JettyLaunchConfigurationType extends
 		addOptionalAttr(configuration, runtimeVmArgs,
 				Plugin.ATTR_SCANINTERVALSECONDS, "scanintervalseconds");
 
-		addOptionalAttr(configuration, runtimeVmArgs,
-				Plugin.ATTR_EXCLUDE_CLASSPATH, "excludedclasspath");
-
 		addOptionalAttrx(configuration, runtimeVmArgs,
 				Plugin.ATTR_ENABLE_SCANNER, "enablescanner");
 
-		addOptionalAttrx(configuration, runtimeVmArgs,
-				Plugin.ATTR_SCANNER_SCAN_WEBINF, "scanWEBINF");
+		if(debugMode){
+			addOptionalAttrx(configuration, runtimeVmArgs, Plugin.ATTR_IGNORE_SCAN_CLASS_WHEN_DEBUG_MODE,
+			"ignoreScanClassFile",true);
+		}
 
 		addOptionalAttrx(configuration, runtimeVmArgs, Plugin.ATTR_ENABLE_SSL,
 				"enablessl");
@@ -653,12 +654,18 @@ public class JettyLaunchConfigurationType extends
 	}
 
 	private void addOptionalAttrx(ILaunchConfiguration configuration,
-			List<String> runtimeVmArgs, String cfgAttr, String argName)
+			List<String> runtimeVmArgs, String cfgAttr, String argName,boolean defVal)
 			throws CoreException {
-		Boolean value = configuration.getAttribute(cfgAttr, false);
+		Boolean value = configuration.getAttribute(cfgAttr, defVal);
 		String arg = "-Drjr" + argName + "=" + value;
 		runtimeVmArgs.add(arg);
 		return;
+	}
+
+	private void addOptionalAttrx(ILaunchConfiguration configuration,
+			List<String> runtimeVmArgs, String cfgAttr, String argName)
+			throws CoreException {
+		addOptionalAttrx(configuration,runtimeVmArgs,cfgAttr,argName,false);
 	}
 
 	/**
