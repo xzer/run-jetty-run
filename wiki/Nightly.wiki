@@ -3,7 +3,7 @@
 
 = Introduction =
 
-We create a nightly build for those unstable/new features , 
+We create nightly versions for those unstable/new features , 
 
 The nightly version might still have some bugs , and it's very welcome to report the bugs to help us providing better product!
 
@@ -64,6 +64,6 @@ http://run-jetty-run.googlecode.com/svn/trunk/updatesite-nightly
 
 = Next Official build =
 
-1.3.2
+1.3.2 , schedule to 2012/1/20 or earlier.
  
   
