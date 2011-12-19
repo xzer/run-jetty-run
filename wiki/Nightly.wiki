@@ -26,13 +26,13 @@ http://run-jetty-run.googlecode.com/svn/trunk/updatesite-nightly
 2.*New UI for source monitor list in run configuration!*
     It's a ability to scan files in the list , if those files is add/changed/removed , the jetty server will automatically restart.
 
-    It was the source scanner feature ,in past it's only for target output folder , but now you are able to add your own files if you need!
+    It was the source scanner feature ,and it was only for target output folder in past,now you are able to add your own files to the list as you need!
     
     We will also scan all XML files in WEB-INF by default!
     That means web.xml , application-context.xml and some files else will be in the list by default , sure you could disable them in the new UI if you don't need it.
 
 3.*Add support for the newer Maven for Eclipse(M2Eclipse) plugin in Eclipse 3.7*.
-    In Eclispe 3.7, the M2E changed a lot for the package name and also some details configs , we was doing some support feature for old M2E since 1.3.0 , and now we also have well support with new M2E!
+    In Eclispe 3.7, the M2E changed a lot for the package name and also some details , we was doing some support feature for old M2E since 1.3.0 , and now we also have well support with the newer M2E!
 
 4.*Now we have better servlet 3 support*.  
     In 1.3.1 we was trying to support annotation and it was working for annotation.But it's still not working for web-fragment and META-INF/resource folder since the restriction of the Jetty8 implementation , it's only scanning the WEB-INF/classes and WEB-INF/lib/`*`.jar .
