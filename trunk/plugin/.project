@@ -20,11 +20,17 @@
 			<arguments>
 			</arguments>
 		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.pde.api.tools.apiAnalysisBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
 	</buildSpec>
 	<natures>
 		<nature>org.eclipse.pde.PluginNature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.wst.common.project.facet.core.nature</nature>
+		<nature>org.eclipse.pde.api.tools.apiAnalysisNature</nature>
 	</natures>
 	<linkedResources>
 		<link>
@@ -33,4 +39,15 @@
 			<location>C:/workspace/run-jetty-run-bootstrap/src</location>
 		</link>
 	</linkedResources>
+	<filteredResources>
+		<filter>
+			<id>1312070173544</id>
+			<name></name>
+			<type>10</type>
+			<matcher>
+				<id>org.eclipse.ui.ide.multiFilter</id>
+				<arguments>1.0-name-matches-false-false-.git</arguments>
+			</matcher>
+		</filter>
+	</filteredResources>
 </projectDescription>
