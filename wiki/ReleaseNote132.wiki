@@ -45,7 +45,7 @@ http://run-jetty-run.googlecode.com/svn/trunk/updatesite
 
 = Details =
 
-   * Issue list http://code.google.com/p/run-jetty-run/issues/list?can=1&q=label%3Afix-1.3.2
+   * Issue list http://code.google.com/p/run-jetty-run/issues/list?can=1&q=label%3A1.3.2
 
   * Features
      * Issue 88 New view for classpath editor and source monirtor list
