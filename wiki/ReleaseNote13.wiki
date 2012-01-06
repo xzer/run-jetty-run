@@ -1,4 +1,4 @@
-#summary RunJettyRun 1.2.3 Release Note 2011/07/31
+#summary RunJettyRun 1.3 Release Note 2011/07/31
 
 = Publish Date =
 
