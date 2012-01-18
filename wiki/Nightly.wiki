@@ -11,9 +11,7 @@ If you need a stable version, please wait for official release. :)
 
 = Latest Nightly version =
 
- No any nightly version now. (Latest version is official version:1.3.2 .)
-
-
+  1.3.2.20120118
 
 = Nightly Update Site =
 
@@ -21,10 +19,12 @@ http://run-jetty-run.googlecode.com/svn/trunk/updatesite-nightly
 
 
 = Outlines = 
-  None.
+  Bug fixing .
 
 = Details =
-  None.
+  * Bugs
+     Issue 109:	ATTR_WEB_CONTEXT_CLASSPATH_NON_CHECKED doesn't work due to path issue
+
 = Next Official build =
-  None.
+  1.3.3
   
