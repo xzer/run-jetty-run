@@ -65,4 +65,7 @@ public class ClasspathGroup extends AbstractClasspathEntry {
 		return editable;
 	}
 
+	public String getRealPath() {
+		return name;
+	}
 }
