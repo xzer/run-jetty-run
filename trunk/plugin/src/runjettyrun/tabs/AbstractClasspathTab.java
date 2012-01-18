@@ -247,7 +247,7 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 	}
 
 	private void checkEntry(Map<String,String> set, IRJRClasspathEntry entry) {
-		set.put(entry.toString(),"0");
+		set.put(entry.getRealPath(),"0");
 		if (logger.isLoggable(Level.CONFIG)) {
 			logger.config("Set<String>, IClasspathEntry - removed:"
 					+ entry.toString());
@@ -275,10 +275,10 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 	}
 
 	private void uncheckEntry(Map<String,String> set, IRJRClasspathEntry entry) {
-		set.put(entry.toString(),"1");
+		set.put(entry.getRealPath(),"1");
 		if (logger.isLoggable(Level.CONFIG)) {
 			logger.config("Set<String>, IClasspathEntry - add:"
-					+ entry.toString());
+					+ entry.getRealPath());
 		}
 		IRJRClasspathEntry[] entrys = entry.getEntries();
 		if (entrys != null && entrys.length > 0) {

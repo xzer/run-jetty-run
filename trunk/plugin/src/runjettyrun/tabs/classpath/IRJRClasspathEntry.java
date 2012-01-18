@@ -21,6 +21,7 @@ public interface IRJRClasspathEntry {
 	 */
 	public IRJRClasspathEntry[] getEntries();
 
+	public String getRealPath();
 	/**
 	 * Returns whether this classpath entries has child entries.
 	 *

@@ -247,4 +247,9 @@ public class UserClassesClasspathModel extends AbstractClasspathEntry {
 		return false;
 	}
 
+
+	public String getRealPath() {
+		return toString();
+	}
+
 }

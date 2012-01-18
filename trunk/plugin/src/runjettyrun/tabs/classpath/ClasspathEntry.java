@@ -346,4 +346,10 @@ public class ClasspathEntry extends AbstractClasspathEntry implements
 		this.maven = maven;
 	}
 
+	public String getRealPath() {
+		if(entry == null) return null;
+
+		return entry.getLocation();
+	}
+
 }
