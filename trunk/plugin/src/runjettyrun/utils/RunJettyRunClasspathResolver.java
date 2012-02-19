@@ -13,13 +13,14 @@ import org.eclipse.jdt.core.IClasspathContainer;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.internal.launching.DefaultProjectClasspathEntry;
 import org.eclipse.jdt.internal.launching.RuntimeClasspathEntry;
 import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
 import org.eclipse.jdt.launching.IRuntimeClasspathEntry2;
 import org.eclipse.jdt.launching.JavaRuntime;
 
 import runjettyrun.Plugin;
+import runjettyrun.exceptions.MissingClasspathEntryException;
+import runjettyrun.tabs.classpath.MissingRuntimeClasspathEntry;
 
 /**
 // * fix for issue #52 , RJR compatiblity with M2E proejct.
@@ -59,9 +60,15 @@ public class RunJettyRunClasspathResolver {
 			IRuntimeClasspathEntry[] entries,ILaunchConfiguration configuration,boolean isMaven)throws CoreException{
 		Set<IRuntimeClasspathEntry> all = new LinkedHashSet<IRuntimeClasspathEntry>(entries.length);
 		for (int i = 0; i < entries.length; i++) {
-			IRuntimeClasspathEntry[] resolved = resolveRuntimeClasspathEntry(entries[i], configuration, isMaven);
-			for (int j = 0; j < resolved.length; j++) {
-				all.add(resolved[j]);
+			IRuntimeClasspathEntry[] resolved;
+			try {
+				resolved = resolveRuntimeClasspathEntry(entries[i], configuration, isMaven);
+				for (int j = 0; j < resolved.length; j++) {
+					all.add(resolved[j]);
+				}
+			} catch (MissingClasspathEntryException e) {
+				//Not resolved , return original one directly.
+				all.add( new MissingRuntimeClasspathEntry(e.getResolvingEntry(),e.getMessage()));
 			}
 		}
 		return (IRuntimeClasspathEntry[])all.toArray(new IRuntimeClasspathEntry[all.size()]);
@@ -73,9 +80,10 @@ public class RunJettyRunClasspathResolver {
 	 * @param configuration
 	 * @return
 	 * @throws CoreException
+	 * @throws MissingClasspathEntryException
 	 */
 	private static IRuntimeClasspathEntry[] resolveRuntimeClasspathEntry(
-			IRuntimeClasspathEntry entry,ILaunchConfiguration configuration,boolean isMaven)throws CoreException{
+			IRuntimeClasspathEntry entry,ILaunchConfiguration configuration,boolean isMaven)throws CoreException, MissingClasspathEntryException{
 
 		if(RunJettyRunClasspathUtil.isDefaultProjectClasspathEntry(entry)){
 			IRuntimeClasspathEntry2 entry2 = (IRuntimeClasspathEntry2)entry;
@@ -120,7 +128,15 @@ public class RunJettyRunClasspathResolver {
 
 			return (IRuntimeClasspathEntry[]) resolved.toArray(new IRuntimeClasspathEntry[resolved.size()]);
 		}else{
-			return JavaRuntime.resolveRuntimeClasspathEntry(entry, configuration);
+			try{
+				return JavaRuntime.resolveRuntimeClasspathEntry(entry, configuration);
+			}catch(CoreException coreEx){
+				String message = coreEx.getMessage();
+				if(message != null && message.indexOf("does not exist") != -1 ){
+					throw new MissingClasspathEntryException(coreEx,entry);
+				}
+				throw coreEx;
+			}
 
 		}
 	}

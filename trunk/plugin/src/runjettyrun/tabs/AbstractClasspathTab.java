@@ -616,6 +616,11 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 	 * .core.ILaunchConfiguration)
 	 */
 	public boolean isValid(ILaunchConfiguration launchConfig) {
+
+		if(fModel == null){
+			throw new IllegalStateException("Items model shouldn't be null");
+		}
+
 		setErrorMessage(null);
 		setMessage(null);
 		String projectName = null;
@@ -624,6 +629,11 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 					IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME, ""); //$NON-NLS-1$
 		} catch (CoreException e) {
 			return false;
+		}
+
+		String checkExist = fModel.checkIfCustomEntriesExisting();
+		if(checkExist != null){
+			setErrorMessage(checkExist);
 		}
 		if (projectName.length() > 0) {
 			IWorkspace workspace = ResourcesPlugin.getWorkspace();

@@ -75,8 +75,6 @@ public class RuntimeUserClasspathEntryLabelProvider extends LabelProvider {
 						File file = path.toFile();
 						if (file.exists() && file.isDirectory()) {
 							key = ISharedImages.IMG_OBJS_PACKFRAG_ROOT;
-						} else if (source) {
-	                        key = ISharedImages.IMG_OBJS_EXTERNAL_ARCHIVE_WITH_SOURCE;
 						} else {
 							key = ISharedImages.IMG_OBJS_EXTERNAL_ARCHIVE;
 						}
@@ -137,15 +135,19 @@ public class RuntimeUserClasspathEntryLabelProvider extends LabelProvider {
 				String[] segments = path.segments();
 				StringBuffer displayPath = new StringBuffer();
 				if (segments.length > 0) {
-					displayPath.append(segments[segments.length - 1]);
-					displayPath.append(" - "); //$NON-NLS-1$
 					String device = path.getDevice();
 					if (device != null) {
 						displayPath.append(device);
+						displayPath.append(File.separator);
 					}
-					displayPath.append(File.separator);
-					for (int i = 0; i < segments.length - 1; i++) {
+					for (int i = 0; i < segments.length -1; i++) {
 						displayPath.append(segments[i]).append(File.separator);
+					}
+					displayPath.append(segments[segments.length - 1]);
+
+					//getDevice means that's a absolute path.
+					if(path.getDevice() != null && !path.toFile().exists()){
+						displayPath.append(" (missing) ");
 					}
 				} else {
 					displayPath.append(path.toOSString());

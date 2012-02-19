@@ -42,6 +42,7 @@ import org.eclipse.jdt.launching.StandardClasspathProvider;
 
 import runjettyrun.container.RunJettyRunContainerClasspathEntry;
 import runjettyrun.extensions.IJettyPackageProvider;
+import runjettyrun.tabs.classpath.MissingRuntimeClasspathEntry;
 import runjettyrun.utils.RunJettyRunClasspathResolver;
 import runjettyrun.utils.RunJettyRunClasspathUtil;
 import runjettyrun.utils.RunJettyRunLaunchConfigurationUtil;
@@ -95,7 +96,10 @@ public class JettyLaunchConfigurationClassPathProvider extends
 				String location = entry.getLocation();
 				if (location != null) {
 					File f =new File(location);
-					if(f.exists() && f.isDirectory()){
+
+					//Assume scanning a non-exist location will not cause issue ,
+					//it's more easier to do this instad of filter exist items out.
+					if((entry instanceof MissingRuntimeClasspathEntry) || (f.exists() && f.isDirectory())){
 						locations.add(location);
 					}
 				}
@@ -192,11 +196,21 @@ public class JettyLaunchConfigurationClassPathProvider extends
 	public IRuntimeClasspathEntry[] computeUnresolvedCustomClasspath(
 			ILaunchConfiguration configuration, String attribute)
 			throws CoreException {
-		IRuntimeClasspathEntry[] classpath = new IRuntimeClasspathEntry[0];
+		List<IRuntimeClasspathEntry> classpath = new ArrayList<IRuntimeClasspathEntry>();
 		// recover persisted classpath
-		classpath = recoverRuntimePath(configuration, attribute);
+		IRuntimeClasspathEntry[] classpaths = recoverRuntimePath(configuration, attribute);
 
-		return classpath;
+		for(IRuntimeClasspathEntry entry: classpaths){
+			if(entry.getType() == IRuntimeClasspathEntry.ARCHIVE
+					&& !entry.getPath().toFile().exists()
+			){
+				classpath.add(new MissingRuntimeClasspathEntry(entry,"Missing custom entry:"+entry.getPath().toString()));
+			}else{
+				classpath.add(entry);
+			}
+		}
+
+		return classpath.toArray(new IRuntimeClasspathEntry[0]);
 	}
 
 	public IRuntimeClasspathEntry[] computeUnresolvedJettyClasspath(

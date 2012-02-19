@@ -1,10 +1,11 @@
 package runjettyrun.tabs.classpath;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 
-public abstract class AbstractClasspathEntry implements IRJRClasspathEntry {
+public abstract class AbstractClasspathEntry implements IRJRClasspathEntry,Iterable<IRJRClasspathEntry> {
 
 	protected List<IRJRClasspathEntry> childEntries = new ArrayList<IRJRClasspathEntry>();
 	protected IRJRClasspathEntry parent = null;
@@ -60,5 +61,9 @@ public abstract class AbstractClasspathEntry implements IRJRClasspathEntry {
 
 	public void setCustom(boolean custom) {
 		this.custom = custom;
+	}
+
+	public Iterator<IRJRClasspathEntry> iterator(){
+		return childEntries.iterator();
 	}
 }
