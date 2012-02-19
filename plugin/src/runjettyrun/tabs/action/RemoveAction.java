@@ -26,6 +26,7 @@ public class RemoveAction extends RuntimeClasspathAction {
 		List<?> targets = getOrderedSelection();
 		List<?> list = getCustomEntriesAsList();
 		list.removeAll(targets);
+		//TODO remove unchecked attributes .
 		setCustomEntries(list);
 	}
 

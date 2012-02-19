@@ -28,7 +28,9 @@ import java.util.Set;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jdt.core.IClasspathEntry;
@@ -43,6 +45,7 @@ import org.eclipse.jdt.launching.StandardClasspathProvider;
 import runjettyrun.container.RunJettyRunContainerClasspathEntry;
 import runjettyrun.extensions.IJettyPackageProvider;
 import runjettyrun.tabs.classpath.MissingRuntimeClasspathEntry;
+import runjettyrun.utils.ResourceUtil;
 import runjettyrun.utils.RunJettyRunClasspathResolver;
 import runjettyrun.utils.RunJettyRunClasspathUtil;
 import runjettyrun.utils.RunJettyRunLaunchConfigurationUtil;
@@ -202,7 +205,7 @@ public class JettyLaunchConfigurationClassPathProvider extends
 
 		for(IRuntimeClasspathEntry entry: classpaths){
 			if(entry.getType() == IRuntimeClasspathEntry.ARCHIVE
-					&& !entry.getPath().toFile().exists()
+					&& !ResourceUtil.lookingFileFromPath(entry.getPath()).exists()
 			){
 				classpath.add(new MissingRuntimeClasspathEntry(entry,"Missing custom entry:"+entry.getPath().toString()));
 			}else{

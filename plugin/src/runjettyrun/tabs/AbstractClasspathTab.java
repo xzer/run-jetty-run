@@ -1,5 +1,6 @@
 package runjettyrun.tabs;
 
+import java.io.File;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,6 +56,7 @@ import runjettyrun.tabs.classpath.IRJRClasspathEntry;
 import runjettyrun.tabs.classpath.RuntimeClasspathViewer;
 import runjettyrun.tabs.classpath.UserClassesClasspathContentProvider;
 import runjettyrun.tabs.classpath.UserClassesClasspathModel;
+import runjettyrun.utils.ResourceUtil;
 
 /**
  * A launch configuration tab that displays and edits the user and bootstrap
@@ -85,7 +87,10 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 	protected RuntimeClasspathViewer fClasspathViewer;
 	private UserClassesClasspathModel fModel;
 
-	protected Map<String,String> checked;
+	/**
+	 * If the items is not checked , the value string will be "1" , or it will be "0" or not contained in the key.
+	 */
+	protected Map<String,String> nonchecked;
 
 	protected static final String DIALOG_SETTINGS_PREFIX = "JavaClasspathTab"; //$NON-NLS-1$
 
@@ -172,16 +177,16 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 		fClasspathViewer.addCheckStateListener(new ICheckStateListener() {
 			public void checkStateChanged(CheckStateChangedEvent event) {
 				if (event.getChecked()) {
-					checkEntry(checked, (IRJRClasspathEntry) event.getElement());
+					checkEntry(nonchecked, (IRJRClasspathEntry) event.getElement());
 				} else {
-					uncheckEntry(checked, (IRJRClasspathEntry) event.getElement());
+					uncheckEntry(nonchecked, (IRJRClasspathEntry) event.getElement());
 				}
 
 				try {
 					ILaunchConfigurationWorkingCopy workingcopy = getWorkingCopy();
 
 					workingcopy.setAttribute(getNonCheckedAttributeName(),
-							checked);
+							nonchecked);
 					workingcopy.doSave();
 				} catch (CoreException e) {
 					logger.severe("CheckStateChangedEvent - exception: " + e);
@@ -218,10 +223,31 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 			return false;
 		}
 
-		if(!checked.containsKey(element.toString())){
+		String elementKey = element.toString();
+		if(!nonchecked.containsKey(elementKey)){  // we don't have to lookup resource if item exist
+
+			//2012/02/20 TonyQ
+			//Note: the way we handle workspace relative path is to convert them to absolute path,
+			//      that might not be a good idea,but it simply the issue in first step at least.
+			//
+			//	    The difficult part is that when we get folder after classpath resolving ,
+			//      that's usually in absolute path , and it's hard to find the original resource.
+			//
+			//      The only risk to use absolute path is ,
+			//		user will lost the uncheck settings when user change workspace/project path.
+			//
+			//		Let's think about this later if any user complain about this.
+			//
+			File file = ResourceUtil.lookingFileFromPathString(element.toString());
+			if(file.exists()){
+				elementKey = file.getAbsolutePath();
+			}
+		}
+
+		if(!nonchecked.containsKey(elementKey)){
 			return isDefaultChecked(element);
 		}
-		return checked.get(element.toString()).equals("0");
+		return nonchecked.get(elementKey).equals("0");
 	}
 
 	protected boolean isDefaultChecked(IRJRClasspathEntry element){
@@ -246,8 +272,8 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 		return workingcopy;
 	}
 
-	private void checkEntry(Map<String,String> set, IRJRClasspathEntry entry) {
-		set.put(entry.getRealPath(),"0");
+	private void checkEntry(Map<String,String> nonChecked, IRJRClasspathEntry entry) {
+		nonChecked.put(entry.getRealPath(),"0");
 		if (logger.isLoggable(Level.CONFIG)) {
 			logger.config("Set<String>, IClasspathEntry - removed:"
 					+ entry.toString());
@@ -255,7 +281,7 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 		IRJRClasspathEntry[] entrys = entry.getEntries();
 		if (entrys != null && entrys.length > 0) {
 			for (IRJRClasspathEntry childentry : entrys) {
-				checkEntry(set, childentry);
+				checkEntry(nonChecked, childentry);
 			}
 		}
 
@@ -268,7 +294,7 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 
 			if (childentrys != null && childentrys.length > 0) {
 				for (IRJRClasspathEntry childentry : childentrys) {
-					checkEntry(set, childentry);
+					checkEntry(nonChecked, childentry);
 				}
 			}
 		}
@@ -570,12 +596,12 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 	private void setLaunchConfiguration(ILaunchConfiguration config) {
 		fLaunchConfiguration = config;
 		try {
-			checked = (Map<String,String>) fLaunchConfiguration.getAttribute(getNonCheckedAttributeName(),(Map<String,String>)null);
+			nonchecked = (Map<String,String>) fLaunchConfiguration.getAttribute(getNonCheckedAttributeName(),(Map<String,String>)null);
 		} catch (CoreException e) {
 		}
 
-		if(checked == null){
-			checked = new HashMap<String,String>();
+		if(nonchecked == null){
+			nonchecked = new HashMap<String,String>();
 		}
 
 	}
@@ -702,12 +728,12 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 	@SuppressWarnings("unchecked")
 	public void refreshSelection(){
 		try {
-			checked = (Map<String,String>) fLaunchConfiguration.getAttribute(getNonCheckedAttributeName(),(Map<String,String>)null);
+			nonchecked = (Map<String,String>) fLaunchConfiguration.getAttribute(getNonCheckedAttributeName(),(Map<String,String>)null);
 		} catch (CoreException e) {
 		}
 
-		if(checked == null){
-			checked = new HashMap<String,String>();
+		if(nonchecked == null){
+			nonchecked = new HashMap<String,String>();
 		}
 		this.fClasspathViewer.refresh();
 
