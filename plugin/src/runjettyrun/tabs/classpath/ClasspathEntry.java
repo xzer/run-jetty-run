@@ -40,6 +40,10 @@ public class ClasspathEntry extends AbstractClasspathEntry implements
 		this.entry = entry;
 	}
 
+	public boolean isMissing(){
+		return entry instanceof MissingRuntimeClasspathEntry;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 *

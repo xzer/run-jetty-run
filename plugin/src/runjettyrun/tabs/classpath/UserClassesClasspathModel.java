@@ -237,6 +237,37 @@ public class UserClassesClasspathModel extends AbstractClasspathEntry {
 		getCustomEntry();
 	}
 
+	public String checkIfCustomEntriesExisting(){
+
+		if(customEntries == null){
+			return null;
+		}
+
+		StringBuffer sb = new StringBuffer();
+		boolean find = false;
+		for(IRJRClasspathEntry entry:customEntries){
+			if(entry instanceof ClasspathEntry && ((ClasspathEntry) entry).isMissing()){
+				if(((ClasspathEntry) entry).getDelegate() == null){
+					throw new IllegalStateException("It shouldn't happened when missing a null IRuntimeClasspath");
+				}
+				String mesg = ((MissingRuntimeClasspathEntry)((ClasspathEntry) entry).getDelegate()).getMessage();
+				if(find){
+					sb.append(",");
+				}
+				sb.append(mesg);
+				find = true;
+			}
+		}
+
+		if( !find ) {
+			return null;
+		}
+
+
+		return sb.toString();
+
+	}
+
 	/*
 	 * (non-Javadoc)
 	 *
