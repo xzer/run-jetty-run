@@ -1130,7 +1130,7 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		configuration.setAttribute(Plugin.ATTR_SCANINTERVALSECONDS, "5");
 
 		boolean defaultEnableScanner = Plugin.getDefault().getPreferenceStore().
-			getBoolean(PreferenceConstants.P_DefaultEnableScanner);
+			getBoolean(PreferenceConstants.P_DEFAULT_ENABLE_SCANNER);
 		configuration.setAttribute(Plugin.ATTR_ENABLE_SCANNER, defaultEnableScanner);
 
 		configuration.setAttribute(Plugin.ATTR_ENABLE_PARENT_LOADER_PRIORITY,

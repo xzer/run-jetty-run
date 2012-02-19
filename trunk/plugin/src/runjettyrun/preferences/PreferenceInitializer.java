@@ -17,8 +17,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	 */
 	public void initializeDefaultPreferences() {
 		IPreferenceStore store = Plugin.getDefault().getPreferenceStore();
-		store.setDefault(PreferenceConstants.P_EnableEclipseListener, true);
-		store.setDefault(PreferenceConstants.P_DefaultEnableScanner, false);
+		store.setDefault(PreferenceConstants.P_ENABLE_ECLIPSE_LISTENER, true);
+		store.setDefault(PreferenceConstants.P_DEFAULT_ENABLE_SCANNER, false);
 		store.setDefault(PreferenceConstants.P_AUTO_PORT, false);
 
 	}
