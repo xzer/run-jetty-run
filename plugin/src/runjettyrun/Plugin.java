@@ -169,7 +169,7 @@ public class Plugin extends AbstractUIPlugin {
 	}
 
 	public boolean isListenerEnable(){
-		return  getPreferenceStore().getBoolean(PreferenceConstants.P_EnableEclipseListener);
+		return  getPreferenceStore().getBoolean(PreferenceConstants.P_ENABLE_ECLIPSE_LISTENER);
 	}
 
 	public void start(BundleContext context) throws Exception {

@@ -38,11 +38,11 @@ public class PreferencePage
 	 */
 	public void createFieldEditors() {
 		addField(new BooleanFieldEditor(
-				PreferenceConstants.P_EnableEclipseListener,
+				PreferenceConstants.P_ENABLE_ECLIPSE_LISTENER,
 				"&Enable Eclipse Listener to prevent Jetty leaks when Eclipse crash (Take effect after Eclipse restarted).",
 				getFieldEditorParent()));
 		addField(new BooleanFieldEditor(
-				PreferenceConstants.P_DefaultEnableScanner,
+				PreferenceConstants.P_DEFAULT_ENABLE_SCANNER,
 				"Default Enable &Scanner when create new run configuration.",
 				getFieldEditorParent()));
 		addField(new BooleanFieldEditor(
