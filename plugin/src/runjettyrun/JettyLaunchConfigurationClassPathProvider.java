@@ -123,7 +123,7 @@ public class JettyLaunchConfigurationClassPathProvider extends
 		for (IResource ir : resuorces) {
 			if (ir.getType() == IResource.FILE) {
 				if (ir.getName().endsWith(".xml")) {
-					sets.add(ir.getFullPath().toFile().getAbsolutePath());
+					sets.add(ir.getLocation().toFile().getAbsolutePath());
 				}
 			}
 		}
