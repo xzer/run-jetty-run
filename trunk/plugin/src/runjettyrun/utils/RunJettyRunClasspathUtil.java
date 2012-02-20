@@ -17,6 +17,7 @@ import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaModel;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.internal.core.JavaProject;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
 import org.eclipse.jdt.launching.IRuntimeClasspathEntry2;
@@ -50,6 +51,15 @@ public class RunJettyRunClasspathUtil {
 						break;
 					case IClasspathEntry.CPE_LIBRARY:
 						classpathEntries.add(JavaRuntime.newArchiveRuntimeClasspathEntry(entry.getPath()));
+						break;
+					case IClasspathEntry.CPE_PROJECT:
+						IResource ir  = ResourcesPlugin.getWorkspace().getRoot().findMember(entry.getPath());
+						if( ir != null){
+							IJavaProject proj = JavaCore.create(ir.getProject());
+							if ( proj != project){ //I am not sure if proj will be project or not actually.
+								classpathEntries.add(JavaRuntime.newProjectRuntimeClasspathEntry(proj));
+							}
+						}
 						break;
 					case IClasspathEntry.CPE_SOURCE:
 						IPath path = entry.getOutputLocation();

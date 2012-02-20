@@ -256,11 +256,11 @@ public class JettyLaunchConfigurationType extends
 			String attribute) throws CoreException {
 		IRuntimeClasspathEntry[] entries = provider
 				.computeUnresolvedCustomClasspath(configuration, attribute);
-		entries = JavaRuntime.resolveRuntimeClasspath(entries, configuration);
+		List<IRuntimeClasspathEntry> result = Arrays.asList(JavaRuntime.resolveRuntimeClasspath(entries, configuration));
 
-		Set<String> set = new HashSet<String>(entries.length);
-		for (int i = 0; i < entries.length; i++) {
-			String location = entries[i].getLocation();
+		Set<String> set = new HashSet<String>(result.size());
+		for (int i = 0; i < result.size(); i++) {
+			String location = result.get(i).getLocation();
 			if (location != null) {
 				if (!set.contains(location)) {
 					set.add(location);
