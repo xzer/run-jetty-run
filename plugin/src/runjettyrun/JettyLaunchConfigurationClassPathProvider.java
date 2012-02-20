@@ -35,6 +35,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
 import org.eclipse.jdt.launching.IRuntimeClasspathEntryResolver;
@@ -325,7 +326,15 @@ public class JettyLaunchConfigurationClassPathProvider extends
 				all.addAll(Arrays.asList(RunJettyRunLaunchConfigurationUtil
 						.loadPackage(configuration,
 								IJettyPackageProvider.TYPE_UTIL)));
-			} else {
+			} else if (entry.getType() == IRuntimeClasspathEntry.PROJECT){
+				IResource ir = entry.getResource();
+				IJavaProject project = JavaCore.create(ir.getProject());
+				List<IRuntimeClasspathEntry> childs = RunJettyRunClasspathUtil.getProjectClasspathsForUserlibs(
+						project, false);
+				IRuntimeClasspathEntry[] childSolvedEntry = JavaRuntime.resolveRuntimeClasspath(
+						childs.toArray(new IRuntimeClasspathEntry[0]), configuration);
+				all.addAll(Arrays.asList(childSolvedEntry));
+			}else {
 				// resloved by default
 				// here's as same as StandardClasspathProvider
 				all.addAll(Arrays.asList(JavaRuntime

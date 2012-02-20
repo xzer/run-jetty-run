@@ -23,7 +23,7 @@ public class ClasspathEntry extends AbstractClasspathEntry implements
 
 	private IRuntimeClasspathEntry entry = null;
 
-	private boolean maven;
+	private boolean isUnderMavenDependency;
 
 	/*
 	 * (non-Javadoc)
@@ -243,8 +243,8 @@ public class ClasspathEntry extends AbstractClasspathEntry implements
 				IResource ir = delegate.getResource();
 				IJavaProject project = JavaCore.create(ir.getProject());
 				childs = RunJettyRunClasspathUtil
-						.getProjectClasspathsForUserlibs(project, maven);
-				return create(childs, maven);
+						.getProjectClasspathsForUserlibs(project, isUnderMavenDependency);
+				return create(childs, isUnderMavenDependency);
 
 			} else if (delegate.getType() == IRuntimeClasspathEntry.CONTAINER) {
 
@@ -291,7 +291,7 @@ public class ClasspathEntry extends AbstractClasspathEntry implements
 																					// one
 				return new IRJRClasspathEntry[0];
 			} else {
-				return create(entries, maven);
+				return create(entries, isUnderMavenDependency);
 			}
 		} catch (CoreException e) {
 			return null;
@@ -309,7 +309,7 @@ public class ClasspathEntry extends AbstractClasspathEntry implements
 		for (int i = 0; i < entries.length; i++) {
 			IRuntimeClasspathEntry childEntry = entries[i];
 			cps[i] = new ClasspathEntry(childEntry, this);
-			cps[i].setMaven(maven);
+			cps[i].setIsUnderMavenDependency(maven);
 			cps[i].setCustom(custom);
 		}
 		return cps;
@@ -342,12 +342,12 @@ public class ClasspathEntry extends AbstractClasspathEntry implements
 		return null;
 	}
 
-	public boolean isMaven() {
-		return maven;
+	public boolean isUnderMavenDependency() {
+		return isUnderMavenDependency;
 	}
 
-	public void setMaven(boolean maven) {
-		this.maven = maven;
+	public void setIsUnderMavenDependency(boolean isUnderMavenDependency) {
+		this.isUnderMavenDependency = isUnderMavenDependency;
 	}
 
 	public String getRealPath() {
