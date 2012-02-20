@@ -23,14 +23,16 @@ public class ResourceUtil {
 			return path.toFile();
 		}
 
-		{
-			IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-			IResource resourceInRuntimeWorkspace = root.findMember(path);
-			File file = new File(resourceInRuntimeWorkspace.getLocationURI());
+		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+		IResource resourceInRuntimeWorkspace = root.findMember(path);
+		if( resourceInRuntimeWorkspace ==null) {
+			return path.toFile();
+		}
 
-			if(file.exists()){
-				return file;
-			}
+		File file = new File(resourceInRuntimeWorkspace.getLocationURI());
+
+		if(file.exists()){
+			return file;
 		}
 
 		return path.toFile();
