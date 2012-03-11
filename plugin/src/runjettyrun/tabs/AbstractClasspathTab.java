@@ -176,7 +176,7 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 		});
 		fClasspathViewer.addCheckStateListener(new ICheckStateListener() {
 			public void checkStateChanged(CheckStateChangedEvent event) {
-				if (event.getChecked()) {
+ 				if (event.getChecked()) {
 					checkEntry(nonchecked, (IRJRClasspathEntry) event.getElement());
 				} else {
 					uncheckEntry(nonchecked, (IRJRClasspathEntry) event.getElement());
@@ -187,9 +187,16 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 
 					workingcopy.setAttribute(getNonCheckedAttributeName(),
 							nonchecked);
+
+					//Just in case, I am afraid this happened in some special case.
+					//Anyway , if a map contains a null key will cause RunConfiguration get NPE when writing to XML.
+					if(nonchecked.containsKey(null)){
+						nonchecked.remove(null);
+					}
 					workingcopy.doSave();
 				} catch (CoreException e) {
 					logger.severe("CheckStateChangedEvent - exception: " + e);
+					e.printStackTrace();
 				}
 			}
 		});
@@ -224,6 +231,9 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 		}
 
 		String elementKey = element.toString();
+		if( elementKey == null){
+			throw new IllegalStateException("elementKey shouldn't be null;");
+		}
 		if(!nonchecked.containsKey(elementKey)){  // we don't have to lookup resource if item exist
 
 			//2012/02/20 TonyQ
@@ -238,7 +248,7 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 			//
 			//		Let's think about this later if any user complain about this.
 			//
-			File file = ResourceUtil.lookingFileFromPathString(element.toString());
+			File file = ResourceUtil.lookingFileFromPathString(element.toString()+"");
 			if(file.exists()){
 				elementKey = file.getAbsolutePath();
 			}
@@ -273,7 +283,14 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 	}
 
 	private void checkEntry(Map<String,String> nonChecked, IRJRClasspathEntry entry) {
-		nonChecked.put(entry.getRealPath(),"0");
+
+
+		if(entry.getRealPath() != null){
+			//for container , the realpath might be null , we just ignore it.
+			nonChecked.put(entry.getRealPath(),"0");
+		}
+
+
 		if (logger.isLoggable(Level.CONFIG)) {
 			logger.config("Set<String>, IClasspathEntry - removed:"
 					+ entry.toString());
@@ -301,7 +318,12 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 	}
 
 	private void uncheckEntry(Map<String,String> set, IRJRClasspathEntry entry) {
-		set.put(entry.getRealPath(),"1");
+
+		if(entry.getRealPath() != null){
+			//for container , the realpath might be null , we just ignore it.
+			set.put(entry.getRealPath(),"1");
+		}
+
 		if (logger.isLoggable(Level.CONFIG)) {
 			logger.config("Set<String>, IClasspathEntry - add:"
 					+ entry.getRealPath());
