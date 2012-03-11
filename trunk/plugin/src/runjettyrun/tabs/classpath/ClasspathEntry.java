@@ -353,7 +353,11 @@ public class ClasspathEntry extends AbstractClasspathEntry implements
 	public String getRealPath() {
 		if(entry == null) return null;
 
-		return entry.getLocation();
+		if(entry.getType() == IRuntimeClasspathEntry.PROJECT){
+			return entry.getResource().getLocation().toOSString();
+		}else{
+			return entry.getLocation();
+		}
 	}
 
 }
