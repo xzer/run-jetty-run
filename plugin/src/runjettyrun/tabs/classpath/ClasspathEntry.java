@@ -274,7 +274,7 @@ public class ClasspathEntry extends AbstractClasspathEntry implements
 						return null;
 					}
 					IClasspathEntry[] cpes = container.getClasspathEntries();
-					if (cpes == null) {
+					if (cpes == null || cpes.length == 0) {
 						return null;
 					}
 					IRuntimeClasspathEntry[] entries = new IRuntimeClasspathEntry[cpes.length];
@@ -360,4 +360,13 @@ public class ClasspathEntry extends AbstractClasspathEntry implements
 		}
 	}
 
+	public boolean isDefaultChecked(){
+//		if(entry.getType() == IRuntimeClasspathEntry.CONTAINER){
+//			return false;
+//		}else if(entry.getType() == IRuntimeClasspathEntry.PROJECT){
+//			return false;
+//		}
+
+		return true;
+	}
 }

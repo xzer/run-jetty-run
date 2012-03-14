@@ -70,7 +70,6 @@ import runjettyrun.utils.ResourceUtil;
  */
 public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 		IEntriesChangedListener {
-	public static final String TEST_CLASSES = "test-classes";
 
 	/**
 	 * Logger for this class
@@ -168,10 +167,11 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 		fClasspathViewer = new RuntimeClasspathViewer(comp);
 		fClasspathViewer.setCheckStateProvider(new ICheckStateProvider() {
 			public boolean isGrayed(Object element) {
-				return false;
+				return ((IRJRClasspathEntry)element).isDefaultGrayed();
 			}
 			public boolean isChecked(Object element) {
-				return AbstractClasspathTab.this.isChecked((IRJRClasspathEntry)element);
+				boolean res = AbstractClasspathTab.this.isChecked((IRJRClasspathEntry)element);
+				return res;
 			}
 		});
 		fClasspathViewer.addCheckStateListener(new ICheckStateListener() {
@@ -230,7 +230,7 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 			return false;
 		}
 
-		String elementKey = element.toString();
+		String elementKey = element.getKey();
 		if( elementKey == null){
 			throw new IllegalStateException("elementKey shouldn't be null;");
 		}
@@ -248,7 +248,7 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 			//
 			//		Let's think about this later if any user complain about this.
 			//
-			File file = ResourceUtil.lookingFileFromPathString(element.toString()+"");
+			File file = ResourceUtil.lookingFileFromPathString(element.getKey());
 			if(file.exists()){
 				elementKey = file.getAbsolutePath();
 			}
@@ -264,11 +264,9 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 		if(element == null){
 			throw new IllegalArgumentException("Classpath Entry shouldn't be null.");
 		}
-		if(element.toString().endsWith(TEST_CLASSES)){
-			return false;
-		}else{
-			return true;
-		}
+
+
+		return element.isDefaultChecked();
 	}
 
 	private ILaunchConfigurationWorkingCopy getWorkingCopy() throws CoreException{
@@ -285,15 +283,15 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 	private void checkEntry(Map<String,String> nonChecked, IRJRClasspathEntry entry) {
 
 
-		if(entry.getRealPath() != null){
+		if(entry.getKey() != null){
 			//for container , the realpath might be null , we just ignore it.
-			nonChecked.put(entry.getRealPath(),"0");
+			nonChecked.put(entry.getKey(),"0");
 		}
 
 
 		if (logger.isLoggable(Level.CONFIG)) {
 			logger.config("Set<String>, IClasspathEntry - removed:"
-					+ entry.toString());
+					+ entry.getKey());
 		}
 		IRJRClasspathEntry[] entrys = entry.getEntries();
 		if (entrys != null && entrys.length > 0) {
@@ -319,9 +317,10 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 
 	private void uncheckEntry(Map<String,String> set, IRJRClasspathEntry entry) {
 
-		if(entry.getRealPath() != null){
+		String key = entry.getKey();
+		if(key != null){
 			//for container , the realpath might be null , we just ignore it.
-			set.put(entry.getRealPath(),"1");
+			set.put(key,"1");
 		}
 
 		if (logger.isLoggable(Level.CONFIG)) {
