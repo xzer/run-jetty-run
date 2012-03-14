@@ -194,6 +194,7 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 						nonchecked.remove(null);
 					}
 					workingcopy.doSave();
+					fClasspathViewer.refresh(event.getElement());
 				} catch (CoreException e) {
 					logger.severe("CheckStateChangedEvent - exception: " + e);
 					e.printStackTrace();

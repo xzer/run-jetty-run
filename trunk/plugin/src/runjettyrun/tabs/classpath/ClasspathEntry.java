@@ -52,6 +52,14 @@ public class ClasspathEntry extends AbstractClasspathEntry implements
 	public boolean equals(Object obj) {
 		if (obj instanceof ClasspathEntry) {
 			ClasspathEntry other = (ClasspathEntry) obj;
+
+			if(entry.getType() == IRuntimeClasspathEntry.CONTAINER && entry.toString().indexOf("MAVEN2_CLASSPATH_CONTAINER") !=-1
+					&& other.getType() == IRuntimeClasspathEntry.CONTAINER && other.toString().indexOf("MAVEN2_CLASSPATH_CONTAINER") !=-1
+			){
+				//If there are all M2E container , we considering if they were in the project. (key will be the same).
+				return this.getKey().equals(other.getKey());
+			}
+
 			if (entry != null) {
 				return entry.equals(other.entry);
 			}
