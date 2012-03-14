@@ -68,4 +68,12 @@ public class ClasspathGroup extends AbstractClasspathEntry {
 	public String getRealPath() {
 		return name;
 	}
+
+	public boolean isDefaultChecked(){
+		return true;
+	}
+
+	public boolean isDefaultGrayed(){
+		return true;
+	}
 }

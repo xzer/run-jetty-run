@@ -53,4 +53,9 @@ public interface IRJRClasspathEntry {
 
 	public boolean isCustom();
 
+	public boolean isDefaultChecked();
+
+	public boolean isDefaultGrayed();
+
+	public String getKey();
 }

@@ -7,9 +7,10 @@ import java.util.List;
 
 public abstract class AbstractClasspathEntry implements IRJRClasspathEntry,Iterable<IRJRClasspathEntry> {
 
+	public static final String TEST_CLASSES = "test-classes";
+
 	protected List<IRJRClasspathEntry> childEntries = new ArrayList<IRJRClasspathEntry>();
 	protected IRJRClasspathEntry parent = null;
-
 	protected boolean custom = false;
 
 	/* (non-Javadoc)
@@ -65,5 +66,34 @@ public abstract class AbstractClasspathEntry implements IRJRClasspathEntry,Itera
 
 	public Iterator<IRJRClasspathEntry> iterator(){
 		return childEntries.iterator();
+	}
+
+	public boolean isDefaultChecked(){
+
+		//for maven container , we just ignore the contains checked first
+		if(toString().endsWith(TEST_CLASSES)){ //default disable test-classes
+			return false;
+		}
+
+		return true;
+	}
+
+	public boolean isDefaultGrayed(){
+		return false;
+	}
+
+	/**
+	 * for jars/class-folders , it's just the realpath,
+	 * for containers , it's container-name with proejct.
+	 */
+	public String getKey(){
+		String realpath = getRealPath();
+		if(realpath != null){
+			return realpath;
+		}
+		if(toString().indexOf("org.maven.ide.eclipse") != -1 && getParent() != null){
+			return getParent().toString()+"-"+toString();
+		}
+		return toString();
 	}
 }
