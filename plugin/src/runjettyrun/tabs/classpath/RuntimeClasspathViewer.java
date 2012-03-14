@@ -69,6 +69,8 @@ public class RuntimeClasspathViewer extends ContainerCheckedTreeViewer implement
 
 			}
 		});
+
+		setAutoExpandLevel(5);
 	}
 
 	/* (non-Javadoc)
