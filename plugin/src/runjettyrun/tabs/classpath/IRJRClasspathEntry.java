@@ -57,5 +57,7 @@ public interface IRJRClasspathEntry {
 
 	public boolean isDefaultGrayed();
 
+	public boolean isContainer();
+
 	public String getKey();
 }

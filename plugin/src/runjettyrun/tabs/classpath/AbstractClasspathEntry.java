@@ -91,9 +91,13 @@ public abstract class AbstractClasspathEntry implements IRJRClasspathEntry,Itera
 		if(realpath != null){
 			return realpath;
 		}
-		if(toString().indexOf("org.maven.ide.eclipse") != -1 && getParent() != null){
+		if(isContainer() && getParent() != null){
 			return getParent().toString()+"-"+toString();
 		}
 		return toString();
+	}
+
+	public boolean isContainer() {
+		return false;
 	}
 }
