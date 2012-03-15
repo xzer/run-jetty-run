@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+	ZK Widget Package Definition
+
+	ZK will load javascript by WPD , (i.e. zk.wpd , zul.inp.wpd ...etc )
+	that means all the widget definition in the package will be packed into single file in runtime ,
+	and be loaded when the component is accessed.
+
+	== Tip in advance ==
+	  To prevent too many client Javascript requests for speeding up the loading,
+	  sometimes you will consider to merge multiple packages in lang-addon.xml .
+	  (@see lang-addon.xml)
+
+	  We are not promising anything about the merging config ,
+	  you have to check the order and dependency carefully when you merge it,
+	  especially the dependency for "zul.lang" , it couldn't be merged with any package.
+	====
+
+
+	Options:
+
+	* depends
+
+		If you are developing your own package ,
+		and you need to access a existing widget (ex.zul.db.Datebox)  ,
+		which your widget inherit from or need to instance for ,
+
+		that means your package count on the package (ex. "zul.db") ,
+		then you have to specify the package as "depends".
+
+		i.e.
+		<package name="my.package.name" language="xul/html" depends="zul.db">
+			<widget name="MyWidget" />
+		</package>
+
+		You might depend multiple packages , use comma to separate them.
+		i.e. depends="zk.fmt,zul.inp"
+
+		When ZK try to load the package , it will load the dependency first.
+
+-->
+<package name="test" language="xul/html">
+
+	<!--
+
+	== Tip in advance ==
+		You could also specify a general javascript file here,
+		it's not always required to be a widget definition.
+
+		For example , if you try to wrap some jQuery plug-in as a Widget ,
+		you might need to load some plug-in source code before you writing your widget.
+
+		Just place JS files in the package folder , and write the definition
+		<script src="js-file-a.js" />
+		<script src="js-file-b.js" />
+	====
+
+	-->
+
+	<widget name="Mylabel" />
+</package>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?pde version="3.6"?>
+
+<target name="Running Platform">
+<locations>
+<location configuration="/C:/wseclipse/.metadata/.plugins/org.eclipse.pde.core/pde-junit/" path="${eclipse_home}" type="Profile"/>
+</locations>
+<environment>
+<os>win32</os>
+<ws>win32</ws>
+<arch>x86_64</arch>
+<nl>en_US</nl>
+</environment>
+<launcherArgs>
+<vmArgs>-Dosgi.requiredJavaVersion=1.5 -Xms512m -Xmx1524m -Duser.language=en -Duser.country=US -Dfile.encoding=UTF-8</vmArgs>
+</launcherArgs>
+</target>
