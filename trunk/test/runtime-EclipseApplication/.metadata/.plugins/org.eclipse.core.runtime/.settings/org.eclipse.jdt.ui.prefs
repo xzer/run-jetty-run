@@ -1,0 +1,16 @@
+#Wed Mar 14 19:51:24 CST 2012
+useQuickDiffPrefPage=true
+proposalOrderMigrated=true
+tabWidthPropagated=true
+content_assist_proposals_background=255,255,255
+org.eclipse.jdt.ui.javadoclocations.migrated=true
+useAnnotationsPrefPage=true
+org.eclipse.jface.textfont=1|Courier New|10.0|0|WINDOWS|1|0|0|0|0|0|0|0|0|1|0|0|0|0|Courier New;
+org.eclipse.jdt.ui.editor.tab.width=
+org.eclipse.jdt.ui.formatterprofiles.version=11
+content_assist_number_of_computers=20
+spelling_locale_initialized=true
+eclipse.preferences.version=1
+content_assist_proposals_foreground=0,0,0
+fontPropagated=true
+content_assist_favorite_static_members=org.eclipse.swtbot.swt.finder.matchers.WidgetMatcherFactory.*;org.hamcrest.Matchers.*;org.hamcrest.MatcherAssert.*;org.junit.Assert.*;org.eclipse.swtbot.eclipse.finder.matchers.WidgetMatcherFactory.*;org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable.*;org.eclipse.swtbot.swt.finder.SWTBotAssert.*;org.eclipse.swtbot.eclipse.finder.waits.Conditions.*;org.eclipse.swtbot.swt.finder.waits.Conditions.*

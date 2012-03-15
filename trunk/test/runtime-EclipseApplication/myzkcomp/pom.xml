@@ -1,0 +1,109 @@
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.zkoss.components</groupId>
+	<artifactId>mylabel</artifactId>
+	<properties>
+		<zkel.version>1.1.0</zkel.version>
+		<commons-lang.version>2.4</commons-lang.version>
+		<zk.version>5.0.7</zk.version>
+	</properties>
+	<version>0.8.0</version>
+	<licenses>
+		<license>
+			<name>GNU LESSER GENERAL PUBLIC LICENSE, Version 3</name>
+			<url>http://www.gnu.org/licenses/lgpl.html</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<scm>
+		<url>http://svn.sourceforge.net/viewvc/zk1/releases/${zk.version}/zktest</url>
+	</scm>
+	<repositories>
+		<repository>
+			<id>zk repository</id>
+			<url>http://mavensync.zkoss.org/maven2</url>
+		</repository>
+		<repository>
+			<id>ZK PE Evaluation</id>
+			<url>http://mavensync.zkoss.org/zk/pe-eval</url>
+		</repository>
+		<repository>
+			<id>ZK EE Evaluation</id>
+			<url>http://mavensync.zkoss.org/zk/ee-eval</url>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>zkmaven</id>
+			<name>ZK Maven Plugin Repository</name>
+			<url>http://mavensync.zkoss.org/maven2</url>
+		</pluginRepository>
+		<pluginRepository>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<id>snapshots</id>
+			<name>Maven Central Plugins Development Repository</name>
+			<url>http://snapshots.maven.codehaus.org/maven2</url>
+		</pluginRepository>
+		<pluginRepository>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>central</id>
+			<name>Maven Plugin Repository</name>
+			<url>http://repo1.maven.org/maven2</url>
+		</pluginRepository>
+	</pluginRepositories>
+	<dependencies>
+		<dependency>
+			<groupId>org.zkoss.theme</groupId>
+			<artifactId>breeze</artifactId>
+			<version>${zk.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.zkoss.zk</groupId>
+			<artifactId>zhtml</artifactId>
+			<version>${zk.version}</version>
+		</dependency>
+		<dependency>
+		   	<groupId>org.zkoss.zk</groupId>
+		   	<artifactId>zkplus</artifactId>
+		   	<version>${zk.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>${commons-lang.version}</version>
+		</dependency>
+	</dependencies>
+	<build>
+		<directory>${project.basedir}/target</directory>
+		<outputDirectory>${project.basedir}/target/classes</outputDirectory>
+		<finalName>${project.artifactId}-${project.version}</finalName>
+		<testOutputDirectory>${project.build.directory}/test-classes</testOutputDirectory>
+		<sourceDirectory>${project.basedir}/src/</sourceDirectory>
+		<resources>
+			<resource>
+				<directory>${project.basedir}/resources/</directory>
+			</resource>
+		</resources>
+        <plugins>
+                 <!-- add plug-in confiugration here -->
+                <plugin>
+                        <groupId>org.zkoss.maven</groupId>
+                        <artifactId>yuicompressor-maven-plugin-zk</artifactId>
+                        <version>1.1.6</version>
+                </plugin>
+                <executions>
+                        <execution>
+                                <goals>
+                                        <goal>compress</goal>
+                                </goals>
+                        </execution>
+                </executions>
+       </plugins>
+	</build>
+</project>
