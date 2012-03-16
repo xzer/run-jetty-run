@@ -11,7 +11,7 @@ Here we explain most the information Run-Jetty-Run user might need to know.
 
 Right click your project in project explorer and select "run-as" => "Run Jetty" ,it's really easy to setup and run it , check [GettingStarted] out!
 
-Note: the only requirement is that your project must have "WEB-INF" folder.
+Note: the only requirement is that your project have to contain a "WEB-INF" folder.
 
 ----
 
