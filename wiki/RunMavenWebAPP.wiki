@@ -16,7 +16,7 @@ Forgot those configuration in pom.xml or WTP and save your time,
 use RJR to run it today.
 
 
-For more details about how to run RJR, please referenced to GettingStarted  .
+For more details about how to run RJR, please referenced to [GettingStarted] and [UserGuide]  .
 
 
 Try it , you will love it. ;)
