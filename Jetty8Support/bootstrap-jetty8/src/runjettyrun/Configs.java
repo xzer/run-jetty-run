@@ -210,7 +210,9 @@ public class Configs {
 		if(!getBooleanProp("rjrDisableannotation")){
 			configuration.add("runjettyrun.annotation.RJRAnnotationConfiguration");
 		}
-		configuration.add("org.eclipse.jetty.annotations.ContainerInitializerConfiguration");
+
+		//Configuration removed after 8.1.2 v20120308.
+//		configuration.add("org.eclipse.jetty.annotations.ContainerInitializerConfiguration");
 		configuration.add("org.eclipse.jetty.webapp.JettyWebXmlConfiguration");
 		configuration.add("org.eclipse.jetty.webapp.TagLibConfiguration");
 
