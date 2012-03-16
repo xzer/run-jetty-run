@@ -66,10 +66,10 @@ http://run-jetty-run.googlecode.com/svn/trunk/updatesite
 
 = Next Milestone =
 
-* Live update support ( Browser will refresh after you change the html/css/javascript. )
+  * Live update support ( Browser will refresh after you change the html/css/javascript. )
 
-* We will check some new feature , and review Jetty 8 support , 
-like Spdy support, or some useful feature for developers in 1.4.
+  * We will check some new feature , and review Jetty 8 support , 
+like Spdy support, or some useful feature for developers.
 
 
 = Special thanks = 
