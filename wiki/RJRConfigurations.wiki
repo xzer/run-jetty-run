@@ -3,7 +3,7 @@
 
 * This document is a bit overdue for latest version , we will update this document soon. *
 
-* The scanner configurations is now moved to Source monitor tab of RunConfiguration * 
+* The scanner configurations is now moved to Source monitor tab of RunConfiguration after 1.3.2 * 
 
 = Introduction =
 
