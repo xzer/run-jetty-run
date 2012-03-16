@@ -37,6 +37,29 @@ and there's a select menu to select the version.
 
 ----
 
+= How to change the port / context path / web-app directory =
+
+http://files.tonyq.org/eclipse/runjettyrun/rjr133_runconfiguration1.png
+
+You could change the port , context-path, web-app directory in the run configuration.
+
+  * If you want to use root context , please enter "/" in the context-path.
+
+  * The scan button will find the "WEB-INF" in the project and use its parent as web-app. 
+
+----
+
+= How to work with Java hot-deploy = 
+
+  * You don't really have to restart the server after you change java code,launch RJR with Debug Mode (debug-as -> Run Jetty) and you are now able to enjoy the default hot-deploy feature from JDK. ;)
+
+  * For smart users,I strongly recommend to use [http://ssw.jku.at/dcevm/ DCEVM] to experience best hot-deploy!
+    * By default the java hot-deploy didn't allow you to change method signature and member field , or even class name.
+    * *You are now able to change anything when you use [http://ssw.jku.at/dcevm/ DCEVM]. * (exexcpeting static member , you could change it without restart but it won't apply immediately .)
+    * DCEVM only support JDK 1.6 and later. 
+    * It speed up my development a lot ,just download and one more click , it takes you 5 minute to install it but saving tens of minutes daily !
+
+----
 
 = What's the difference between Jetty Classpath and Webapp Classpath = 
 
@@ -49,20 +72,6 @@ For more details , please reference to [Classpath] .
 = How to update web-app classpath to add new jars = 
 
 Please reference to [Classpath] .
-
-----
-
-
-
-= How to change the port / context path / web-app directory =
-
-http://files.tonyq.org/eclipse/runjettyrun/rjr133_runconfiguration1.png
-
-You could change the port , context-path, web-app directory in the run configuration.
-
-  * If you want to use root context , please enter "/" in the context-path.
-
-  * The scan button will find the "WEB-INF" in the project and use its parent as web-app. 
 
 ----
 
