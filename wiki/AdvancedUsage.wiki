@@ -1,6 +1,6 @@
 #summary A guide for more advanced usage and configurations.
 
- Introduction =
+= Introduction =
 
 Under construction...coming soon.
 
