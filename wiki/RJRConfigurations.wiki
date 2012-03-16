@@ -1,5 +1,10 @@
 #summary One-sentence summary of this page.
 
+
+* This document is a bit overdue for latest version , we will update this document soon. *
+
+* The scanner configurations is now moved to Source monitor tab of RunConfiguration * 
+
 = Introduction =
 
 RunJettyRun Configurations for 1.3
