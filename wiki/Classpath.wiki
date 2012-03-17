@@ -10,13 +10,15 @@ We are going to talk about the Classpath details in Run-Jetty-Run.
 
 There are two classpaths we need to discuss it here.
 
-
+----
 
 ===Jetty Container Classpath ===
 
 Used for our bootstrap . It's seldom changed in general development case.
 
 http://files.tonyq.org/eclipse/runjettyrun/classpath_jetty.png
+
+----
 
 ===Web App classpath ===
 
@@ -30,24 +32,40 @@ http://files.tonyq.org/eclipse/runjettyrun/classpath_webcontext.png
 == Web App Classpath Details ==
 
 
+=== How to check what classpath RJR is loading ? ===
+
 It will load the all the Classpath in your Java Build Path , 
-It locate at project context menu -> properties -> Java Build Path.
-
-  http://run-jetty-run.googlecode.com/svn/trunk/updatesite/javabuildpath.png
+it locate at project context menu -> properties -> Java Build Path.
 
 
-It will load
+You could also check/edit the classpath that RJR should load in *Webapp Classpath Tab* of RJR RunConfiguration.
 
-  * Source(#1) 
-  * Projects
-  * Libraries
-  * WEB-INF/lib/`*`.jar (since Run-Jetty-Run 1.2 (@see Issue #50  ))
+http://files.tonyq.org/eclipse/runjettyrun/run-configuration-webcontext-view.png
 
-It's very straight forward and make it *M2Eclipse supportable*.
+----
 
-Yep , we don't load WEB-INF/classes by default so far , 
-and I think it's enough to load the source folder directly. 
-If you need it , please post a feature request.
+=== How to add new classpaths to web context ? ===
+
+
+There's two way to change web context classpath
+
+  * Change project configuration in project properties
+
+Or 
+  * Click *Webapp Classpath* > * User Custom classpath * in the RunConfiguration
+
+  * Click "add Projects"/"Add class folders"/ "add Jars" /"add external jars" as your need to add new classpath.
+
+
+_Note: It's better to change the project classpath instead of changing classpath of RJR Configuration._
+
+----
+
+=== How to exclude some unused jars ===
+
+  * Uncheck the checkbox in front of jars.
+
+  * Note: You can't uncheck a container forever,we will help you uncheck  all the jars in the container , but if you add new jars to the container , it's still default be checked.
 
 
 ----
