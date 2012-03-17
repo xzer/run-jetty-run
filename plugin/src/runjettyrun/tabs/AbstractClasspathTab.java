@@ -666,7 +666,8 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 	public boolean isValid(ILaunchConfiguration launchConfig) {
 
 		if(fModel == null){
-			throw new IllegalStateException("Items model shouldn't be null");
+			setErrorMessage("RunJettyRun can't read the "+tabname+" data "	);
+			return false;
 		}
 
 		setErrorMessage(null);
