@@ -38,7 +38,7 @@ It will load the all the Classpath in your Java Build Path ,
 it locate at project context menu -> properties -> Java Build Path.
 
 
-You could also check/edit the classpath that RJR should load in *Webapp Classpath Tab* of RJR RunConfiguration.
+You could also check/edit the classpath in *Webapp Classpath Tab* of RJR RunConfiguration.
 
 http://files.tonyq.org/eclipse/runjettyrun/run-configuration-webcontext-view.png
 
