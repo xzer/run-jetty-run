@@ -116,4 +116,8 @@ public class AddExternalJarAction extends RuntimeClasspathAction {
 	protected String getDialogSettingsPrefix() {
 		return prefix;
 	}
+
+	protected int getActionType() {
+		return ADD;
+	}
 }
