@@ -69,7 +69,7 @@ For more details , please reference to [Classpath] .
 
 ----
 
-= How to update web-app classpath to add new jars = 
+= How to update web-app classpath to add/exclude jars = 
 
 Please reference to [Classpath] .
 
