@@ -24,7 +24,7 @@ you could customize it "Debug Jetty Web Application" in Eclipse Preference "Gene
 
 ----
 
-= How to change Jetty version =
+= How to select Jetty version (Jetty 6/7/8) =
 
 Default it's Jetty 6.1.26 , if you install "Jetty7 Support" or "Jetty8 Support" feature (which could be found in update-site) , 
 
