@@ -10,11 +10,22 @@ We are going to talk about the Classpath details in Run-Jetty-Run.
 
 There are two classpaths we need to discuss it here.
 
-  # Jetty Container Classpath , which used for our bootstrap 
-  # Web App classpath , in a general wab app , it's the classes/jars in WEB-INF/classes , WEB-INF/lib 
 
-  Most case of user need to care is Web App classpath.
 
+===Jetty Container Classpath ===
+
+Used for our bootstrap . It's seldom changed in general development case.
+
+http://files.tonyq.org/eclipse/runjettyrun/classpath_jetty.png
+
+===Web App classpath ===
+
+In a general wab app , it's the classes/jars in WEB-INF/classes and WEB-INF/lib 
+
+http://files.tonyq.org/eclipse/runjettyrun/classpath_webcontext.png
+
+
+----
 
 == Web App Classpath Details ==
 
@@ -39,6 +50,7 @@ and I think it's enough to load the source folder directly.
 If you need it , please post a feature request.
 
 
+----
 
 == Jetty Classpath Details ==
   
@@ -58,7 +70,7 @@ If you need it , please post a feature request.
 Note: * Usually you don't need to add any container Classpath here * , all the framework/lib like Spring/Hibernate/Struts , 
 it's web app stuff and should be placed in WebApp classpath, not containers.
 
-
+----
   
 = More =
 
