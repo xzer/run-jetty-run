@@ -376,7 +376,9 @@ public class ClasspathEntry extends AbstractClasspathEntry implements
 //		}else if(entry.getType() == IRuntimeClasspathEntry.PROJECT){
 //			return false;
 //		}
-
+		if(toString().endsWith(TEST_CLASSES)){ //default disable test-classes
+			return false;
+		}
 		return true;
 	}
 }
