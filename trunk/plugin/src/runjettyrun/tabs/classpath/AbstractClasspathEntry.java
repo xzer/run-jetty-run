@@ -70,7 +70,6 @@ public abstract class AbstractClasspathEntry implements IRJRClasspathEntry,Itera
 
 	public boolean isDefaultChecked(){
 
-		//for maven container , we just ignore the contains checked first
 		if(toString().endsWith(TEST_CLASSES)){ //default disable test-classes
 			return false;
 		}
