@@ -333,7 +333,7 @@ public class JettyLaunchConfigurationType extends
 					if (ir.isLinked()) {
 						sb.append(ir.getProjectRelativePath().makeRelativeTo(
 								root.getProjectRelativePath())
-								+ "=" + ir.getRawLocation() + ";");
+								+ "=" + ir.getLocation() + ";");
 					}
 					sb.append(getLinkedResourceInResource(root, (IFolder) ir));
 				}
@@ -625,11 +625,11 @@ public class JettyLaunchConfigurationType extends
 			path.makeAbsolute();
 			value = path.toOSString();
 		} else {
-			if (proj.getProject().getFolder(value).getRawLocation() == null) {
+			if (proj.getProject().getFolder(value).getLocation() == null) {
 				throw new IllegalStateException(
 						"raw location shouldn't be null");
 			}
-			value = proj.getProject().getFolder(value).getRawLocation()
+			value = proj.getProject().getFolder(value).getLocation()
 					.toOSString();
 		}
 
