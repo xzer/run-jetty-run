@@ -60,7 +60,7 @@ public class RuntimeUserClasspathEntryLabelProvider extends LabelProvider {
 				if (resource instanceof IContainer) {
 					return lp.getImage(resource);
 				}
-				if(resource !=  null && resource.getRawLocation().toFile().isDirectory()){
+				if(resource !=  null && resource.getLocation().toFile().isDirectory()){
 					return PlatformUI.getWorkbench().getSharedImages().getImage(
 							org.eclipse.ui.ISharedImages.IMG_OBJ_FOLDER);
 				}
