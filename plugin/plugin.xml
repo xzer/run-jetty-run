@@ -77,30 +77,37 @@
  	</extension>
     <extension
           point="org.eclipse.ui.commands">
-       <command
-             categoryId="runjettyrun.commands"
-             id="runjettyrun.commands.runjetty"
-             name="Debug Jetty Web Application">
-       </command>
+      <command
+            name="Debug Jetty Web Application"
+            description="Debug Jetty Web app"
+            categoryId="runjettyrun.commands"
+            id="runjettyrun.runJettyShortcut.debug">
+      </command>
+      <command
+            name="Run Jetty Web Application"
+            description="Debug Jetty Web app"
+            categoryId="runjettyrun.commands"
+            id="runjettyrun.runJettyShortcut.run">
+      </command>
+
        <category
              id="runjettyrun.commands"
              name="Run Jetty Run">
        </category>
     </extension>
     <extension
-          point="org.eclipse.ui.handlers">
-       <handler
-             class="runjettyrun.handlers.RunJettyHandler"
-             commandId="runjettyrun.commands.runjetty">
-       </handler>
-    </extension>
-    <extension
           point="org.eclipse.ui.bindings">
        <key
-             commandId="runjettyrun.commands.runjetty"
+             commandId="runjettyrun.runJettyShortcut.debug"
              contextId="org.eclipse.ui.contexts.window"
              schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
              sequence="Alt+Z">
+       </key>
+       <key
+             commandId="runjettyrun.runJettyShortcut.run"
+             contextId="org.eclipse.ui.contexts.window"
+             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+             sequence="">
        </key>
     </extension>
     <extension

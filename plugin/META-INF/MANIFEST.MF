@@ -30,7 +30,6 @@ Export-Package: runjettyrun;uses:="org.mortbay.resource,org.mortbay.jetty.webapp
    runjettyrun.extensions,
    org.w3c.dom",
  runjettyrun.extensions,
- runjettyrun.handlers;uses:="org.eclipse.core.runtime,org.eclipse.ui,org.eclipse.core.commands",
  runjettyrun.launchshortcut;
   uses:="org.eclipse.debug.core,
    org.eclipse.debug.ui,
