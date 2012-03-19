@@ -33,7 +33,10 @@ http://run-jetty-run.googlecode.com/svn/trunk/updatesite
          Anyway , when it's not working as expect , check your run configuration first. 
   
  
-3. Turn off source scanner by default. (user could still enable it in source monitor tab of run confiugration)
+3. Turn off source scanner by default. 
+   i. If you still want it to be default enable, please config your preference. (_Window_ -> _Preferences_ -> _RunJettyRun_ -> _Default enable Scanner when create new run configuration_ )
+ 
+   ii.User could still enable it in source monitor tab of run confiugration for each project.
 
 
 
