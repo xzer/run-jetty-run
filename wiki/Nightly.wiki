@@ -11,7 +11,7 @@ If you need a stable version, please wait for official release. :)
 
 = Latest Nightly version =
 
-No any nightly version available.
+v1.3.3.201301020723 
 
 = Nightly Update Site =
 
@@ -19,10 +19,18 @@ http://run-jetty-run.googlecode.com/svn/trunk/updatesite-nightly
 
 
 = Outlines = 
-  Bug fixing .
+   Jetty version update.
+   Few bug fixes.    
+
+Important Note: 
+      In next version we will move the default version from 6.1.26 to Jetty 8.
+
 
 = Details =
   * Bugs
+
+  * Features
+    Issue 157:	upgrade jetty 7/8 version and add jetty 9 support
 
 = Next Official build =
 
