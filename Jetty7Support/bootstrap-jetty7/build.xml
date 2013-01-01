@@ -18,7 +18,7 @@
   -->
 <project basedir="." default="build" name="run-jetty-run-bootstrap">
 	<property environment="env" />
-	<property name="run-jetty-run-project" value="../run-jetty-run-jetty7" />
+	<property name="run-jetty-run-project" value="../plugin-jetty7" />
 	<property name="libdir" value="${run-jetty-run-project}/lib" />
 	<property name="bootstrap.jar" value="${libdir}/run-jetty-run-bootstrap-jetty7.jar"/>
 	<property name="debuglevel" value="source,lines,vars" />

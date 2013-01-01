@@ -11,7 +11,7 @@ import runjettyrun.utils.ProjectUtil;
 
 public class Jetty8PackageProvider implements IJettyPackageProvider {
 
-	public static final String VERSION = "Jetty 8.1.2.v20120308";
+	public static final String VERSION = "Jetty 8.1.8.v20121106";
 
 	public IRuntimeClasspathEntry[] getPackage(String version, int type) {
 		try {
@@ -24,33 +24,36 @@ public class Jetty8PackageProvider implements IJettyPackageProvider {
 					"lib/javax.el-2.2.0.v201108011116.jar",
 					"lib/javax.servlet.jsp-2.2.0.v201112011158.jar",
 					"lib/javax.servlet.jsp.jstl-1.2.0.v201105211821.jar",
-					"lib/jetty-ajp-8.1.2.v20120308.jar",
-					"lib/jetty-annotations-8.1.2.v20120308.jar",
-					"lib/jetty-client-8.1.2.v20120308.jar",
-					"lib/jetty-continuation-8.1.2.v20120308.jar",
-					"lib/jetty-deploy-8.1.2.v20120308.jar",
-					"lib/jetty-http-8.1.2.v20120308.jar",
-					"lib/jetty-io-8.1.2.v20120308.jar",
-					"lib/jetty-jmx-8.1.2.v20120308.jar",
-					"lib/jetty-jndi-8.1.2.v20120308.jar",
-					"lib/jetty-overlay-deployer-8.1.2.v20120308.jar",
-					"lib/jetty-plus-8.1.2.v20120308.jar",
-					"lib/jetty-policy-8.1.2.v20120308.jar",
-					"lib/jetty-rewrite-8.1.2.v20120308.jar",
-					"lib/jetty-security-8.1.2.v20120308.jar",
-					"lib/jetty-server-8.1.2.v20120308.jar",
-					"lib/jetty-servlet-8.1.2.v20120308.jar",
-					"lib/jetty-servlets-8.1.2.v20120308.jar",
-					"lib/jetty-util-8.1.2.v20120308.jar",
-					"lib/jetty-webapp-8.1.2.v20120308.jar",
-					"lib/jetty-websocket-8.1.2.v20120308.jar",
-					"lib/jetty-xml-8.1.2.v20120308.jar",
+					"lib/jetty-ajp-8.1.8.v20121106.jar",
+					"lib/jetty-annotations-8.1.8.v20121106.jar",
+					"lib/jetty-client-8.1.8.v20121106.jar",
+					"lib/jetty-continuation-8.1.8.v20121106.jar",
+					"lib/jetty-deploy-8.1.8.v20121106.jar",
+					"lib/jetty-http-8.1.8.v20121106.jar",
+					"lib/jetty-io-8.1.8.v20121106.jar",
+					"lib/jetty-jmx-8.1.8.v20121106.jar",
+					"lib/jetty-jndi-8.1.8.v20121106.jar",
+					"lib/jetty-overlay-deployer-8.1.8.v20121106.jar",
+					"lib/jetty-plus-8.1.8.v20121106.jar",
+					"lib/jetty-policy-8.1.8.v20121106.jar",
+					"lib/jetty-rewrite-8.1.8.v20121106.jar",
+					"lib/jetty-security-8.1.8.v20121106.jar",
+					"lib/jetty-server-8.1.8.v20121106.jar",
+					"lib/jetty-servlet-8.1.8.v20121106.jar",
+					"lib/jetty-servlets-8.1.8.v20121106.jar",
+					"lib/jetty-util-8.1.8.v20121106.jar",
+					"lib/jetty-webapp-8.1.8.v20121106.jar",
+					"lib/jetty-websocket-8.1.8.v20121106.jar",
+					"lib/jetty-xml-8.1.8.v20121106.jar",
 					"lib/jsp-impl-2.2.2.b05.0.jar",
 					"lib/org.apache.jasper.glassfish-2.2.2.v201112011158.jar",
 					"lib/org.apache.taglibs.standard.glassfish-1.2.0.v201112081803.jar",
 					"lib/org.objectweb.asm_3.3.1.v201101071600.jar",
 					"lib/run-jetty-run-bootstrap-jetty8.jar",
 					"lib/servlet-api-3.0.jar",
+					"lib/spdy-core-8.1.8.v20121106.jar",
+					"lib/spdy-jetty-8.1.8.v20121106.jar",
+					"lib/spdy-jetty-http-8.1.8.v20121106.jar"
 				});
 
 			} else if (type == TYPE_UTIL) {

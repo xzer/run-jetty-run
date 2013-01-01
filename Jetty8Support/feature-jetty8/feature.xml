@@ -19,12 +19,12 @@
 <feature
       id="runjettyrun_feature_support_jetty8"
       label="RunJettyRun Jetty8 Support (Optional)"
-      version="1.3.2.qualifier"
+      version="1.3.3.qualifier"
       provider-name="http://code.google.com/p/run-jetty-run/">
 
    <description url="http://code.google.com/p/run-jetty-run/">
       Run web applications in Eclipse using the Jetty distribution
-(8.0.0.M3) embedded in this plug-in.
+(8.1.8.v20121106) embedded in this plug-in.
    </description>
 
    <copyright>
