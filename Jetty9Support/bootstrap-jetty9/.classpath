@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty9/lib/com.sun.el-2.2.0.v201108011116.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty9/lib/javax.annotation_1.1.0.v201105051105.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty9/lib/javax.el-2.2.0.v201108011116.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty9/lib/javax.servlet.jsp-2.2.0.v201112011158.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty9/lib/javax.servlet.jsp.jstl-1.2.0.v201105211821.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty9/lib/javax.websocket-api-0.0.006.draft.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty9/lib/jetty-annotations-8.1.8.v20121106.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty9/lib/jetty-annotations-9.0.0.M3.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty9/lib/jetty-client-9.0.0.M3.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty9/lib/jetty-continuation-9.0.0.M3.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty9/lib/jetty-deploy-9.0.0.M3.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty9/lib/jetty-http-9.0.0.M3.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty9/lib/jetty-io-9.0.0.M3.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty9/lib/jetty-jaas-9.0.0.M3.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty9/lib/jetty-jmx-9.0.0.M3.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty9/lib/jetty-jndi-9.0.0.M3.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty9/lib/jetty-plus-9.0.0.M3.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty9/lib/jetty-rewrite-9.0.0.M3.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty9/lib/jetty-security-9.0.0.M3.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty9/lib/jetty-server-9.0.0.M3.jar" sourcepath="C:/Users/TonyQ/Downloads/jetty.project-release-9">
+		<attributes>
+			<attribute name="source_encoding" value="UTF-8"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty9/lib/jetty-servlet-9.0.0.M3.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty9/lib/jetty-servlets-9.0.0.M3.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty9/lib/jetty-util-9.0.0.M3.jar" sourcepath="C:/Users/TonyQ/Downloads/jetty.project-release-9">
+		<attributes>
+			<attribute name="source_encoding" value="UTF-8"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty9/lib/jetty-webapp-9.0.0.M3.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty9/lib/jetty-xml-9.0.0.M3.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty9/lib/org.apache.jasper.glassfish-2.2.2.v201112011158.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty9/lib/org.apache.taglibs.standard.glassfish-1.2.0.v201112081803.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty9/lib/org.eclipse.jdt.core-3.7.1.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty9/lib/org.objectweb.asm_3.3.1.v201101071600.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty9/lib/servlet-api-3.0.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty9/lib/spdy-client-9.0.0.M3.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty9/lib/spdy-core-9.0.0.M3.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty9/lib/spdy-http-server-9.0.0.M3.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty9/lib/spdy-server-9.0.0.M3.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty9/lib/websocket-api-9.0.0.M3.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty9/lib/websocket-client-9.0.0.M3.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty9/lib/websocket-common-9.0.0.M3.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty9/lib/websocket-server-9.0.0.M3.jar"/>
+	<classpathentry kind="lib" path="/run-jetty-run-jetty9/lib/websocket-servlet-9.0.0.M3.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
