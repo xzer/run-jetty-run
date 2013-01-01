@@ -61,7 +61,7 @@ permissions and limitations under the License.
    </requires>
 
    <plugin
-         id="runjettyrun.jetty8"
+         id="runjettyrun.jetty9"
          download-size="0"
          install-size="0"
          version="0.0.0"
