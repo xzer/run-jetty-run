@@ -19,7 +19,10 @@ http://run-jetty-run.googlecode.com/svn/trunk/updatesite-nightly
 
 
 = Outlines = 
-   Jetty version update.
+   Jetty version update. 
+     jetty7 7.6.8.v20121106
+     jetty8 8.1.8.v20121106
+     jetty9 9.0.0.M3
    Few bug fixes.    
 
 Important Note: 
