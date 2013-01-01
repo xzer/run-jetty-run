@@ -85,6 +85,7 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 
 	protected RuntimeClasspathViewer fClasspathViewer;
 	private UserClassesClasspathModel fModel;
+	private String message = null;
 
 	/**
 	 * If the items is not checked , the value string will be "1" , or it will be "0" or not contained in the key.
@@ -453,6 +454,7 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 		try {
 			fModel = createClasspathModel(configuration);
 		} catch (Exception e) {
+			message = e.getMessage();
 			setErrorMessage(e.getMessage());
 		}
 
@@ -666,7 +668,7 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 	public boolean isValid(ILaunchConfiguration launchConfig) {
 
 		if(fModel == null){
-			setErrorMessage("RunJettyRun can't read the "+tabname+" data "	);
+			setErrorMessage("RunJettyRun can't read the "+tabname+" data , reason:"+message	);
 			return false;
 		}
 
