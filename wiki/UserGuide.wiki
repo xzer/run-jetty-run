@@ -17,10 +17,20 @@ Note: the only requirement is that your project have to contain a "WEB-INF" fold
 
 = Hot key = 
 
-Alt + Z
+* Alt + Z
 
 There's a hot key to launch the server just like launching java applications,
 you could customize it "Debug Jetty Web Application" in Eclipse Preference "General > Keys" page.
+
+
+* Type "q" in the console and hit Enter 
+
+To cause a graceful Jetty shutdown.
+
+
+* Type "r" in the console and hit Enter 
+
+To redeploy the application in the running container.
 
 ----
 
