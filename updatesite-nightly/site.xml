@@ -105,6 +105,18 @@
    <feature url="features/runjettyrun_feature_support_jetty8_1.3.3.201203170835.jar" id="runjettyrun_feature_support_jetty8" version="1.3.3.201203170835">
       <category name="RunJettyRun Jetty Support"/>
    </feature>
+   <feature url="features/runjettyrun_feature_1.3.3.201301020707.jar" id="runjettyrun_feature" version="1.3.3.201301020707">
+      <category name="RunJettyRun"/>
+   </feature>
+   <feature url="features/runjettyrun_feature_support_jetty7_1.3.3.201301020707.jar" id="runjettyrun_feature_support_jetty7" version="1.3.3.201301020707">
+      <category name="RunJettyRun Jetty Support"/>
+   </feature>
+   <feature url="features/runjettyrun_feature_support_jetty8_1.3.3.201301020707.jar" id="runjettyrun_feature_support_jetty8" version="1.3.3.201301020707">
+      <category name="RunJettyRun Jetty Support"/>
+   </feature>
+   <feature url="features/runjettyrun_feature_support_jetty9_1.3.3.201301020707.jar" id="runjettyrun_feature_support_jetty9" version="1.3.3.201301020707">
+      <category name="RunJettyRun Jetty Support"/>
+   </feature>
    <category-def name="RunJettyRun" label="RunJettyRun Core (Require)"/>
    <category-def name="RunJettyRun Jetty Support" label="RunJettyRun Util (Optional)"/>
 </site>
