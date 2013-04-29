@@ -236,6 +236,16 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		for (IJettyPackageProvider provider : providers) {
 			fJettyVersion.add(provider.getJettyVersion());
 		}
+		
+		String defaultJettyVer = Plugin.getDefault().getPreferenceStore()
+				.getString(PreferenceConstants.P_DEFAULT_JETTY_VERSION);
+		for (int i = 0; i < providers.length; i++) {
+			if (providers[i].getJettyVersion()
+					.equalsIgnoreCase(defaultJettyVer)) {
+				fJettyVersion.select(i);
+				break;
+			}
+		}
 
 		jettyVersionNote = new Label(jettyGroup, SWT.LEFT);
 		jettyVersionNote.setText("Note: If you are running jsp page with Jetty8 Bundle , "+
@@ -1137,6 +1147,11 @@ public class RunJettyRunTab extends JavaLaunchTab {
 				true);
 
 		configuration.setAttribute(Plugin.ATTR_JETTY_XML_PATH, "");
+		
+		String defaultJettyVer = Plugin.getDefault().getPreferenceStore()
+				.getString(PreferenceConstants.P_DEFAULT_JETTY_VERSION);
+		configuration.setAttribute(Plugin.ATTR_SELECTED_JETTY_VERSION,
+				defaultJettyVer);
 
 		return;
 	}

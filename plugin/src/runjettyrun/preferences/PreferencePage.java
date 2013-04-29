@@ -1,11 +1,13 @@
 package runjettyrun.preferences;
 
 import org.eclipse.jface.preference.BooleanFieldEditor;
+import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
 import runjettyrun.Plugin;
+import runjettyrun.extensions.IJettyPackageProvider;
 
 /**
  * This class represents a preference page that
@@ -49,9 +51,21 @@ public class PreferencePage
 				PreferenceConstants.P_AUTO_PORT,
 				"Find a &unused port that between 10000~ 15000 when creating new run configuration.",
 				getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_DEFAULT_JETTY_VERSION, 
+				"Default Jetty &version to use:", getJettyVersions(), getFieldEditorParent()));
 	}
 
 	public void init(IWorkbench workbench) {
 
+	}
+
+	private String[][] getJettyVersions() {
+		IJettyPackageProvider[] providers = Plugin.getDefault().getProviders();
+		String[][] result = new String[providers.length][2];
+		for (int i = 0; i < providers.length; i++) {
+			result[i][0] = providers[i].getJettyVersion();
+			result[i][1] = providers[i].getJettyVersion();
+		}
+		return result;
 	}
 }

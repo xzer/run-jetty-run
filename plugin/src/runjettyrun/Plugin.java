@@ -280,7 +280,15 @@ public class Plugin extends AbstractUIPlugin {
 	}
 
 	public IRuntimeClasspathEntry[] getDefaultPackages(int type){
-			//we assume 0 be jetty 6
+		String defaultVer = getPreferenceStore().getString(
+				PreferenceConstants.P_DEFAULT_JETTY_VERSION);
+		for (IJettyPackageProvider pro : this.extensions) {
+			String jettyVer = pro.getJettyVersion();
+			if (jettyVer.equalsIgnoreCase(defaultVer)) {
+				return pro.getPackage(jettyVer, type);
+			}
+		}
+		//back to jetty 6
 		IJettyPackageProvider pro = this.extensions.get(0);
 		return pro.getPackage(pro.getJettyVersion(), type);
 	}
