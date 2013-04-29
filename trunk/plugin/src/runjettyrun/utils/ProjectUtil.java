@@ -5,6 +5,7 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 
 import org.eclipse.core.resources.IContainer;
@@ -153,5 +154,17 @@ public class ProjectUtil {
 			Plugin.logError(e);
 		}
 		return entries.toArray(new IRuntimeClasspathEntry[0]);
+	}
+
+	public static String[] getJarFilesIn(Bundle bundle, String rootPath) {
+		Enumeration<String> entries = bundle.getEntryPaths(rootPath);
+		List<String> jarFiles = new ArrayList<String>();
+		if (entries != null) {
+			for (; entries.hasMoreElements();) {
+				String file = entries.nextElement();
+				if(file.toLowerCase().endsWith(".jar"))jarFiles.add(file);
+			}
+		}
+		return jarFiles.toArray(new String[0]);
 	}
 }
