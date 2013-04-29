@@ -4,6 +4,7 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 
 import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
+import org.osgi.framework.Bundle;
 
 import runjettyrun.Plugin;
 import runjettyrun.extensions.IJettyPackageProvider;
@@ -15,30 +16,15 @@ public class Jetty6PackageProvider implements IJettyPackageProvider {
 
 	public IRuntimeClasspathEntry[] getPackage(String version, int type) {
 		try {
+			Bundle bundle = Plugin.getDefault().getBundle();
 			if (type == TYPE_JETTY_BUNDLE) {
 
-				return ProjectUtil.getLibs(Plugin.getDefault().getBundle(),
-						new String[]{
-							"lib/core-3.1.1.jar",
-							"lib/jetty-6.1.26.jar",
-							"lib/jetty-management-6.1.26.jar",
-							"lib/jetty-util-6.1.26.jar",
-							"lib/jsp-2.1.jar",
-							"lib/jsp-api-2.1.jar",
-							"lib/run-jetty-run-bootstrap.jar",
-							"lib/servlet-api-2.5-20081211.jar"
-						}
-					);
+				return ProjectUtil.getLibs(bundle,
+						ProjectUtil.getJarFilesIn(bundle, "lib"));
 
 			} else if (type == TYPE_UTIL) {
-				return ProjectUtil.getLibs(Plugin.getDefault().getBundle(),
-						new String[]{
-						"jndilib/activation-1.1.1.jar",
-						"jndilib/jetty-naming-6.1.26.jar",
-						"jndilib/jetty-plus-6.1.26.jar",
-						"jndilib/mail-1.4.jar"
-					}
-				);
+				return ProjectUtil.getLibs(bundle,
+						ProjectUtil.getJarFilesIn(bundle, "jndilib"));
 			}
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
