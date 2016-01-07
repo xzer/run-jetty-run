@@ -381,4 +381,13 @@ public class ClasspathEntry extends AbstractClasspathEntry implements
 		}
 		return true;
 	}
+
+	public IPath getExternalAnnotationsPath() {
+		// TODO To confirm what we have to do
+		return null;
+	}
+
+	public void setExternalAnnotationsPath(IPath path) {
+		// TODO To confirm what we have to do
+	}
 }

@@ -297,4 +297,13 @@ public class RunJettyRunContainerClasspathEntry implements IClasspathEntry,
 		return getVariableName();
 	}
 
+	public IPath getExternalAnnotationsPath() {
+		// TODO To confirm what we have to do
+		return null;
+	}
+
+	public void setExternalAnnotationsPath(IPath path) {
+		// TODO To confirm what we have to do
+	}
+
 }

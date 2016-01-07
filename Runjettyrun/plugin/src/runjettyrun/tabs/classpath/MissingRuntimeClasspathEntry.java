@@ -97,5 +97,13 @@ public class MissingRuntimeClasspathEntry implements IRuntimeClasspathEntry{
 		this.message = message;
 	}
 
+	public IPath getExternalAnnotationsPath() {
+		// TODO To confirm what we have to do
+		return null;
+	}
+
+	public void setExternalAnnotationsPath(IPath path) {
+		// TODO To confirm what we have to do
+	}
 
 }
