@@ -28,6 +28,8 @@ public class FirstTest {
 	public void testCreateRunConfiguration() throws Exception {
 
 		String projectName = "TestNormalJavaProject";
+		
+		/*
 
 		bot.viewByTitle("Package Explorer").bot().tree(0)
 				.getTreeItem(projectName).select();
@@ -73,6 +75,7 @@ public class FirstTest {
 		bot.button("Yes").click();
 
 		bot.button("Close").click();
+		*/
 	}
 
 
