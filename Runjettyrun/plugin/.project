@@ -32,13 +32,6 @@
 		<nature>org.eclipse.wst.common.project.facet.core.nature</nature>
 		<nature>org.eclipse.pde.api.tools.apiAnalysisNature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>bootstrap</name>
-			<type>2</type>
-			<location>C:/workspace/run-jetty-run-bootstrap/src</location>
-		</link>
-	</linkedResources>
 	<filteredResources>
 		<filter>
 			<id>1312070173544</id>
