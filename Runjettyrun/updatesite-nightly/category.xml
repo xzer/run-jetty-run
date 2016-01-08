@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <description url="http://run-jetty-run.googlecode.com">
+      run-jetty-run Eclipse plugin
+   </description>
+   <feature url="features/runjettyrun_feature_1.3.3.qualifier.jar" id="runjettyrun_feature" version="1.3.3.qualifier">
+      <category name="RunJettyRun"/>
+   </feature>
+   <category-def name="RunJettyRun" label="RunJettyRun Core (Require)"/>
+   <category-def name="RunJettyRun Jetty Support" label="RunJettyRun Util (Optional)"/>
+   <repository-reference location="http://run-jetty-run.googlecode.com/svn/trunk/updatesite/" enabled="true" />
+</site>
