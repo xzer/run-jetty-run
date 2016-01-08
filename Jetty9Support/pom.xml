@@ -8,14 +8,13 @@
   </parent>
 
   <groupId>runjettyrun</groupId>
-  <artifactId>runjettyrun-parent</artifactId>
+  <artifactId>runjettyrun-jetty9support-parent</artifactId>
   <version>1.3.3-SNAPSHOT</version>
   <packaging>pom</packaging>
   
   <modules>
-    <module>plugin</module>
-    <module>feature</module>
-    <module>updatesite-nightly</module>
+    <module>feature-jetty9</module>
+    <module>plugin-jetty9</module>
   </modules>
 
   </project>
