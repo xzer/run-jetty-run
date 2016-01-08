@@ -4,12 +4,12 @@
   <parent>
     <groupId>runjettyrun</groupId>
     <artifactId>runjettyrun-all-parent</artifactId>
-    <version>1.3.3-SNAPSHOT</version>
+    <version>1.3.4-SNAPSHOT</version>
   </parent>
 
   <groupId>runjettyrun</groupId>
   <artifactId>runjettyrun-jetty7support-parent</artifactId>
-  <version>1.3.3-SNAPSHOT</version>
+  <version>1.3.4-SNAPSHOT</version>
   <packaging>pom</packaging>
   
   <modules>

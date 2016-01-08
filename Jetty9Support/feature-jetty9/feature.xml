@@ -19,7 +19,7 @@
 <feature
       id="runjettyrun_feature_support_jetty9"
       label="RunJettyRun Jetty9 Support (Optional)"
-      version="1.3.3.qualifier"
+      version="1.3.4.qualifier"
       provider-name="http://code.google.com/p/run-jetty-run/">
 
    <description url="http://code.google.com/p/run-jetty-run/">
