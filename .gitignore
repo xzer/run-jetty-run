@@ -1,2 +1,6 @@
 bin
 target
+/Jetty7Support/plugin-jetty7/lib/bootstrap.jar
+/Jetty8Support/plugin-jetty8/lib/bootstrap.jar
+/Jetty9Support/plugin-jetty9/lib/bootstrap.jar
+/Runjettyrun/plugin/lib/bootstrap.jar
