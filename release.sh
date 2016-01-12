@@ -9,7 +9,7 @@ then
     exit 1
 fi
 
-# mvn clean package
+mvn clean package
 
 if [ $? -ne 0 ]
 then
@@ -41,6 +41,7 @@ echo copied files to $sitefolder/updatesite/$copyTarget
 
 if [ $copyTarget == "current" ]
 then
+    rm -rf ./archive/$currentVersion
     cp -R $copyTarget ./archive/.
     mv ./archive/$copyTarget ./archive/$currentVersion
     echo archied file to $sitefolder/updatesite/archive/$currentVersion
