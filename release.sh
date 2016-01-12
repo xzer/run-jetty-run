@@ -34,7 +34,7 @@ echo copyTarget is $copyTarget
 
 cd $sitefolder/updatesite
 rm -rf $copyTarget
-cp -R $currentFolder/Runjettyrun/updatesite-nightly/target/repository .
+cp -R $currentFolder/Runjettyrun/updatesite/target/repository .
 mv repository $copyTarget
 
 echo copied files to $sitefolder/updatesite/$copyTarget

@@ -15,7 +15,7 @@
   <modules>
     <module>plugin</module>
     <module>feature</module>
-    <module>updatesite-nightly</module>
+    <module>updatesite</module>
   </modules>
 
   </project>
