@@ -5,12 +5,12 @@
   <parent>
     <groupId>runjettyrun</groupId>
     <artifactId>runjettyrun-jetty8support-parent</artifactId>
-    <version>1.3.4-SNAPSHOT</version>
+    <version>1.3.4</version>
   </parent>
 
   <groupId>runjettyrun</groupId>
   <artifactId>runjettyrun_feature_support_jetty8</artifactId>
-  <version>1.3.4-SNAPSHOT</version>
+  <version>1.3.4</version>
   <packaging>eclipse-feature</packaging>
 
 </project>
