@@ -20,7 +20,7 @@
       id="runjettyrun_feature"
       label="Run Jetty Run Feature (Require)"
       version="1.3.4"
-      provider-name="http://code.google.com/p/run-jetty-run/"
+      provider-name="https://github.com/xzer/run-jetty-run-fork"
       plugin="runjettyrun">
 
    <description url="http://code.google.com/p/run-jetty-run/">
@@ -46,7 +46,7 @@ permissions and limitations under the License.
    </license>
 
    <url>
-      <update label="run-jetty-run update site" url="http://run-jetty-run.googlecode.com/svn/trunk/updatesite/"/>
+      <update label="run-jetty-run update site" url="http://xzer.github.io/run-jetty-run-fork/updatesite/current/"/>
    </url>
 
    <requires>
