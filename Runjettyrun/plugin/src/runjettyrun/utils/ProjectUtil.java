@@ -1,5 +1,6 @@
 package runjettyrun.utils;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -157,14 +158,22 @@ public class ProjectUtil {
 	}
 
 	public static String[] getJarFilesIn(Bundle bundle, String rootPath) {
-		Enumeration<String> entries = bundle.getEntryPaths(rootPath);
 		List<String> jarFiles = new ArrayList<String>();
+		addJars(jarFiles, bundle, rootPath);
+		return jarFiles.toArray(new String[0]);
+	}
+	
+	private static void addJars(List<String> jarFiles, Bundle bundle, String rootPath){
+		Enumeration<String> entries = bundle.getEntryPaths(rootPath);
 		if (entries != null) {
 			for (; entries.hasMoreElements();) {
 				String file = entries.nextElement();
-				if(file.toLowerCase().endsWith(".jar"))jarFiles.add(file);
+				if(file.toLowerCase().endsWith(".jar")){
+					jarFiles.add(file);
+				}else{//maybe folder?
+					addJars(jarFiles, bundle, file);
+				}
 			}
 		}
-		return jarFiles.toArray(new String[0]);
 	}
 }

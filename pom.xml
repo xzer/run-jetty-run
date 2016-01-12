@@ -21,6 +21,7 @@
     <module>Jetty7Support</module>
     <module>Jetty8Support</module>
     <module>Jetty9Support</module>
+    <module>Jetty93Support</module>
   </modules>
   <build>
     <plugins>

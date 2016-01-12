@@ -4,3 +4,4 @@ target
 /Jetty8Support/plugin-jetty8/lib/bootstrap.jar
 /Jetty9Support/plugin-jetty9/lib/bootstrap.jar
 /Runjettyrun/plugin/lib/bootstrap.jar
+/Jetty93Support/plugin-jetty93/lib/bootstrap.jar
