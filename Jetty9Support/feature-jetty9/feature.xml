@@ -19,7 +19,7 @@
 <feature
       id="runjettyrun_feature_support_jetty9"
       label="RunJettyRun Jetty9 Support (Optional)"
-      version="1.3.4"
+      version="1.3.5.qualifier"
       provider-name="https://github.com/xzer/run-jetty-run-fork">
 
    <description url="http://code.google.com/p/run-jetty-run/">
