@@ -3,6 +3,7 @@ package run_jetty_run_jetty93;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.util.Arrays;
 
 import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
 import org.osgi.framework.Bundle;
@@ -18,13 +19,17 @@ public class Jetty93PackageProvider implements IJettyPackageProvider {
 		try {
 			Bundle bundle = Activator.getDefault().getBundle();
 			if (type == TYPE_JETTY_BUNDLE) {
-
-				return ProjectUtil.getLibs(bundle,
-						ProjectUtil.getJarFilesIn(bundle, "lib"));
+				String[] jars = ProjectUtil.getJarFilesIn(bundle, "lib");
+				jars = Arrays.stream(jars).filter(jar->{
+					boolean exclude = jar.startsWith("lib/jndi/");
+					exclude = exclude || jar.startsWith("lib/cdi-");
+					return !exclude;
+				}).toArray(size->new String[size]);
+				return ProjectUtil.getLibs(bundle, jars);
 
 			} else if (type == TYPE_UTIL) {
 				return ProjectUtil.getLibs(bundle,
-						ProjectUtil.getJarFilesIn(bundle, "jndilib"));
+						ProjectUtil.getJarFilesIn(bundle, "lib/jndi"));
 			}
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
