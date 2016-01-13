@@ -10,10 +10,12 @@ import org.osgi.framework.Bundle;
 
 import runjettyrun.extensions.IJettyPackageProvider;
 import runjettyrun.utils.ProjectUtil;
+import runjettyrun.utils.VersionUtil;
 
 public class Jetty93PackageProvider implements IJettyPackageProvider {
 
 	public static final String VERSION = "Jetty 9.3.6.v20151106";
+	public static final String[] VERSION_PREFIX = {"Jetty 9.3."};
 
 	public IRuntimeClasspathEntry[] getPackage(String version, int type) {
 		try {
@@ -50,7 +52,7 @@ public class Jetty93PackageProvider implements IJettyPackageProvider {
 	}
 
 	public boolean accpet(String ver) {
-		return VERSION.equals(ver);
+		return VersionUtil.supportVersion(ver, VERSION, VERSION_PREFIX);
 	}
 
 	public String getName() {
