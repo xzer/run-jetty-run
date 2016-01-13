@@ -10,7 +10,7 @@ versions:
 
 - 1.3.4
 
-    This release constains all the unreleased fixes from the original RJR, without any new fixes.
+    This release constains all the unreleased fixes from the original RJR, without any new fixes(with support of jetty 9.0.0M3).
 
 - 1.3.5
 
