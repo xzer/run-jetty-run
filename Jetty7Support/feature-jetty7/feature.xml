@@ -20,9 +20,9 @@
       id="runjettyrun_feature_support_jetty7"
       label="RunJettyRun Jetty7 Support (Optional)"
       version="1.3.5.qualifier"
-      provider-name="https://github.com/xzer/run-jetty-run-fork">
+      provider-name="https://github.com/xzer/run-jetty-run">
 
-   <description url="http://code.google.com/p/run-jetty-run/">
+   <description url="https://github.com/xzer/run-jetty-run">
       Run web applications in Eclipse using the Jetty7 distribution (7.6.8.v20121106)
 embedded in this plug-in,it have to work with RunJettyRun core.
    </description>
@@ -44,7 +44,7 @@ permissions and limitations under the License.
    </license>
 
    <url>
-      <update label="run-jetty-run update site" url="http://xzer.github.io/run-jetty-run-fork/updatesite/current/"/>
+      <update label="run-jetty-run update site" url="http://xzer.github.io/run-jetty-run/updatesite/current/"/>
    </url>
 
    <requires>
