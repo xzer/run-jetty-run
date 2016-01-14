@@ -17,4 +17,4 @@ versions:
     Added Jetty 9.3 support for Java8 developers. Released as nightly(CDI support is disabled for some startup issues).
 
 
-All the update site links of above versions can be found at [update links](http://xzer.github.io/run-jetty-run-fork/).
+All the update site links of above versions can be found at [update links](http://xzer.github.io/run-jetty-run/).
