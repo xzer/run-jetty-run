@@ -240,8 +240,7 @@ public class RunJettyRunTab extends JavaLaunchTab {
 		String defaultJettyVer = Plugin.getDefault().getPreferenceStore()
 				.getString(PreferenceConstants.P_DEFAULT_JETTY_VERSION);
 		for (int i = 0; i < providers.length; i++) {
-			if (providers[i].getJettyVersion()
-					.equalsIgnoreCase(defaultJettyVer)) {
+			if (providers[i].accpet(defaultJettyVer)) {
 				fJettyVersion.select(i);
 				break;
 			}
@@ -778,9 +777,7 @@ public class RunJettyRunTab extends JavaLaunchTab {
 				if (!"".equals(ver)) {
 					int i = 0;
 					for (IJettyPackageProvider provider : providers) {
-
-						String proVer = provider.getJettyVersion();
-						if (proVer != null && proVer.equals(ver)) {
+						if (provider.accpet(ver)) {
 							fJettyVersion.select(i);
 							if(ver.indexOf("8.0.0")!=-1){
 								jettyVersionNote.setVisible(true);
