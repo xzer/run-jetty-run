@@ -1,6 +1,16 @@
 # Run Jetty Run
 
-This is a fork of the original RJR from google code site. Since the original RJR has been out of maintaince, I am going to handle it over and release the new version to add jetty9 support, also try to add new features and fix existing bugs.
+```
+This repository has been decided to be the official successor of the original "Run Jetty Run" at https://code.google.com/p/run-jetty-run/.
+
+New feature and bug fix will be performed here.
+```
+
+- Run web applications with Jetty and Eclipse in one click!
+
+- Full maven support , simply run maven J2EE project without any config.
+
+- GettingStarted explains it all.  Please see FutureDirectionsDiscussion to participate in the evolution of Run Jetty Run.
 
 ## Recent Versions:
 
@@ -16,7 +26,7 @@ This is a fork of the original RJR from google code site. Since the original RJR
 
 - 1.3.4
 
-    This release constains all the unreleased fixes from the original RJR, without any new fixes(with support of jetty 9.0.0M3), with support of:
+    This release constains all the unreleased fixes from the original RJR, without any new fixes, with support of:
     
     - 6.1.26
     - 7.6.8
@@ -33,6 +43,36 @@ This is a fork of the original RJR from google code site. Since the original RJR
 
 
 All the update site links of above versions can be found at [update links](http://xzer.github.io/run-jetty-run/).
+
+
+## Why this plugin? ##
+
+Because running a web application in Eclipse should be as simple as 'clicking run'. No additional setup required.
+
+
+## The difference with WTP Jetty Integration ##
+
+We think there are some benefits to use Run-Jetty-Run instead of WTP:
+
+- Performance
+    WTP always copy all the resources to a temp folder , that slow down the process and  you have to stop server then clean the resource sometimes if the resource locked. WTP solution also takes more time to start and terminate a web application.
+
+- The maven support
+    It's a annoying to run maven based web application in WTP. Since we use same project classpath with default Eclipse JDT , so we could support maven dependency management (M2Eclipse Plug-in) easily. (Note that RunJettyRun did not required to install a maven plug-in , it's optional.)
+
+- Less steps to setup and run
+    For using WTP Jetty ,  you have to install Jetty\_WTP\_Plugin , then find a runtime for it , that took your time to download a runtime and config it. You still have 3-4 steps after you install WTP plugin.But if you use RunJettyRun , there's already a built-in Jetty lib in the plug-in , simply "run" a project with Jetty by one click.
+
+    <a href='http://www.youtube.com/watch?feature=player_embedded&v=Dtj1YBy9LKw' target='_blank'><img src='http://img.youtube.com/vi/Dtj1YBy9LKw/0.jpg' width='425' height=344 /></a>
+
+- Also support Java project.
+    Easy to use Jetty for every Java project but also a Dynamic Web Project , if you are writing some web widget , it's easy to test it with RJR.
+
+
+## Other benefits ##
+
+- Working with Eclipse JDT debugging/ hot deploy
+    When you running RJR in debug mode , you could modify the code and apply it directly. Of course, all the breakpoint/inspector for java resource is working fine.
 
 ## Contributors
 
