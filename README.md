@@ -11,7 +11,7 @@ New feature and bug fix will be performed here.
 
 - Full maven support , simply run maven J2EE project without any config.
 
-- GettingStarted explains it all.  Please see FutureDirectionsDiscussion to participate in the evolution of Run Jetty Run.
+- [GettingStarted](https://github.com/xzer/run-jetty-run/wiki/GettingStarted) explains it all.  Please see [FutureDirectionsDiscussion](https://github.com/xzer/run-jetty-run/wiki/FutureDirectionsDiscussion) to participate in the evolution of Run Jetty Run.
 
 ## Update site
 
