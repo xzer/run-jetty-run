@@ -1,7 +1,8 @@
 # Run Jetty Run
 
 ```
-This repository has been decided to be the official successor of the original "Run Jetty Run" at https://code.google.com/p/run-jetty-run/.
+This repository has been decided to be the official successor of the original "Run Jetty Run" at
+https://code.google.com/p/run-jetty-run/.
 
 New feature and bug fix will be performed here.
 ```
@@ -11,6 +12,10 @@ New feature and bug fix will be performed here.
 - Full maven support , simply run maven J2EE project without any config.
 
 - GettingStarted explains it all.  Please see FutureDirectionsDiscussion to participate in the evolution of Run Jetty Run.
+
+## Update site
+
+[update site list](http://xzer.github.io/run-jetty-run/).
 
 ## Recent Versions:
 
@@ -40,10 +45,6 @@ New feature and bug fix will be performed here.
     - 6.1.26
     - 7.6.2
     - 8.1.2
-
-
-All the update site links of above versions can be found at [update links](http://xzer.github.io/run-jetty-run/).
-
 
 ## Why this plugin? ##
 
