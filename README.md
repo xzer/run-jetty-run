@@ -13,38 +13,13 @@ New feature and bug fix will be performed here.
 
 - [GettingStarted](https://github.com/xzer/run-jetty-run/wiki/GettingStarted) explains it all.  Please see [FutureDirectionsDiscussion](https://github.com/xzer/run-jetty-run/wiki/FutureDirectionsDiscussion) to participate in the evolution of Run Jetty Run.
 
-## Update site
-
 [update site list](http://xzer.github.io/run-jetty-run/).
 
-## Recent Versions:
+## News
 
-- 1.3.5
-
-    Added Jetty 9.3 support for Java8 developers. Be developing, released as nightly(CDI support is disabled for some startup issues), with support of:
-
-    - 6.1.26
-    - 7.6.8
-    - 8.1.8
-    - 9.0.0 M3
-    - 9.3.6 
-
-- 1.3.4
-
-    This release constains all the unreleased fixes from the original RJR, without any new fixes, with support of:
-    
-    - 6.1.26
-    - 7.6.8
-    - 8.1.8
-    - 9.0.0 M3
-
-- 1.3.3
-
-    The final official release from the original RJR, be stable and with support of following jetty versions:
-    
-    - 6.1.26
-    - 7.6.2
-    - 8.1.2
+- Version 1.3.5 is under developing.
+- 2016/01/16 RJR is officially migrated to github now.
+- 2016/01/12 1.3.4 has been released, which includes all unreleased fixes at original https://code.google.com/p/run-jetty-run/.
 
 ## Why this plugin? ##
 
