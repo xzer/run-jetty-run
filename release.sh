@@ -32,19 +32,19 @@ fi
 
 echo copyTarget is $copyTarget
 
-cd $sitefolder/updatesite
+cd $sitefolder
 rm -rf $copyTarget
 cp -R $currentFolder/Runjettyrun/updatesite/target/repository .
 mv repository $copyTarget
 
-echo copied files to $sitefolder/updatesite/$copyTarget
+echo copied files to $sitefolder/$copyTarget
 
 if [ $copyTarget == "current" ]
 then
     rm -rf ./archive/$currentVersion
     cp -R $copyTarget ./archive/.
     mv ./archive/$copyTarget ./archive/$currentVersion
-    echo archied file to $sitefolder/updatesite/archive/$currentVersion
+    echo archied file to $sitefolder/archive/$currentVersion
 fi
 
 echo release finished.
