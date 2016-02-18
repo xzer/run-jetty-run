@@ -13,6 +13,8 @@ New feature and bug fix will be performed here.
 
 - [GettingStarted](https://github.com/xzer/run-jetty-run/wiki/GettingStarted) explains it all.  Please see [FutureDirectionsDiscussion](https://github.com/xzer/run-jetty-run/wiki/FutureDirectionsDiscussion) to participate in the evolution of Run Jetty Run.
 
+## Install
+
 [update site list](http://xzer.github.io/run-jetty-run/).
 
 ## News
