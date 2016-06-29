@@ -17,6 +17,12 @@ New feature and bug fix will be performed here.
 
 [update site list](http://xzer.github.io/run-jetty-run/).
 
+***Due to the Java 8 lambda issue, the nightly build is recommended.***
+
+### Migrate Note
+
+Directly upgrading from old version to the current nightly build is not supported. Uninstall the old version via eclipse's plugin manager at first, then follow the [GettingStarted](https://github.com/xzer/run-jetty-run/wiki/GettingStarted) to install the newest nightly version.
+
 ## News
 
 - Version 1.3.5 is under developing.
