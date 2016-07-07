@@ -176,20 +176,29 @@ public class Bootstrap {
 					try {
 						while(true){
 							Thread.sleep(5000L);
-							Socket sock = new Socket("127.0.0.1", configs.getEclipseListenerPort());
-							byte[] response = new byte[4];
-							sock.getInputStream().read(response);
-
-							//@see runjettyrun.Plugin#enableListenter
-							if(response[0] ==1 && response[1] ==2){
-								//it's ok!
-							}else{
-								//Eclipse crashs
-								shutdownServer();
+							Socket sock = null;
+							try{
+								sock = new Socket("127.0.0.1", configs.getEclipseListenerPort());
+								byte[] response = new byte[4];
+								sock.getInputStream().read(response);
+	
+								//@see runjettyrun.Plugin#enableListenter
+								if(response[0] ==1 && response[1] ==2){
+									//it's ok!
+								}else{
+									//Eclipse crashs
+									shutdownServer();
+								}
+							}finally{
+								if(sock != null){
+									try{
+										sock.close();
+									}catch(Exception ex){
+										ex.printStackTrace(System.err);
+									}
+								}
 							}
-
-						}
-
+						}//end while
 					} catch (UnknownHostException e) {
 						System.err.println("lost connection with Eclipse , shutting down.");
 						shutdownServer();

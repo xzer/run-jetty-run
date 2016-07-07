@@ -222,8 +222,7 @@ public class Bootstrap {
 									}
 								}
 							}
-						}
-
+						}//end while
 					} catch (UnknownHostException e) {
 						System.err.println("lost connection with Eclipse , shutting down.");
 						shutdownServer();
