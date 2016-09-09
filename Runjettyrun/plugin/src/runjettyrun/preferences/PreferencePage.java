@@ -53,6 +53,10 @@ public class PreferencePage
 				getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_DEFAULT_JETTY_VERSION, 
 				"Default Jetty &version to use:", getJettyVersions(), getFieldEditorParent()));
+		addField(new BooleanFieldEditor(
+				PreferenceConstants.P_LAZY_CLASSPATH_ENTRY_STATUS,
+				"Lazy load classpath entry status of launch configuration(experimental, do not check it if you have no problem about it).",
+				getFieldEditorParent()));
 	}
 
 	public void init(IWorkbench workbench) {

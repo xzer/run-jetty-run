@@ -13,5 +13,7 @@ public class PreferenceConstants {
 	public static final String P_AUTO_PORT = "autoPortPreference";
 	
 	public static final String P_DEFAULT_JETTY_VERSION = "defaultJettyVersion";
+	
+	public static final String P_LAZY_CLASSPATH_ENTRY_STATUS = "lazyClasspathEntryStatus";
 
 }

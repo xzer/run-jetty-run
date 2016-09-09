@@ -38,6 +38,7 @@ import org.eclipse.swt.widgets.Label;
 import runjettyrun.JettyLaunchConfigurationClassPathProvider;
 import runjettyrun.Plugin;
 import runjettyrun.RunJettyRunMessages;
+import runjettyrun.preferences.PreferenceConstants;
 import runjettyrun.tabs.action.AddClassFolderAction;
 import runjettyrun.tabs.action.AddExternalFolderAction;
 import runjettyrun.tabs.action.AddExternalJarAction;
@@ -86,6 +87,8 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 	protected RuntimeClasspathViewer fClasspathViewer;
 	private UserClassesClasspathModel fModel;
 	private String message = null;
+	
+	private boolean activated = false;
 
 	/**
 	 * If the items is not checked , the value string will be "1" , or it will be "0" or not contained in the key.
@@ -171,8 +174,14 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 				return ((IRJRClasspathEntry)element).isDefaultGrayed();
 			}
 			public boolean isChecked(Object element) {
-				boolean res = AbstractClasspathTab.this.isChecked((IRJRClasspathEntry)element);
-				return res;
+				boolean lazy = Plugin.getDefault().getPreferenceStore().
+						getBoolean(PreferenceConstants.P_LAZY_CLASSPATH_ENTRY_STATUS);
+				if((!lazy) || activated){
+					//this operation is expensive, thus we only perform it after current tab has been activated at least once.
+					return  AbstractClasspathTab.this.isChecked((IRJRClasspathEntry)element);
+				}else{
+					return false;
+				}
 			}
 		});
 		fClasspathViewer.addCheckStateListener(new ICheckStateListener() {
@@ -430,6 +439,7 @@ public abstract class AbstractClasspathTab extends JavaLaunchTab implements
 	 */
 	public void activated(ILaunchConfigurationWorkingCopy workingCopy) {
 		try {
+			activated = true;
 			boolean useDefault = workingCopy.getAttribute(
 					IJavaLaunchConfigurationConstants.ATTR_DEFAULT_CLASSPATH,
 					true);

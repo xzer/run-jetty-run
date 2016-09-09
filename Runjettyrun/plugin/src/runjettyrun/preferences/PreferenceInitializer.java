@@ -22,6 +22,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_DEFAULT_ENABLE_SCANNER, false);
 		store.setDefault(PreferenceConstants.P_AUTO_PORT, false);
 		store.setDefault(PreferenceConstants.P_DEFAULT_JETTY_VERSION, Jetty6PackageProvider.VERSION);
+		store.setDefault(PreferenceConstants.P_LAZY_CLASSPATH_ENTRY_STATUS, false);
 	}
 
 }
