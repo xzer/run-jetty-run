@@ -4,5 +4,37 @@
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="bootstrap"/>
+	<classpathentry kind="lib" path="lib/com.sun.el_1.0.0.v201004190952.jar"/>
+	<classpathentry kind="lib" path="lib/ecj-3.6.jar"/>
+	<classpathentry kind="lib" path="lib/javax.el_2.1.0.v201004190952.jar"/>
+	<classpathentry kind="lib" path="lib/javax.servlet.jsp_2.1.0.v201004190952.jar"/>
+	<classpathentry kind="lib" path="lib/javax.servlet.jsp.jstl_1.2.0.v201004190952.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-ajp-7.6.8.v20121106.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-annotations-7.6.8.v20121106.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-client-7.6.8.v20121106.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-continuation-7.6.8.v20121106.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-deploy-7.6.8.v20121106.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-http-7.6.8.v20121106.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-io-7.6.8.v20121106.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-jmx-7.6.8.v20121106.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-jndi-7.6.8.v20121106.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-overlay-deployer-7.6.8.v20121106.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-plus-7.6.8.v20121106.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-policy-7.6.8.v20121106.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-rewrite-7.6.8.v20121106.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-security-7.6.8.v20121106.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-server-7.6.8.v20121106.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-servlet-7.6.8.v20121106.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-servlets-7.6.8.v20121106.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-util-7.6.8.v20121106.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-webapp-7.6.8.v20121106.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-websocket-7.6.8.v20121106.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-xml-7.6.8.v20121106.jar"/>
+	<classpathentry kind="lib" path="lib/org.apache.jasper.glassfish_2.1.0.v201007080150.jar"/>
+	<classpathentry kind="lib" path="lib/org.apache.taglibs.standard.glassfish_1.2.0.v201004190952.jar"/>
+	<classpathentry kind="lib" path="lib/servlet-api-2.5.jar"/>
+	<classpathentry kind="lib" path="lib/spdy-core-7.6.8.v20121106.jar"/>
+	<classpathentry kind="lib" path="lib/spdy-jetty-7.6.8.v20121106.jar"/>
+	<classpathentry kind="lib" path="lib/spdy-jetty-http-7.6.8.v20121106.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
