@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.management.ManagementFactory;
 import java.net.Socket;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jetty.jmx.MBeanContainer;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.util.Scanner;
@@ -52,7 +54,15 @@ public class Bootstrap {
 
 		server = new Server();
 
+		// Setup JMX
+		MBeanContainer mbContainer=new MBeanContainer(ManagementFactory.getPlatformMBeanServer());
+		server.addEventListener(mbContainer);
+		server.addBean(mbContainer);
+
+		System.err.println("added mbean");
+		
 		initConnnector(server, configs);
+		
 
 		initWebappContext(server,configs);
 
