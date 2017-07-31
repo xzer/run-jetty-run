@@ -12,7 +12,6 @@ import org.eclipse.jetty.annotations.AbstractDiscoverableAnnotationHandler;
 import org.eclipse.jetty.annotations.AnnotationConfiguration;
 import org.eclipse.jetty.annotations.AnnotationParser;
 import org.eclipse.jetty.annotations.AnnotationParser.Handler;
-import org.eclipse.jetty.annotations.ClassNameResolver;
 import org.eclipse.jetty.util.log.Log;
 import org.eclipse.jetty.util.log.Logger;
 import org.eclipse.jetty.util.resource.FileResource;
@@ -82,7 +81,7 @@ public class RJRAnnotationConfiguration extends AnnotationConfiguration {
         {
             if (_parserTasks != null)
             {
-                ParserTask task = new ParserTask(parser, handlers, dir, _webAppClassNameResolver);
+                ParserTask task = new ParserTask(parser, handlers, dir);
                 _parserTasks.add(task);
                 _webInfClassesStats.increment();
                 if (logger.isDebugEnabled())
