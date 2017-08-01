@@ -22,6 +22,7 @@
     <module>Jetty8Support</module>
     <module>Jetty9Support</module>
     <module>Jetty93Support</module>
+    <module>Jetty94Support</module>
   </modules>
   <build>
     <plugins>
