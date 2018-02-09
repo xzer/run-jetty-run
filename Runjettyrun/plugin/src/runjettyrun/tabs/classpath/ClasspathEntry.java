@@ -390,4 +390,9 @@ public class ClasspathEntry extends AbstractClasspathEntry implements
 	public void setExternalAnnotationsPath(IPath path) {
 		// TODO To confirm what we have to do
 	}
+
+	public boolean isAutomodule() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

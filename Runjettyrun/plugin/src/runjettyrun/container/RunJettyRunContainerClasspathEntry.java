@@ -306,4 +306,9 @@ public class RunJettyRunContainerClasspathEntry implements IClasspathEntry,
 		// TODO To confirm what we have to do
 	}
 
+	public boolean isAutomodule() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }
