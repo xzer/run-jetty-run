@@ -23,6 +23,7 @@
     <module>Jetty9Support</module>
     <module>Jetty93Support</module>
     <module>Jetty94Support</module>
+    <module>Jetty948Support</module>
   </modules>
   <build>
     <plugins>
