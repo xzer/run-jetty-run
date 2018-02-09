@@ -14,7 +14,7 @@ import runjettyrun.utils.VersionUtil;
 
 public class Jetty94PackageProvider implements IJettyPackageProvider {
 
-	public static final String VERSION = "Jetty 9.4.6.v20170531";
+	public static final String VERSION = "Jetty 9.4.8.v20171121";
 	public static final String[] VERSION_PREFIX = {"Jetty 9.4."};
 
 	public IRuntimeClasspathEntry[] getPackage(String version, int type) {
@@ -68,10 +68,6 @@ public class Jetty94PackageProvider implements IJettyPackageProvider {
 
 		for(File f :new File("lib").listFiles()){
 			System.out.println("\"lib/"+f.getName()+"\",");
-		}
-
-		for(File f :new File("jndilib").listFiles()){
-			System.out.println("\"jndilib/"+f.getName()+"\",");
 		}
 	}
 }
