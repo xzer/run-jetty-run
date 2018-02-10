@@ -15,7 +15,7 @@ import runjettyrun.utils.VersionUtil;
 public class Jetty948PackageProvider implements IJettyPackageProvider {
 
 	public static final String VERSION = "Jetty 9.4.8.v20171121";
-	public static final String[] VERSION_PREFIX = {"Jetty 9.4."};
+	public static final String[] VERSION_PREFIX = {"Jetty 9.4.8"};
 
 	public IRuntimeClasspathEntry[] getPackage(String version, int type) {
 		try {
