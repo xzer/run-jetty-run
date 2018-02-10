@@ -24,6 +24,7 @@ New feature and bug fix will be performed here.
 The official Java 9 support of Jetty is start from version 10 which has not been released yet, but Jetty has released a version 9.4.8 with earlier Java 9 support, which has been supported by RJR too. 
 
 ***IMPORTANT***
+
 To use RJR with jetty 9.4.8 Java 9 support, you need add the following vm args to your launch configuration or you will get error as "java.lang.NoClassDefFoundError: javax/xml/bind/JAXBException":
 
 ```
