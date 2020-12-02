@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+  - $Id$
+  - $HeadURL$
+  - 
+  - ==============================================================================
+  - Licensed under the Apache License, Version 2.0 (the "License"); you may not
+  - use this file except in compliance with the License. You may obtain a copy of
+  - the License at
+  - 
+  - http://www.apache.org/licenses/LICENSE-2.0
+  - 
+  - Unless required by applicable law or agreed to in writing, software
+  - distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  - WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+  - License for the specific language governing permissions and limitations under
+  - the License.
+  -->
+<feature
+      id="runjettyrun_feature_support_jetty9435"
+      label="RunJettyRun Jetty9.4.35 Support (Optional, Java8+)"
+      version="1.3.5.qualifier"
+      provider-name="https://github.com/bvfalcon/run-jetty-run">
+
+   <description url="https://github.com/xzer/run-jetty-run">
+      Run web applications in Eclipse using the Jetty distribution
+(9.4.35.v20201120) embedded in this plug-in.
+   </description>
+
+   <copyright>
+      Copyright 2020 github@bychkov.name
+   </copyright>
+
+   <license url="http://www.apache.org/licenses/LICENSE-2.0">
+      Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+http://www.apache.org/licenses/LICENSE-2.0 Unless required by
+applicable law or agreed to in writing, software distributed
+under the License is distributed on an &quot;AS IS&quot; BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+or implied. See the License for the specific language governing
+permissions and limitations under the License.
+   </license>
+
+   <url>
+      <update label="run-jetty-run update site" url="http://bvfalcon.github.io/run-jetty-run/updatesite/current/"/>
+   </url>
+
+   <requires>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.debug.core"/>
+      <import plugin="org.eclipse.debug.ui"/>
+      <import plugin="org.eclipse.jdt.debug"/>
+      <import plugin="org.eclipse.jdt.debug.ui"/>
+      <import plugin="org.eclipse.jdt.launching"/>
+      <import plugin="org.eclipse.jdt.core"/>
+      <import plugin="org.eclipse.jdt.ui"/>
+      <import plugin="org.eclipse.ui.ide"/>
+   </requires>
+
+   <plugin
+         id="runjettyrun.jetty9435"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

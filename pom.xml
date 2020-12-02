@@ -6,7 +6,7 @@
   <version>1.3.5-SNAPSHOT</version>
   <packaging>pom</packaging>
   <properties>
-    <tycho>0.24.0</tycho>
+    <tycho>1.7.0</tycho>
     <eclipse>http://download.eclipse.org/releases/mars/</eclipse>
   </properties>
   <repositories>
@@ -24,6 +24,7 @@
     <module>Jetty93Support</module>
     <module>Jetty94Support</module>
     <module>Jetty948Support</module>
+    <module>Jetty9435Support</module>
   </modules>
   <build>
     <plugins>
